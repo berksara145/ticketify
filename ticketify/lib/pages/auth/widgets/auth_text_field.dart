@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ticketify/constants/app_theme.dart';
+import 'package:ticketify/constants/constant_variables.dart';
 
 class AuthTextField extends StatelessWidget {
   const AuthTextField(
