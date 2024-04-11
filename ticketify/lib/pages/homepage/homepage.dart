@@ -14,13 +14,16 @@ class _HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     return const Scaffold(
       appBar: UserAppBar(),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: DisplayProducts(),
-          ),
-        ],
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16.0), // Adjust the horizontal padding as needed
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: DisplayProducts(),
+            ),
+          ],
+        ),
       ),
     );
   }

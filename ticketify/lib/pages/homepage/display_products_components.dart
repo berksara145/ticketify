@@ -16,22 +16,23 @@ class _FilterContainerState extends State<FilterContainer> {
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
     double size;
-    if ( screenSize.width>kMobileWidthThreshold){
+    if ( screenSize.width>ScreenConstants.kMobileWidthThreshold){
       size= 170;
     }else {
       size = screenSize.width;
     }
     return Padding(
-      padding: const EdgeInsets.only(top: 8, bottom: 8, right: 8),
+      padding: const EdgeInsets.only(top: 8, bottom: 8, right: 8, left: 8),
       child: Container(
           width: size,
+          height:500,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.0),
             border: Border.all(
               color: Colors.grey, // Siyah renkli border
               width: 0.5, // Border kalınlığı
             ),
-            color: Colors.transparent,
+            color: AppColors.filterColor,
             boxShadow: [
               BoxShadow(
                 color: Colors.white.withOpacity(0.1), // Gölge rengi ve opaklık seviyesi
@@ -54,10 +55,9 @@ class _FilterContainerState extends State<FilterContainer> {
                 child: Center(
                   child: Text(
                     widget.title,
-                    style: const TextStyle(
-                      fontSize: 15,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
+                    style: AppFonts.allertaStencil.copyWith(
+                      fontSize: 25,
+                      color: Colors.white,
                     ),
                   ),
                 ),
@@ -114,7 +114,7 @@ class CustomSearchBar extends StatelessWidget {
       hintText: hint_text,
       hintStyle: MaterialStateProperty.all<TextStyle?>(AppFonts.allertaStencil),
       leading: const Icon(Icons.search),
-      backgroundColor: MaterialStateProperty.all<Color?>(AppColors.blue),
+      backgroundColor: MaterialStateProperty.all<Color?>(AppColors.searchBar),
       constraints: const BoxConstraints(
         minHeight: 40,
       ),
