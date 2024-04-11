@@ -243,7 +243,6 @@ class _ProductCardState extends State<ProductCard> {
                     fit: BoxFit.cover, // or BoxFit.contain based on your preference
                   ),
                 ),
-                Divider(), // Add a Divider below the Card
                 const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

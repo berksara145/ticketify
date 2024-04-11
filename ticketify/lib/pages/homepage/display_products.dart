@@ -52,7 +52,7 @@ class _PageLayoutState extends State<PageLayout> {
           if (screenSize.width > ScreenConstants.kMobileWidthThreshold)
             const FilterContainer(
               title: 'Filters',
-              children: [],
+              //children: [],
             ),
           Expanded(
             child: Column(
@@ -80,7 +80,7 @@ class _PageLayoutState extends State<PageLayout> {
                             child: const Center(
                               child: FilterContainer(
                                 title: 'Filters',
-                                children: [],
+                                //children: [],
                               ),
                             ),
                           );

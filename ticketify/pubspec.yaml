@@ -49,6 +49,8 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^3.0.2
 
+  intl: ^0.17.0  # Add this line to include the intl package it is date format of filtering
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
