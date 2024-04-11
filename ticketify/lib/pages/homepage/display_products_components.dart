@@ -43,7 +43,7 @@ class _FilterContainerState extends State<FilterContainer> {
       size = screenSize.width;
     }
     return Padding(
-      padding: const EdgeInsets.only(top: 40.0, bottom: 40.0,right: 20.0, left: 20.0),
+      padding: const EdgeInsets.only(top: 100.0, bottom: 40.0, right: 20.0, left: 20.0),
       child: Container(
         width: size,
         decoration: BoxDecoration(
@@ -62,135 +62,137 @@ class _FilterContainerState extends State<FilterContainer> {
             ),
           ],
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(20.0), // Add padding to the content inside the container
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    widget.title,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              _buildFilterOption('Event Name:', TextField(
-                onChanged: (value) => setState(() => eventName = value),
-              )),
-              _buildFilterOption('Choose Categories:', DropdownButtonFormField<String>(
-                value: selectedCategories.isNotEmpty ? selectedCategories[0] : null,
-                onChanged: (newValue) {
-                  setState(() {
-                    selectedCategories.clear();
-                    selectedCategories.add(newValue!);
-                  });
-                },
-                items: categoryOptions.map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              )),
-              _buildFilterOption('Time Interval:', Row(
-                children: [
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {
-                        showDatePicker(
-                          context: context,
-                          initialDate: startDate ?? DateTime.now(),
-                          firstDate: DateTime(2000),
-                          lastDate: endDate ?? DateTime(2050),
-                        ).then((pickedDate) {
-                          if (pickedDate != null) {
-                            setState(() {
-                              startDate = pickedDate;
-                            });
-                          }
-                        });
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Text(
-                          startDate != null
-                              ? 'Start: ${DateFormat('yyyy-MM-dd').format(startDate!)}'
-                              : 'Select start date',
-                        ),
+        child: SingleChildScrollView( // Add a SingleChildScrollView
+          child: Padding(
+            padding: const EdgeInsets.all(20.0), // Add padding to the content inside the container
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      widget.title,
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {
-                        showDatePicker(
-                          context: context,
-                          initialDate: endDate ?? DateTime.now(),
-                          firstDate: startDate ?? DateTime(2000),
-                          lastDate: DateTime(2050),
-                        ).then((pickedDate) {
-                          if (pickedDate != null) {
-                            setState(() {
-                              endDate = pickedDate;
-                            });
-                          }
-                        });
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Text(
-                          endDate != null
-                              ? 'End: ${DateFormat('yyyy-MM-dd').format(endDate!)}'
-                              : 'Select end date',
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              )),
-              _buildFilterOption('Ticket Price:', Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      onChanged: (value) {
-                        setState(() {
-                          minPrice = double.tryParse(value) ?? 0;
-                        });
-                      },
-                      keyboardType: TextInputType.numberWithOptions(decimal: true),
-                      decoration: InputDecoration(labelText: 'Min Price'),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: TextField(
-                      onChanged: (value) {
-                        setState(() {
-                          maxPrice = double.tryParse(value) ?? 0;
-                        });
-                      },
-                      keyboardType: TextInputType.numberWithOptions(decimal: true),
-                      decoration: InputDecoration(labelText: 'Max Price'),
-                    ),
-                  ),
-                ],
-              )),
-              ElevatedButton(
-                onPressed: _resetFilters,
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  textStyle: const TextStyle(fontSize: 16),
+                  ],
                 ),
-                child: const Text('Reset Filters'),
-              ),
-            ],
+                const SizedBox(height: 20),
+                _buildFilterOption('Event Name:', TextField(
+                  onChanged: (value) => setState(() => eventName = value),
+                )),
+                _buildFilterOption('Choose Categories:', DropdownButtonFormField<String>(
+                  value: selectedCategories.isNotEmpty ? selectedCategories[0] : null,
+                  onChanged: (newValue) {
+                    setState(() {
+                      selectedCategories.clear();
+                      selectedCategories.add(newValue!);
+                    });
+                  },
+                  items: categoryOptions.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                )),
+                _buildFilterOption('Time Interval:', Row(
+                  children: [
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          showDatePicker(
+                            context: context,
+                            initialDate: startDate ?? DateTime.now(),
+                            firstDate: DateTime(2000),
+                            lastDate: endDate ?? DateTime(2050),
+                          ).then((pickedDate) {
+                            if (pickedDate != null) {
+                              setState(() {
+                                startDate = pickedDate;
+                              });
+                            }
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Text(
+                            startDate != null
+                                ? 'Start: ${DateFormat('yyyy-MM-dd').format(startDate!)}'
+                                : 'Select start date',
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          showDatePicker(
+                            context: context,
+                            initialDate: endDate ?? DateTime.now(),
+                            firstDate: startDate ?? DateTime(2000),
+                            lastDate: DateTime(2050),
+                          ).then((pickedDate) {
+                            if (pickedDate != null) {
+                              setState(() {
+                                endDate = pickedDate;
+                              });
+                            }
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Text(
+                            endDate != null
+                                ? 'End: ${DateFormat('yyyy-MM-dd').format(endDate!)}'
+                                : 'Select end date',
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )),
+                _buildFilterOption('Ticket Price:', Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            minPrice = double.tryParse(value) ?? 0;
+                          });
+                        },
+                        keyboardType: TextInputType.numberWithOptions(decimal: true),
+                        decoration: InputDecoration(labelText: 'Min Price'),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            maxPrice = double.tryParse(value) ?? 0;
+                          });
+                        },
+                        keyboardType: TextInputType.numberWithOptions(decimal: true),
+                        decoration: InputDecoration(labelText: 'Max Price'),
+                      ),
+                    ),
+                  ],
+                )),
+                ElevatedButton(
+                  onPressed: _resetFilters,
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    textStyle: const TextStyle(fontSize: 16),
+                  ),
+                  child: const Text('Reset Filters'),
+                ),
+              ],
+            ),
           ),
         ),
       ),
