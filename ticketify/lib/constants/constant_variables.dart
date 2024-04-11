@@ -30,3 +30,9 @@ class AssetLocations {
   static const String design = "lib/Assets/ticketify_logo.png";
   //static const String userPhoto = "lib/Assets/user_photo.jpg";
 }
+
+class ScreenConstants {
+  static const int kMobileWidthThreshold = 500;
+}
+
+const int kMobileWidthThreshold = 500;

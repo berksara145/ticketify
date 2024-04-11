@@ -1,9 +1,9 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ticketify/constants/constant_variables.dart';
 import 'package:ticketify/pages/auth/auth_screen.dart';
 import 'package:ticketify/pages/homepage/homepage.dart';
+import 'package:ticketify/constants/constant_variables.dart';
 
 class UserAppBar extends StatefulWidget implements PreferredSizeWidget {
   const UserAppBar({super.key});
@@ -38,7 +38,7 @@ class _UserAppBarState extends State<UserAppBar> {
                   Text(
                     "TICKETIFY",
                     style: GoogleFonts.allertaStencil(
-                        textStyle: TextStyle(
+                        textStyle: const TextStyle(
                       color: AppColors.black,
                       fontSize: 25,
                     )),
@@ -60,7 +60,7 @@ class _UserAppBarState extends State<UserAppBar> {
                     MaterialPageRoute(
                         builder: (context) => const AuthScreen()));
               },
-              child: Text(
+              child: const Text(
                 "Log out",
                 style: TextStyle(color: AppColors.black),
               )),
