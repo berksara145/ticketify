@@ -187,7 +187,7 @@ class _FilterContainerState extends State<FilterContainer> {
                   onPressed: _resetFilters,
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
-                    textStyle: const TextStyle(fontSize: 16),
+                    textStyle: const TextStyle(fontSize: 16, color: AppColors.blue), // Set text color here
                   ),
                   child: const Text('Reset Filters'),
                 ),
