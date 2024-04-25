@@ -35,7 +35,6 @@ class PageLayout extends StatefulWidget {
     super.key,
   });
 
-
   @override
   State<PageLayout> createState() => _PageLayoutState();
 }
@@ -59,13 +58,14 @@ class _PageLayoutState extends State<PageLayout> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 20.0, bottom: 20.0), // Add padding bottom to create space
+                  padding: const EdgeInsets.only(
+                      top: 20.0,
+                      bottom: 20.0), // Add padding bottom to create space
                   child: Container(
                     height: 45, // Adjust height as needed
-                    padding: EdgeInsets.symmetric(horizontal: 40.0), // Adjust padding as needed
-                    child: const CustomSearchBar(
-                        "Search for an event"
-                    ),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 40.0), // Adjust padding as needed
+                    child: const CustomSearchBar("Search for an event"),
                   ),
                 ),
                 if (screenSize.width <= ScreenConstants.kMobileWidthThreshold)

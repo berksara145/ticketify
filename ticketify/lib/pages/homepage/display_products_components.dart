@@ -1,4 +1,3 @@
-
 import 'package:ticketify/constants/constant_variables.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -43,13 +42,14 @@ class _FilterContainerState extends State<FilterContainer> {
       size = screenSize.width;
     }
     return Padding(
-      padding: const EdgeInsets.only(top: 100.0, bottom: 40.0, right: 20.0, left: 20.0),
+      padding: const EdgeInsets.only(
+          top: 100.0, bottom: 40.0, right: 20.0, left: 20.0),
       child: Container(
         width: size,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.0),
           border: Border.all(
-            color: Colors.grey, // Siyah renkli border
+            color: AppColors.grey, // Siyah renkli border
             width: 0.5, // Border kalınlığı
           ),
           color: AppColors.filterColor,
@@ -62,9 +62,11 @@ class _FilterContainerState extends State<FilterContainer> {
             ),
           ],
         ),
-        child: SingleChildScrollView( // Add a SingleChildScrollView
+        child: SingleChildScrollView(
+          // Add a SingleChildScrollView
           child: Padding(
-            padding: const EdgeInsets.all(20.0), // Add padding to the content inside the container
+            padding: const EdgeInsets.all(
+                20.0), // Add padding to the content inside the container
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -81,108 +83,123 @@ class _FilterContainerState extends State<FilterContainer> {
                   ],
                 ),
                 const SizedBox(height: 20),
-                _buildFilterOption('Event Name:', TextField(
-                  onChanged: (value) => setState(() => eventName = value),
-                )),
-                _buildFilterOption('Choose Categories:', DropdownButtonFormField<String>(
-                  value: selectedCategories.isNotEmpty ? selectedCategories[0] : null,
-                  onChanged: (newValue) {
-                    setState(() {
-                      selectedCategories.clear();
-                      selectedCategories.add(newValue!);
-                    });
-                  },
-                  items: categoryOptions.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                )),
-                _buildFilterOption('Time Interval:', Row(
-                  children: [
-                    Expanded(
-                      child: InkWell(
-                        onTap: () {
-                          showDatePicker(
-                            context: context,
-                            initialDate: startDate ?? DateTime.now(),
-                            firstDate: DateTime(2000),
-                            lastDate: endDate ?? DateTime(2050),
-                          ).then((pickedDate) {
-                            if (pickedDate != null) {
-                              setState(() {
-                                startDate = pickedDate;
+                _buildFilterOption(
+                    'Event Name:',
+                    TextField(
+                      onChanged: (value) => setState(() => eventName = value),
+                    )),
+                _buildFilterOption(
+                    'Choose Categories:',
+                    DropdownButtonFormField<String>(
+                      value: selectedCategories.isNotEmpty
+                          ? selectedCategories[0]
+                          : null,
+                      onChanged: (newValue) {
+                        setState(() {
+                          selectedCategories.clear();
+                          selectedCategories.add(newValue!);
+                        });
+                      },
+                      items: categoryOptions
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    )),
+                _buildFilterOption(
+                    'Time Interval:',
+                    Row(
+                      children: [
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              showDatePicker(
+                                context: context,
+                                initialDate: startDate ?? DateTime.now(),
+                                firstDate: DateTime(2000),
+                                lastDate: endDate ?? DateTime(2050),
+                              ).then((pickedDate) {
+                                if (pickedDate != null) {
+                                  setState(() {
+                                    startDate = pickedDate;
+                                  });
+                                }
                               });
-                            }
-                          });
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: Text(
-                            startDate != null
-                                ? 'Start: ${DateFormat('yyyy-MM-dd').format(startDate!)}'
-                                : 'Select start date',
+                            },
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 8.0),
+                              child: Text(
+                                startDate != null
+                                    ? 'Start: ${DateFormat('yyyy-MM-dd').format(startDate!)}'
+                                    : 'Select start date',
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: InkWell(
-                        onTap: () {
-                          showDatePicker(
-                            context: context,
-                            initialDate: endDate ?? DateTime.now(),
-                            firstDate: startDate ?? DateTime(2000),
-                            lastDate: DateTime(2050),
-                          ).then((pickedDate) {
-                            if (pickedDate != null) {
-                              setState(() {
-                                endDate = pickedDate;
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              showDatePicker(
+                                context: context,
+                                initialDate: endDate ?? DateTime.now(),
+                                firstDate: startDate ?? DateTime(2000),
+                                lastDate: DateTime(2050),
+                              ).then((pickedDate) {
+                                if (pickedDate != null) {
+                                  setState(() {
+                                    endDate = pickedDate;
+                                  });
+                                }
                               });
-                            }
-                          });
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: Text(
-                            endDate != null
-                                ? 'End: ${DateFormat('yyyy-MM-dd').format(endDate!)}'
-                                : 'Select end date',
+                            },
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 8.0),
+                              child: Text(
+                                endDate != null
+                                    ? 'End: ${DateFormat('yyyy-MM-dd').format(endDate!)}'
+                                    : 'Select end date',
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                  ],
-                )),
-                _buildFilterOption('Ticket Price:', Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        onChanged: (value) {
-                          setState(() {
-                            minPrice = double.tryParse(value) ?? 0;
-                          });
-                        },
-                        keyboardType: TextInputType.numberWithOptions(decimal: true),
-                        decoration: InputDecoration(labelText: 'Min Price'),
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: TextField(
-                        onChanged: (value) {
-                          setState(() {
-                            maxPrice = double.tryParse(value) ?? 0;
-                          });
-                        },
-                        keyboardType: TextInputType.numberWithOptions(decimal: true),
-                        decoration: InputDecoration(labelText: 'Max Price'),
-                      ),
-                    ),
-                  ],
-                )),
+                      ],
+                    )),
+                _buildFilterOption(
+                    'Ticket Price:',
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            onChanged: (value) {
+                              setState(() {
+                                minPrice = double.tryParse(value) ?? 0;
+                              });
+                            },
+                            keyboardType:
+                                TextInputType.numberWithOptions(decimal: true),
+                            decoration: InputDecoration(labelText: 'Min Price'),
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: TextField(
+                            onChanged: (value) {
+                              setState(() {
+                                maxPrice = double.tryParse(value) ?? 0;
+                              });
+                            },
+                            keyboardType:
+                                TextInputType.numberWithOptions(decimal: true),
+                            decoration: InputDecoration(labelText: 'Max Price'),
+                          ),
+                        ),
+                      ],
+                    )),
                 ElevatedButton(
                   onPressed: _resetFilters,
                   style: ElevatedButton.styleFrom(
@@ -231,8 +248,6 @@ class _FilterContainerState extends State<FilterContainer> {
   }
 }
 
-
-
 class ClickableText extends StatefulWidget {
   const ClickableText({
     super.key,
@@ -263,7 +278,7 @@ class _ClickableTextState extends State<ClickableText> {
             });
           },
           child:
-          Center(child: Text(widget.text, style: TextStyle(color: color)))),
+              Center(child: Text(widget.text, style: TextStyle(color: color)))),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ticketify/constants/constant_variables.dart';
 import 'package:ticketify/pages/auth/widgets/register_form.dart';
@@ -27,13 +28,16 @@ class AuthScreen extends StatelessWidget {
                     width: screenWidth / 2,
                     height: screenHeight / 2,
                   ),
-                  Text(
-                    'TICKETIFY',
-                    style: GoogleFonts.allertaStencil(
-                      textStyle: TextStyle(
-                        color: AppColors.black,
-                        fontSize: 70,
-                        fontWeight: FontWeight.bold,
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      'TICKETIFY',
+                      style: GoogleFonts.allertaStencil(
+                        textStyle: TextStyle(
+                          color: AppColors.black,
+                          fontSize: 70,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),

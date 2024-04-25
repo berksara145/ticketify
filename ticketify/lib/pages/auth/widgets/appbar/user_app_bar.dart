@@ -18,54 +18,50 @@ class UserAppBar extends StatefulWidget implements PreferredSizeWidget {
 class _UserAppBarState extends State<UserAppBar> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.green.withOpacity(0.55),
-        //automaticallyImplyLeading: false,
-        title: Row(
-          children: [
-            IconButton(
-              icon: Row(
-                children: [
-                  Image.asset(
-                    AssetLocations.design,
-                    width: 35,
-                    height: 35,
-                  ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  Text(
-                    "TICKETIFY",
-                    style: GoogleFonts.allertaStencil(
-                        textStyle: const TextStyle(
-                      color: AppColors.black,
-                      fontSize: 25,
-                    )),
-                  ),
-                ],
-              ),
-              onPressed: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => const Homepage()));
-              },
+    return AppBar(
+      backgroundColor: AppColors.green.withOpacity(0.55),
+      automaticallyImplyLeading: false,
+      title: Row(
+        children: [
+          IconButton(
+            icon: Row(
+              children: [
+                Image.asset(
+                  AssetLocations.design,
+                  width: 35,
+                  height: 35,
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                Text(
+                  "TICKETIFY",
+                  style: GoogleFonts.allertaStencil(
+                      textStyle: const TextStyle(
+                    color: AppColors.black,
+                    fontSize: 25,
+                  )),
+                ),
+              ],
             ),
-          ],
-        ),
-        actions: [
-          TextButton(
-              onPressed: () {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const AuthScreen()));
-              },
-              child: const Text(
-                "Log out",
-                style: TextStyle(color: AppColors.black),
-              )),
+            onPressed: () {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => const Homepage()));
+            },
+          ),
         ],
       ),
+      actions: [
+        TextButton(
+            onPressed: () {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => const AuthScreen()));
+            },
+            child: const Text(
+              "Log out",
+              style: TextStyle(color: AppColors.black),
+            )),
+      ],
     );
   }
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:ticketify/pages/auth/widgets/appbar/user_app_bar.dart';
 import 'package:ticketify/constants/constant_variables.dart';
+import 'package:ticketify/pages/homepage/one_item_view.dart';
 
 import 'display_products_components.dart';
 
@@ -13,8 +14,8 @@ class ItemGrid extends StatefulWidget {
   final FetchDataFunction fetchDataFunction;
   const ItemGrid(
       {Key? key,
-        required this.scrollController,
-        required this.fetchDataFunction})
+      required this.scrollController,
+      required this.fetchDataFunction})
       : super(key: key);
 
   @override
@@ -23,7 +24,7 @@ class ItemGrid extends StatefulWidget {
 
 class _ItemGridState extends State<ItemGrid> {
   final StreamController<List<dynamic>> _dataStreamController =
-  StreamController<List<dynamic>>();
+      StreamController<List<dynamic>>();
   Stream<List<dynamic>> get dataStream => _dataStreamController.stream;
   final List<dynamic> _currentItems = [];
   int _currentPage = 1;
@@ -49,7 +50,7 @@ class _ItemGridState extends State<ItemGrid> {
       // Temporary replacement for fetching data
       final List<dynamic> items = List.generate(
         _pageSize,
-            (index) => {
+        (index) => {
           'id': 'id_$index',
           'title': 'Title $index',
           'tags': 'Tags $index',
@@ -118,54 +119,65 @@ class _ItemGridState extends State<ItemGrid> {
         } else {
           // Display the paginated data
           final items = snapshot.data;
-          return Expanded(
-            child: Container(
-              padding: const EdgeInsets.only(top: 20.0,left: 20.0, right: 20.0, bottom: 8.0),// Adjust padding as needed
-              decoration: BoxDecoration(
-                color: AppColors.secondBackground,
-                borderRadius: BorderRadius.circular(20.0), // Set the border radius
-              ),
-              child: ListView(
-                controller: _scrollController,
-                children: [
-                  GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: items!.length,
-                    gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 300, // Adjust max width as needed
-                      mainAxisSpacing: 10, // Adjust spacing between rows as needed
-                      crossAxisSpacing: 10, // Adjust spacing between items as needed
-                      childAspectRatio: 1, // Maintain aspect ratio of 1:1 for items
-                    ),
-                    itemBuilder: (context, index) {
-                      PostDTO post = PostDTO(
-                        id: '1', // Example: Replace '1' with the actual ID
-                        tags: 'Concert', // Example: Replace 'Sample Tags' with the actual tags
-                        title: 'Mayfest & Mogollar', // Example: Replace 'Sample Title' with the actual title
-                        imageUrl: 'https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg', // Example: Replace with actual image URL
-                        sdate: DateTime.now(), // Example: Replace 'DateTime.now()' with the actual creation date
-                        location: "Bilkent", // Example: Replace '10.0' with the actual price
-                        organizer: 'Bilkent', // Example: Replace 'Sample User' with the actual user
-                      );
-
-                      return ProductCard(
-                        post: post,
-                      );
-                    },
+          return Container(
+            padding: const EdgeInsets.only(
+                top: 20.0,
+                left: 20.0,
+                right: 20.0,
+                bottom: 8.0), // Adjust padding as needed
+            decoration: BoxDecoration(
+              color: AppColors.secondBackground,
+              borderRadius:
+                  BorderRadius.circular(20.0), // Set the border radius
+            ),
+            child: ListView(
+              controller: _scrollController,
+              children: [
+                GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: items!.length,
+                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 300, // Adjust max width as needed
+                    mainAxisSpacing:
+                        10, // Adjust spacing between rows as needed
+                    crossAxisSpacing:
+                        10, // Adjust spacing between items as needed
+                    childAspectRatio:
+                        1, // Maintain aspect ratio of 1:1 for items
                   ),
-                  if (_isFetchingData)
-                    const Center(
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: CircularProgressIndicator(),
-                      ),
+                  itemBuilder: (context, index) {
+                    PostDTO post = PostDTO(
+                      id: '1', // Example: Replace '1' with the actual ID
+                      tags:
+                          'Concert', // Example: Replace 'Sample Tags' with the actual tags
+                      title:
+                          'Mayfest & Mogollar', // Example: Replace 'Sample Title' with the actual title
+                      imageUrl:
+                          'https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg', // Example: Replace with actual image URL
+                      sdate: DateTime
+                          .now(), // Example: Replace 'DateTime.now()' with the actual creation date
+                      location:
+                          "Bilkent", // Example: Replace '10.0' with the actual price
+                      organizer:
+                          'Bilkent', // Example: Replace 'Sample User' with the actual user
+                    );
+
+                    return ProductCard(
+                      post: post,
+                    );
+                  },
+                ),
+                if (_isFetchingData)
+                  const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: CircularProgressIndicator(),
                     ),
-                ],
-              ),
+                  ),
+              ],
             ),
           );
-
         }
       },
     );
@@ -197,6 +209,7 @@ class PostDTO {
     required this.organizer,
   });
 }
+
 class ProductCard extends StatefulWidget {
   final PostDTO post;
   final Color backgroundColor;
@@ -210,25 +223,25 @@ class ProductCard extends StatefulWidget {
   _ProductCardState createState() => _ProductCardState();
 }
 
-
 class _ProductCardState extends State<ProductCard> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => OneItemView(productId: widget.post.id ?? ""),
-        //   ),
-        // );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => OneItemView(post: widget.post),
+          ),
+        );
       },
       child: Card(
         color: widget.backgroundColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),
         ),
-        child: SingleChildScrollView(// Disable scrolling
+        child: SingleChildScrollView(
+          // Disable scrolling
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -240,14 +253,16 @@ class _ProductCardState extends State<ProductCard> {
                   child: Image.network(
                     widget.post.imageUrl ??
                         "https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg",
-                    fit: BoxFit.cover, // or BoxFit.contain based on your preference
+                    fit: BoxFit
+                        .cover, // or BoxFit.contain based on your preference
                   ),
                 ),
                 const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Expanded( // Wrap the title with Expanded
+                    Expanded(
+                      // Wrap the title with Expanded
                       child: Text(
                         widget.post.title ?? "",
                         style: const TextStyle(

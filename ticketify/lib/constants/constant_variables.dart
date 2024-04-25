@@ -7,6 +7,7 @@ class AppFonts {
 }
 
 class AppColors {
+  static const Color grey = Colors.grey;
   static const Color white = Color(0xffffffff);
   static const Color secondBackground = Color(0xffd9d9d9);
   static const Color black = Color(0xff000000);
