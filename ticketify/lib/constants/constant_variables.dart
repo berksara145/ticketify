@@ -15,7 +15,8 @@ class AppColors {
   static const Color blue = Color.fromRGBO(127, 199, 217, 0.366);
   static const Color buttonBlue = Color.fromRGBO(54, 84, 134, 1);
 
-  static const Color filterColor = Color(0xff393e46);
+  //static const Color filterColor = Color(0xff393e46);
+  static const Color filterColor = Color(0xff5d6169);
   static const Color searchBar = Color(0xffa1babd);
 
   static const Color purple1 = Color(0xff592356);
