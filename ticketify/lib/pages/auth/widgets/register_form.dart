@@ -5,7 +5,8 @@ import 'package:ticketify/pages/auth/widgets/auth_text_field.dart';
 import 'package:ticketify/pages/homepage/homepage.dart';
 
 class RegisterForm extends StatefulWidget {
-  RegisterForm({super.key});
+  RegisterForm({super.key, required this.setParentState});
+  final VoidCallback setParentState;
 
   @override
   State<RegisterForm> createState() => _RegisterFormState();
@@ -103,7 +104,30 @@ class _RegisterFormState extends State<RegisterForm> {
           AuthTextField(controller: emailController, label: emailLabel),
           const SizedBox(height: 20),
           AuthTextField(controller: passwordController, label: passwordLabel),
+          GestureDetector(
+            onTap: () => {widget.setParentState()},
+            child: Padding(
+              padding: const EdgeInsets.only(top: 2.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Already have an account? ",
+                    style: TextStyle(
+                        color: AppColors.buttonBlue,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    "Log in.",
+                    style: TextStyle(
+                        color: AppColors.black, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+          ),
           const SizedBox(height: 30),
+
           TextButton(
             onPressed: () {
               Navigator.pushReplacement(context,

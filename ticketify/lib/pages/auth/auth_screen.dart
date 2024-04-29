@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ticketify/constants/constant_variables.dart';
+import 'package:ticketify/pages/auth/widgets/login_form.dart';
 import 'package:ticketify/pages/auth/widgets/register_form.dart';
 
-class AuthScreen extends StatelessWidget {
+class AuthScreen extends StatefulWidget {
   const AuthScreen({
     super.key,
   });
+
+  @override
+  State<AuthScreen> createState() => _AuthScreenState();
+}
+
+class _AuthScreenState extends State<AuthScreen> {
+  bool isLogin = true;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +49,16 @@ class AuthScreen extends StatelessWidget {
               ),
             ),
           ),
-          Expanded(child: RegisterForm())
+          Expanded(
+              child: isLogin
+                  ? LoginForm(
+                      setParentState: () => setState(() {
+                            isLogin = false;
+                          }))
+                  : RegisterForm(
+                      setParentState: () => setState(() {
+                            isLogin = true;
+                          })))
         ],
       ),
     );

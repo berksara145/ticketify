@@ -84,10 +84,33 @@ class _FilterContainerState extends State<FilterContainer> {
                 ),
                 const SizedBox(height: 20),
                 _buildFilterOption(
-                    'Event Name:',
-                    TextField(
-                      onChanged: (value) => setState(() => eventName = value),
-                    )),
+                  'Event Name:',
+                  TextField(
+                    onChanged: (value) => setState(() => eventName = value),
+                    decoration: InputDecoration(
+                      border: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: AppColors.white, // Set the color of the border
+                          width: 1.0, // Set the width of the border
+                        ),
+                      ),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: AppColors
+                              .white, // Set the color of the border when TextField is enabled
+                          width: 1.0, // Set the width of the border
+                        ),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: AppColors
+                              .white, // Set the color of the border when TextField is focused
+                          width: 1.0, // Set the width of the border
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
                 _buildFilterOption(
                     'Choose Categories:',
                     DropdownButtonFormField<String>(
@@ -100,6 +123,29 @@ class _FilterContainerState extends State<FilterContainer> {
                           selectedCategories.add(newValue!);
                         });
                       },
+                      decoration: InputDecoration(
+                        border: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color:
+                                AppColors.white, // Set the color of the border
+                            width: 1.0, // Set the width of the border
+                          ),
+                        ),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: AppColors
+                                .white, // Set the color of the border when TextField is enabled
+                            width: 1.0, // Set the width of the border
+                          ),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: AppColors
+                                .white, // Set the color of the border when TextField is focused
+                            width: 1.0, // Set the width of the border
+                          ),
+                        ),
+                      ),
                       items: categoryOptions
                           .map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
@@ -180,9 +226,33 @@ class _FilterContainerState extends State<FilterContainer> {
                                 minPrice = double.tryParse(value) ?? 0;
                               });
                             },
+                            style: TextStyle(color: AppColors.grey),
                             keyboardType:
                                 TextInputType.numberWithOptions(decimal: true),
-                            decoration: InputDecoration(labelText: 'Min Price'),
+                            decoration: InputDecoration(
+                              labelText: 'Min Price',
+                              border: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: AppColors
+                                      .white, // Set the color of the border
+                                  width: 1.0, // Set the width of the border
+                                ),
+                              ),
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: AppColors
+                                      .white, // Set the color of the border when TextField is enabled
+                                  width: 1.0, // Set the width of the border
+                                ),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: AppColors
+                                      .white, // Set the color of the border when TextField is focused
+                                  width: 1.0, // Set the width of the border
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                         const SizedBox(width: 16),
@@ -195,7 +265,30 @@ class _FilterContainerState extends State<FilterContainer> {
                             },
                             keyboardType:
                                 TextInputType.numberWithOptions(decimal: true),
-                            decoration: InputDecoration(labelText: 'Max Price'),
+                            decoration: InputDecoration(
+                              labelText: 'Max Price',
+                              border: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: AppColors
+                                      .white, // Set the color of the border
+                                  width: 1.0, // Set the width of the border
+                                ),
+                              ),
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: AppColors
+                                      .white, // Set the color of the border when TextField is enabled
+                                  width: 1.0, // Set the width of the border
+                                ),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: AppColors
+                                      .white, // Set the color of the border when TextField is focused
+                                  width: 1.0, // Set the width of the border
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                       ],
@@ -204,7 +297,9 @@ class _FilterContainerState extends State<FilterContainer> {
                   onPressed: _resetFilters,
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
-                    textStyle: const TextStyle(fontSize: 16, color: AppColors.blue), // Set text color here
+                    textStyle: const TextStyle(
+                        fontSize: 16,
+                        color: AppColors.blue), // Set text color here
                   ),
                   child: const Text('Reset Filters'),
                 ),
