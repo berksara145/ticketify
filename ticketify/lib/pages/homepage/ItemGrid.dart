@@ -69,9 +69,9 @@ class _ItemGridState extends State<ItemGrid> {
       final timeDifference =
           endTime.millisecondsSinceEpoch - startTime.millisecondsSinceEpoch;
 
-      if (timeDifference < 2000) {
+      if (timeDifference < 500) {
         // Delay for 2 seconds if the time taken by the API request is less then 2 seconds
-        await Future.delayed(const Duration(milliseconds: 2000));
+        await Future.delayed(const Duration(milliseconds: 500));
       }
 
       _dataStreamController.add(_currentItems);
