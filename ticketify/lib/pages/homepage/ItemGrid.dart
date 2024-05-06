@@ -233,6 +233,7 @@ class _ProductCardState extends State<ProductCard> {
           MaterialPageRoute(
             builder: (context) => OneItemView(post: widget.post),
           ),
+          Go
         );
       },
       child: Card(

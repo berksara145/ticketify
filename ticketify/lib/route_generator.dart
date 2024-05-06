@@ -2,44 +2,48 @@ import 'package:go_router/go_router.dart';
 import 'package:ticketify/pages/auth/auth_screen.dart';
 
 class RouteGenerator {
-  final String loginRoute = "/login";
-  final String chat = "/chad";
-  final String instructorRoute = "/instructor";
-  final String questionHomepageRoute = "/instructor/question";
-  final String questionCreateRoute = "/instructor/question/create";
+  final String loginRoute = "/auth";
+  //final String registerRoute = "/register";
+  final String profileRoute = "/profile/:userId";
 
-  final String studentRoute = "/student";
+  final String displayAllEvents = "/display/all";
+  // if type = buyer:
+  final String displayOneItemRoute = "/display/:eventID";
+  final String checkTickets = "/purchase/:eventID";
 
-  final String profileRoute = "/user/profile/:userId";
-
-  final String assignmentRoute = "/:role/assignment/:sectionID/:assignmentID";
-
+// ADMIN
   final String adminRoute = "/admin";
-  final String studentCreateRoute = "/admin/studentCreate";
+  final String reportCreateRoute = "/admin/report/create";
+  final String reportDisplay = "/admin/report/display/all";
+  final String oneReportDisplay = "/admin/report/display/:reportId";
+// Worker Bee
 
-  final String createAssignmentRoute = "/createAssignment";
+// Organizor
+  final String eventCreateRoute = "/event/create/:userId";
+  final String venueCreateRoute = "/venue/create/:userId";
+
 
   getRouter() {
     return GoRouter(
       initialLocation: loginRoute,
       routes: [
-        GoRoute(
+        /*GoRoute(
           path: '/',
           builder: (context, state) {
             return const AuthScreen();
           },
-        ),
-        /*GoRoute(
-          path: '/chad',
-          builder: (context, state) {
-            return const Chat_Homepage();
-          },
-        ),
+        ),*/
         GoRoute(
             path: loginRoute,
             builder: (context, state) {
-              return const LoginPage();
+              return const AuthScreen();
             }),
+        GoRoute(
+          path: displayAllEvents,
+        builder: (context, state) {
+            return const Homepage();
+    }
+        );
         GoRoute(
             path: assignmentRoute,
             builder: (context, state) {
@@ -91,7 +95,7 @@ class RouteGenerator {
             path: adminRoute,
             builder: (context, state) {
               return Admin();
-            }),*/
+            }),
       ],
     );
   }

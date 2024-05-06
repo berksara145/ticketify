@@ -38,7 +38,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   Text(
                     'TICKETIFY',
                     style: GoogleFonts.allertaStencil(
-                      textStyle: TextStyle(
+                      textStyle: const TextStyle(
                         color: AppColors.black,
                         fontSize: 70,
                         fontWeight: FontWeight.bold,
