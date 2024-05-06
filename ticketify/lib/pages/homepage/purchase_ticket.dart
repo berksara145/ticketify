@@ -64,6 +64,7 @@ class _OneItemViewState extends State<PurchaseTicket> {
                         MaterialPageRoute(
                           builder: (context) => OneItemView(
                             post: post,
+                            event_id: post.id,
                           ),
                         ),
                       );

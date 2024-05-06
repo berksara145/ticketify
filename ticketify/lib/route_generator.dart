@@ -45,16 +45,6 @@ class RouteGenerator {
           builder: (context, state) {
               return const Homepage();
           }),
-        GoRoute(
-            path: assignmentRoute,
-            builder: (context, state) {
-              final sectionID = state.pathParameters['sectionID'].toString();
-              final assignmentID =
-                  state.pathParameters['assignmentID'].toString();
-              final role = state.pathParameters['role'].toString();
-              return Assignment_Details(
-                  role: role, assignmentID: assignmentID, sectionID: sectionID);
-            }),
         /*GoRoute(
             path: profileRoute,
             builder: (context, state) {
@@ -67,7 +57,7 @@ class RouteGenerator {
               final itemId = state.pathParameters['eventID'].toString();
               return OneItemView(event_id: itemId,);
             }),
-        GoRoute(
+        /*GoRoute(
             path: questionHomepageRoute,
             builder: (context, state) {
               return const QuestionHomepage();
@@ -96,7 +86,7 @@ class RouteGenerator {
             path: adminRoute,
             builder: (context, state) {
               return Admin();
-            }),
+            }),*/
       ],
     );
   }
