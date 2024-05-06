@@ -54,10 +54,10 @@ class PhoneOneItemView extends StatelessWidget {
     return Scaffold(
       appBar: UserAppBar(),
       body: Padding(
-        padding: EdgeInsets.all(50),
+        padding: EdgeInsets.all(20),
         child: SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.all(50),
+            padding: EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: AppColors.secondBackground.withOpacity(0.5),
               borderRadius: BorderRadius.circular(20),
@@ -78,7 +78,7 @@ class PhoneOneItemView extends StatelessWidget {
                 ),
                 SingleChildScrollView(
                   child: Container(
-                    width: 800,
+                    width: 1000,
                     height: 1000,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -279,17 +279,20 @@ class DesktopOneItemView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: UserAppBar(),
       body: Padding(
         padding: EdgeInsets.all(50),
-        child: SingleChildScrollView(
-          child: Container(
-            padding: EdgeInsets.all(50),
-            decoration: BoxDecoration(
-              color: AppColors.secondBackground.withOpacity(0.5),
-              borderRadius: BorderRadius.circular(20),
-            ),
+        child: Container(
+          height: height - 150,
+          decoration: BoxDecoration(
+            color: AppColors.secondBackground.withOpacity(0.5),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

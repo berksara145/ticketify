@@ -36,16 +36,20 @@ class _OneItemViewState extends State<PurchaseTicket> {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: UserAppBar(),
       body: Padding(
-        padding: EdgeInsets.all(50),
-        child: SingleChildScrollView(
-          child: Container(
-            decoration: BoxDecoration(
-              color: AppColors.secondBackground.withOpacity(0.5),
-              borderRadius: BorderRadius.circular(20),
-            ),
+        padding: const EdgeInsets.all(50.0),
+        child: Container(
+          height: height - 150, // Applying padding to the container
+          decoration: BoxDecoration(
+            color: AppColors.secondBackground.withOpacity(0.5),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -85,9 +89,21 @@ class _OneItemViewState extends State<PurchaseTicket> {
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            padding: EdgeInsets.only(bottom: 50),
-                            child: Placeholder(),
+                          Column(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.only(bottom: 50),
+                                child: Placeholder(),
+                              ),
+                              Container(
+                                padding: EdgeInsets.only(bottom: 50),
+                                child: Placeholder(),
+                              ),
+                              Container(
+                                padding: EdgeInsets.only(bottom: 50),
+                                child: Placeholder(),
+                              ),
+                            ],
                           ),
                           Padding(
                             padding: const EdgeInsets.only(left: 20.0),
@@ -152,5 +168,3 @@ class _OneItemViewState extends State<PurchaseTicket> {
     );
   }
 }
-
-class PhonePurchaseTicketView {}
