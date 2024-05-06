@@ -10,45 +10,49 @@ import 'package:ticketify/pages/homepage/homepage.dart';
 import 'package:ticketify/pages/homepage/purchase_ticket.dart';
 
 class OneItemView extends StatefulWidget {
-  const OneItemView({
+  OneItemView({
     Key? key,
-    required this.post,
+    this.post,
+    required this.event_id,
   }) : super(key: key);
 
-  final PostDTO post;
-
+  final PostDTO? post;
+  final String event_id;
   @override
   State<OneItemView> createState() => _OneItemViewState();
 }
 
 class _OneItemViewState extends State<OneItemView> {
   late PostDTO post;
-
+  late String event_id;
   @override
   void initState() {
     super.initState();
-    post = widget.post;
+    post = widget.post!;
+    event_id = widget.event_id;
   }
 
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     if (width <= 1000) {
-      return PhoneOneItemView(post: post, widget: widget);
+      return PhoneOneItemView(post: post, widget: widget, event_id: event_id,);
     }
     print(width);
-    return DesktopOneItemView(post: post, widget: widget);
+    return DesktopOneItemView(post: post, widget: widget, event_id: event_id,);
   }
 }
 
 class PhoneOneItemView extends StatelessWidget {
-  const PhoneOneItemView({
+  PhoneOneItemView({
     super.key,
-    required this.post,
+    this.post,
+    required this.event_id,
     required this.widget,
   });
-  final PostDTO post;
+  final PostDTO? post;
   final OneItemView widget;
+  final String event_id;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,16 +89,16 @@ class PhoneOneItemView extends StatelessWidget {
                       children: [
                         FittedBox(
                           child: Text(
-                            post.title,
+                            post!.title,
                             style: TextStyle(fontSize: 52),
                           ),
                         ),
                         Text(
-                          "Date: ${widget.post.sdate}",
+                          "Date: ${widget.post?.sdate}",
                           style: TextStyle(fontSize: 20),
                         ),
                         Text(
-                          "Type:  ${widget.post.tags}",
+                          "Type:  ${widget.post?.tags}",
                           style: TextStyle(fontSize: 20),
                         ),
                         Text(
@@ -108,6 +112,7 @@ class PhoneOneItemView extends StatelessWidget {
                               MaterialPageRoute(
                                 builder: (context) => PurchaseTicket(
                                   post: post,
+                                    event_id: event_id
                                 ),
                               ),
                             );
@@ -132,7 +137,7 @@ class PhoneOneItemView extends StatelessWidget {
                           height: 20,
                         ),
                         Image.network(
-                          widget.post.imageUrl ??
+                          widget.post?.imageUrl ??
                               "https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg",
                           fit: BoxFit.cover,
                         ),
@@ -154,23 +159,23 @@ class PhoneOneItemView extends StatelessWidget {
                                       padding:
                                           const EdgeInsets.only(bottom: 8.0),
                                       child: FittedBox(
-                                          child: Text("Artist(s): ${post.id}")),
+                                          child: Text("Artist(s): ${post?.id}")),
                                     ),
                                     Padding(
                                       padding:
                                           const EdgeInsets.only(bottom: 8.0),
-                                      child: Text("Starts at: ${post.sdate}"),
+                                      child: Text("Starts at: ${post?.sdate}"),
                                     ),
                                     Padding(
                                       padding:
                                           const EdgeInsets.only(bottom: 8.0),
-                                      child: Text("Location: ${post.location}"),
+                                      child: Text("Location: ${post?.location}"),
                                     ),
                                     Padding(
                                       padding:
                                           const EdgeInsets.only(bottom: 8.0),
                                       child: Text(
-                                        "Event Info: ${post.id} is getting ready to bring you its popular songs with the ${post.organizer} organization.",
+                                        "Event Info: ${post?.id} is getting ready to bring you its popular songs with the ${post?.organizer} organization.",
                                         softWrap:
                                             true, // Allow text to wrap to multiple lines
                                       ),
@@ -268,14 +273,16 @@ class PhoneOneItemView extends StatelessWidget {
 }
 
 class DesktopOneItemView extends StatelessWidget {
-  const DesktopOneItemView({
+  DesktopOneItemView({
     super.key,
-    required this.post,
+    this.post ,
+    required this.event_id,
     required this.widget,
   });
 
-  final PostDTO post;
+  PostDTO? post;
   final OneItemView widget;
+  final String event_id;
 
   @override
   Widget build(BuildContext context) {
@@ -318,7 +325,7 @@ class DesktopOneItemView extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            post.title,
+                            post!.title,
                             style: TextStyle(fontSize: 52),
                           ),
                           Expanded(child: Container()),
@@ -331,6 +338,7 @@ class DesktopOneItemView extends StatelessWidget {
                                   MaterialPageRoute(
                                     builder: (context) => PurchaseTicket(
                                       post: post,
+                                        event_id : event_id
                                     ),
                                   ),
                                 );
@@ -356,11 +364,11 @@ class DesktopOneItemView extends StatelessWidget {
                         ],
                       ),
                       Text(
-                        "Date: ${widget.post.sdate}",
+                        "Date: ${widget.post?.sdate}",
                         style: TextStyle(fontSize: 20),
                       ),
                       Text(
-                        "Type:  ${widget.post.tags}",
+                        "Type:  ${widget.post?.tags}",
                         style: TextStyle(fontSize: 20),
                       ),
                       Text(
@@ -371,7 +379,7 @@ class DesktopOneItemView extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Image.network(
-                            widget.post.imageUrl ??
+                            widget.post?.imageUrl ??
                                 "https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg",
                             fit: BoxFit.cover,
                           ),
@@ -398,25 +406,25 @@ class DesktopOneItemView extends StatelessWidget {
                                                 bottom: 8.0),
                                             child: FittedBox(
                                                 child: Text(
-                                                    "Artist(s): ${post.id}")),
+                                                    "Artist(s): ${post?.id}")),
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.only(
                                                 bottom: 8.0),
                                             child: Text(
-                                                "Starts at: ${post.sdate}"),
+                                                "Starts at: ${post?.sdate}"),
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.only(
                                                 bottom: 8.0),
                                             child: Text(
-                                                "Location: ${post.location}"),
+                                                "Location: ${post?.location}"),
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.only(
                                                 bottom: 8.0),
                                             child: Text(
-                                              "Event Info: ${post.id} is getting ready to bring you its popular songs with the ${post.organizer} organization.",
+                                              "Event Info: ${post?.id} is getting ready to bring you its popular songs with the ${post?.organizer} organization.",
                                               softWrap:
                                                   true, // Allow text to wrap to multiple lines
                                             ),

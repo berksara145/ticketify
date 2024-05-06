@@ -224,16 +224,20 @@ class ProductCard extends StatefulWidget {
 }
 
 class _ProductCardState extends State<ProductCard> {
+
+
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+        print(widget.post.id);
+
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => OneItemView(post: widget.post),
-          ),
-          Go
+          ), // TODO: BURAYA GOROUTER
         );
       },
       child: Card(

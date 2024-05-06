@@ -1,5 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:ticketify/pages/auth/auth_screen.dart';
+import 'package:ticketify/pages/homepage/homepage.dart';
+import 'package:ticketify/pages/homepage/one_item_view.dart';
 
 class RouteGenerator {
   final String loginRoute = "/auth";
@@ -40,10 +42,9 @@ class RouteGenerator {
             }),
         GoRoute(
           path: displayAllEvents,
-        builder: (context, state) {
-            return const Homepage();
-    }
-        );
+          builder: (context, state) {
+              return const Homepage();
+          }),
         GoRoute(
             path: assignmentRoute,
             builder: (context, state) {
@@ -54,17 +55,17 @@ class RouteGenerator {
               return Assignment_Details(
                   role: role, assignmentID: assignmentID, sectionID: sectionID);
             }),
-        GoRoute(
+        /*GoRoute(
             path: profileRoute,
             builder: (context, state) {
               final userId = state.pathParameters['userId'].toString();
               return UserProfilePage(userId: userId);
-            }),
+            }),*/
         GoRoute(
-            path: createAssignmentRoute,
+            path: displayOneItemRoute,
             builder: (context, state) {
-              final section = state.pathParameters['sectionID'].toString();
-              return CreateAssignmentPage(sectionID: section);
+              final itemId = state.pathParameters['eventID'].toString();
+              return OneItemView();
             }),
         GoRoute(
             path: questionHomepageRoute,
