@@ -65,7 +65,7 @@ class RouteGenerator {
             path: displayOneItemRoute,
             builder: (context, state) {
               final itemId = state.pathParameters['eventID'].toString();
-              return OneItemView();
+              return OneItemView(event_id: itemId,);
             }),
         GoRoute(
             path: questionHomepageRoute,

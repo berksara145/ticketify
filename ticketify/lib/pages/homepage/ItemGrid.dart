@@ -236,7 +236,7 @@ class _ProductCardState extends State<ProductCard> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => OneItemView(post: widget.post),
+            builder: (context) => OneItemView(post: widget.post, event_id: widget.post.id,),
           ), // TODO: BURAYA GOROUTER
         );
       },
