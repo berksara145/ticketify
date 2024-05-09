@@ -3,6 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:ticketify/constants/constant_variables.dart';
 import 'package:ticketify/pages/auth/widgets/login_form.dart';
 import 'package:ticketify/pages/auth/widgets/register_form.dart';
+import 'package:ticketify/pages/auth/widgets/reset_passowrd_change_password.dart';
+import 'package:ticketify/pages/auth/widgets/reset_password_enter_code.dart';
+import 'package:ticketify/pages/auth/widgets/reset_password_get_mail.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({
@@ -51,10 +54,11 @@ class _AuthScreenState extends State<AuthScreen> {
           ),
           Expanded(
               child: isLogin
-                  ? LoginForm(
-                      setParentState: () => setState(() {
-                            isLogin = false;
-                          }))
+                  ? ResetPasswordChangePassword()
+                  // ? LoginForm(
+                  //     setParentState: () => setState(() {
+                  //           isLogin = false;
+                  //         }))
                   : RegisterForm(
                       setParentState: () => setState(() {
                             isLogin = true;
@@ -64,3 +68,5 @@ class _AuthScreenState extends State<AuthScreen> {
     );
   }
 }
+
+class ResetPassWordChangePassword {}
