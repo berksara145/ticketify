@@ -1,3 +1,4 @@
+USE cs353dbproject;
 CREATE TABLE IF NOT EXISTS User (
     user_id INT NOT NULL AUTO_INCREMENT,
     first_name VARCHAR(50) NOT NULL,
