@@ -22,6 +22,7 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Row(
           children: [
             PageSelector(
+              isCreateIssueEnabled: true,
               returnActivePageName: (newName) {
                 setState(() {
                   activePage = newName;
