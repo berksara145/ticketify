@@ -1,5 +1,6 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ticketify/constants/constant_variables.dart';
 import 'package:ticketify/pages/auth/widgets/auth_text_field.dart';
 import 'package:ticketify/pages/homepage/homepage.dart';
@@ -57,7 +58,7 @@ class _RegisterFormState extends State<RegisterForm> {
                   width: 1.0, // Width of the border
                 ),
                 // Set the border radius for rounded corners
-                borderRadius: BorderRadius.all(
+                borderRadius: const BorderRadius.all(
                   Radius.circular(10), // Radius of 10
                 ),
               ),
@@ -106,8 +107,8 @@ class _RegisterFormState extends State<RegisterForm> {
           AuthTextField(controller: passwordController, label: passwordLabel),
           GestureDetector(
             onTap: () => {widget.setParentState()},
-            child: Padding(
-              padding: const EdgeInsets.only(top: 2.0),
+            child: const Padding(
+              padding: EdgeInsets.only(top: 2.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -130,17 +131,18 @@ class _RegisterFormState extends State<RegisterForm> {
 
           TextButton(
             onPressed: () {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => const Homepage()));
+              /*Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => const Homepage()));*/
+              GoRouter.of(context).go('/display/all');
             },
             child: Container(
               width: 300,
               alignment: Alignment.center,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   color: AppColors.buttonBlue,
                   borderRadius: BorderRadius.all(Radius.circular(15))),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: Text(
                   'Sign Up',
                   style: TextStyle(

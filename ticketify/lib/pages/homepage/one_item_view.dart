@@ -3,6 +3,7 @@ import 'dart:html';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ticketify/constants/constant_variables.dart';
 import 'package:ticketify/pages/auth/widgets/appbar/user_app_bar.dart';
 import 'package:ticketify/pages/homepage/ItemGrid.dart';
@@ -333,15 +334,16 @@ class DesktopOneItemView extends StatelessWidget {
                             padding: const EdgeInsets.only(right: 75.0),
                             child: TextButton(
                               onPressed: () {
-                                Navigator.push(
+                                GoRouter.of(context).go('/purchase/:eventID');
+                               /* Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => PurchaseTicket(
                                       post: post,
                                         event_id : event_id
-                                    ),
+                                    ),// TODO
                                   ),
-                                );
+                                );*/
                               },
                               style: ButtonStyle(
                                 backgroundColor:

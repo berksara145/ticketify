@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ticketify/pages/auth/auth_screen.dart';
 import 'package:ticketify/pages/homepage/homepage.dart';
 import 'package:ticketify/pages/homepage/purchase_ticket.dart';
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const AuthScreen(),
+      home: const AuthScreen(), /*GoRouter.of(context).go('/auth'),*/
     );
   }
 }

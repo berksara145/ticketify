@@ -6,7 +6,6 @@ from flask_mysqldb import MySQL
 import MySQLdb.cursors
 from flask_cors import CORS
 
-#https://www.youtube.com/watch?v=5uiHHX4Sxw8
 
 app = Flask(__name__)
 CORS(app) 
@@ -19,35 +18,62 @@ app.config['MYSQL_DB'] = 'cs353dbproject'
 
 mysql = MySQL(app)
 
+# Function to execute schema.sql file
+def execute_schema_sql():
+    with app.app_context():
+        script_dir = os.path.dirname(__file__)
+        schema_file_path = os.path.join(script_dir, 'schema.sql')
+        with open(schema_file_path, 'r') as file:
+            schema_sql = file.read()
+            cursor = mysql.connection.cursor()
+            try:
+                # Execute the SQL commands only if the table 'user' does not exist
+                cursor.execute("SHOW TABLES LIKE 'user'")
+                result = cursor.fetchone()
+                if not result:
+                    cursor.execute(schema_sql)
+                    mysql.connection.commit()
+                else:
+                    print("Table 'user' already exists.")
+            except mysql.connection.ProgrammingError as e:
+                # Handle any exceptions
+                print("Error:", e)
+            finally:
+                cursor.close()
 
+# Execute schema.sql file upon Flask application startup
+execute_schema_sql()
 #@app.route('/')
-@app.route('/login', methods=['GET','POST'])
+@app.route('/login', methods=['POST'])
 def login():
-    # Get login request data from the request body
-    data = request.json
-    email = data.get('email')
-    password = data.get('password')
-    user_type = data.get('userType')
-    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    cursor.execute('SELECT * FROM User WHERE email = % s AND password = % s', (email, password,))
-    user = cursor.fetchone()  
-    if user:              
-            session['loggedin'] = True
-            session['userid'] = user['user_id']
-            session['email'] = user['email']
-            return jsonify({'message': 'Login successful'}), 200
-    else:
-            return jsonify({'message': 'Invalid credentials'}), 401
+       # Get email and password from request body
+    email = request.json.get('email')
+    password = request.json.get('password')
 
-    # Check if the user exists and the password is correct
-    #if email in users and users[email]['password'] == password:
-        # Check if the user type matches
-    #    if user_type == users[email]['user_type']:
-    #        return jsonify({'message': 'Login successful'}), 200
-    #    else:
-    #        return jsonify({'message': 'Invalid user type'}), 400
-    #else:
-    #    return jsonify({'message': 'Invalid credentials'}), 401
+    # Check if email and password are provided
+    if not email or not password:
+        return jsonify({'message': 'Email and password are required'}), 404
+
+    # Create MySQL cursor
+    cur = mysql.connection.cursor()
+
+    # Execute query to fetch user from 'user' table
+    cur.execute('SELECT * FROM user WHERE email = %s AND password = %s', (email, password))
+
+    # Fetch one row
+    user = cur.fetchone()
+
+    # Close cursor
+    cur.close()
+
+    # Check if user exists
+    if not user:
+        print(email)
+        print(password)
+        return jsonify({'message': 'Invalid email or password'}), 401
+
+    # User exists, return user data
+    return jsonify({'user': user}), 200
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
