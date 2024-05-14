@@ -4,9 +4,9 @@ import 'package:intl/intl.dart';
 
 class FilterContainer extends StatefulWidget {
   const FilterContainer({
-    Key? key,
+    super.key,
     required this.title,
-  }) : super(key: key);
+  });
 
   final String title;
 
@@ -49,7 +49,7 @@ class _FilterContainerState extends State<FilterContainer> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.0),
           border: Border.all(
-            color: AppColors.grey, // Siyah renkli border
+            color: AppColors.greydark, // Siyah renkli border
             width: 0.5, // Border kalınlığı
           ),
           color: AppColors.filterColor,
@@ -226,7 +226,7 @@ class _FilterContainerState extends State<FilterContainer> {
                                 minPrice = double.tryParse(value) ?? 0;
                               });
                             },
-                            style: TextStyle(color: AppColors.grey),
+                            style: TextStyle(color: AppColors.greydark),
                             keyboardType:
                                 TextInputType.numberWithOptions(decimal: true),
                             decoration: InputDecoration(
@@ -380,7 +380,7 @@ class _ClickableTextState extends State<ClickableText> {
 
 class CustomSearchBar extends StatelessWidget {
   final String hint_text;
-  const CustomSearchBar(this.hint_text, {Key? key}) : super(key: key);
+  const CustomSearchBar(this.hint_text, {super.key});
 
   @override
   Widget build(BuildContext context) {

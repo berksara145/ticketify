@@ -7,13 +7,15 @@ class AppFonts {
 }
 
 class AppColors {
-  static const Color grey = Colors.grey;
+  static const Color greydark = Color(0xD9D9D9D9);
+  static const Color greylight = Color(0xFFEEEEEE);
+
   static const Color white = Color(0xffffffff);
   static const Color secondBackground = Color(0xffd9d9d9);
   static const Color black = Color(0xff000000);
   static const Color green = Color(0xBF00ACB5);
-  static const Color blue = Color.fromRGBO(127, 199, 217, 0.366);
-  static const Color buttonBlue = Color.fromRGBO(54, 84, 134, 1);
+  static const Color blue = Color(0x5D7FC7D9);
+  static const Color buttonBlue = Color(0xFF365486);
 
   //static const Color filterColor = Color(0xff393e46);
   static const Color filterColor = Color(0xff5d6169);
