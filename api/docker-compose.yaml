@@ -1,11 +1,16 @@
-version: '3'
+version: '3.8'
 services:
   web:
-    image: ticketify
+    build: .
     ports:
       - "5000:5000"
+    environment:
+      - FLASK_ENV = development
+      - FLASK_APP = api.py  
     volumes:
       - ./api:/api
+    depends_on:
+      - db  
     working_dir: /api
     command: python api.py
   db:
@@ -13,7 +18,5 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: password1212
       MYSQL_DATABASE: cs353dbproject
-    ports:
-      - "3307:3306"
     volumes:
-      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/schema.sql

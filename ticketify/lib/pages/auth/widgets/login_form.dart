@@ -4,7 +4,8 @@ import 'package:flutter/widgets.dart';
 import 'package:ticketify/constants/constant_variables.dart';
 import 'package:ticketify/pages/auth/widgets/auth_text_field.dart';
 import 'package:ticketify/pages/homepage/homepage.dart';
-
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 class LoginForm extends StatefulWidget {
   LoginForm({super.key, required this.setParentState});
   final VoidCallback setParentState;
@@ -25,7 +26,37 @@ class _LoginFormState extends State<LoginForm> {
   final String passwordLabel = "Password";
 
   String? userType;
+   Future<void> _login() async {
+    // Construct the login request payload
+    final Map<String, dynamic> data = {
+      'email': emailController.text,
+      'password': passwordController.text,
+      'userType': userType,
+    };
 
+    // Send the login request to your Flask backend
+    final response = await http.post(
+      Uri.parse('http://127.0.0.1:5000/login'), // Update with your backend URL
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(data),
+    );
+
+    // Handle the response from the backend
+    if (response.statusCode == 200) {
+      // Successful login, navigate to homepage or perform other actions
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const Homepage()),
+      );
+    } else {
+      // Login failed, display error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Login failed')),
+      );
+    }
+   }
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -143,10 +174,7 @@ class _LoginFormState extends State<LoginForm> {
           ),
           const SizedBox(height: 30),
           TextButton(
-            onPressed: () {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => const Homepage()));
-            },
+            onPressed: _login,
             child: Container(
               width: 300,
               alignment: Alignment.center,

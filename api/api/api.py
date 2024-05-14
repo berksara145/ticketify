@@ -4,11 +4,12 @@ import os
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
+from flask_cors import CORS
 
 #https://www.youtube.com/watch?v=5uiHHX4Sxw8
 
 app = Flask(__name__)
-
+CORS(app) 
 app.secret_key = 'abcdefgh'
 
 app.config['MYSQL_HOST'] = 'db'
@@ -19,26 +20,34 @@ app.config['MYSQL_DB'] = 'cs353dbproject'
 mysql = MySQL(app)
 
 
-@app.route('/')
-@app.route('/login', methods=['GET', 'POST'])
+#@app.route('/')
+@app.route('/login', methods=['GET','POST'])
 def login():
-    message = ''
-    if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
-        username = request.form['username']
-        password = request.form['password']
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM customer WHERE name = % s AND cid = % s', (username, password,))
-        user = cursor.fetchone()
-        if user:
+    # Get login request data from the request body
+    data = request.json
+    email = data.get('email')
+    password = data.get('password')
+    user_type = data.get('userType')
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute('SELECT * FROM User WHERE email = % s AND password = % s', (email, password,))
+    user = cursor.fetchone()  
+    if user:              
             session['loggedin'] = True
-            session['userid'] = user['cid']
-            session['username'] = user['name']
-            message = 'Logged in successfully!'
-            return redirect(url_for('main_page'))
-        else:
-            message = 'Please enter correct email / password !'
-    #return render_template('login.html', message=message)
+            session['userid'] = user['user_id']
+            session['email'] = user['email']
+            return jsonify({'message': 'Login successful'}), 200
+    else:
+            return jsonify({'message': 'Invalid credentials'}), 401
 
+    # Check if the user exists and the password is correct
+    #if email in users and users[email]['password'] == password:
+        # Check if the user type matches
+    #    if user_type == users[email]['user_type']:
+    #        return jsonify({'message': 'Login successful'}), 200
+    #    else:
+    #        return jsonify({'message': 'Invalid user type'}), 400
+    #else:
+    #    return jsonify({'message': 'Invalid credentials'}), 401
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
