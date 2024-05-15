@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ticketify/general_widgets/selected_page.dart';
+import 'package:ticketify/pages/Organizator/event/create_event_widget.dart';
+import 'package:ticketify/pages/Organizator/organizer_homepage.dart';
 import 'package:ticketify/pages/auth/auth_screen.dart';
 import 'package:ticketify/pages/homepage/homepage.dart';
 import 'package:ticketify/pages/homepage/purchase_ticket.dart';
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: ProfilePage(),
+      home: CreateEventPage(),
     );
   }
 }

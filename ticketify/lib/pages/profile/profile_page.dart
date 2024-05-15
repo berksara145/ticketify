@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ticketify/general_widgets/page_selector/page_selector.dart';
-import 'package:ticketify/general_widgets/selected_page.dart';
+import 'package:ticketify/pages/Organizator/event/create_event_widget.dart';
 import 'package:ticketify/pages/auth/widgets/appbar/user_app_bar.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -50,7 +50,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ],
             ),
-            CreateEventWidget(),
 //            Text(activePage)
           ],
         ),

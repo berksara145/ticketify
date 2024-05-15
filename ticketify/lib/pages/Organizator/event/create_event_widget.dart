@@ -38,7 +38,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 24),
+        margin: const EdgeInsets.symmetric(horizontal: 20),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(36),
           color: AppColors.greylight.withAlpha(255),
@@ -50,7 +50,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
             ),
           ],
         ),
-        width: 600,
+        width: MediaQuery.of(context).size.width - 500,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -61,6 +61,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
               child: Column(
                 children: [
                   DropdownMenu<String>(
+                    expandedInsets: EdgeInsets.all(0),
                     hintText: "Select type of the event",
                     initialSelection: "",
                     dropdownMenuEntries: eventType.map((category) {
@@ -326,9 +327,9 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                               briefDescription = value;
                             });
                           },
-                          maxLines: 3,
+                          maxLines: 10,
                           decoration: const InputDecoration(
-                            labelText: 'Brief Description',
+                            hintText: 'Brief Description',
                             border: OutlineInputBorder(),
                           ),
                         ),
@@ -341,9 +342,10 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                               eventRules = value;
                             });
                           },
-                          maxLines: 3,
+                          maxLines: 10,
                           decoration: const InputDecoration(
-                            labelText: 'Event Rules',
+                            hintText: "Event Rules",
+                            //     labelText: 'Event Rules',
                             border: OutlineInputBorder(),
                           ),
                         ),

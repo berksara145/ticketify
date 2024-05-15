@@ -29,7 +29,7 @@ class _PageSelectorState extends State<PageSelector> {
 
   @override
   Widget build(BuildContext context) {
-    double containerWidth = 300;
+    double containerWidth = 400;
     return Container(
       margin: EdgeInsets.symmetric(vertical: 50),
       decoration: BoxDecoration(
