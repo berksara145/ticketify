@@ -12,14 +12,13 @@ def create_venue():
     venue_name = data.get('venue_name')
     address = data.get('address')
     phone_no = data.get('phone_no')
-    venue_capacity = data.get('venue_capacity')
     venue_image = data.get('venue_image')
     venue_row_length = data.get('venue_row_length')
     venue_column_length = data.get('venue_column_length')
     venue_section_count = data.get('venue_section_count')
 
     # Validate required data
-    if not (venue_name and address and phone_no and venue_capacity and venue_image and
+    if not (venue_name and address and phone_no and venue_image and
             venue_row_length and venue_column_length and venue_section_count):
         return jsonify({'error': 'Missing required data'}), 400
 
@@ -31,11 +30,11 @@ def create_venue():
         print("creating venue")
         # Insert venue into venue table
         venue_insert_query = """
-        INSERT INTO venue(venue_name, address, phone_no, venue_capacity, url_photo,
+        INSERT INTO venue(venue_name, address, phone_no, section_count, url_photo,
         venue_row_length, venue_column_length)
         VALUES (%s, %s, %s, %s, %s, %s, %s)
         """
-        cursor.execute(venue_insert_query, (venue_name, address, phone_no, venue_capacity,
+        cursor.execute(venue_insert_query, (venue_name, address, phone_no, venue_section_count,
                                              venue_image, venue_row_length, venue_column_length))
 
         venue_id = cursor.lastrowid  # Get the ID of the newly inserted venue

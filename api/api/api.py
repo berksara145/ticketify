@@ -37,30 +37,17 @@ def execute_schema_sql():
             try:
                 # Execute the SQL commands only if the table 'user' does not exist
                 
-                cursor.execute("SHOW TABLES LIKE 'user'")
-                result = cursor.fetchone()
-                if result:
-                    cursor.fetchall()
-                    print("drop all tables")
-
-                    # User table exists, drop all tables in the database
-                    cursor.execute("SET FOREIGN_KEY_CHECKS=0")  # Disable foreign key checks
-                    cursor.execute("SHOW TABLES")
-                    tables = cursor.fetchall()
-                    for table in tables:
-                        table_name = table[0]
-                        print("dropping", table_name)
-                        cursor.execute(f"DROP TABLE IF EXISTS {table_name}")
-                    cursor.execute("SET FOREIGN_KEY_CHECKS=1")  # Re-enable foreign key checks
                 
                 # Execute the schema SQL to create tables
                 cursor.execute(schema_sql)
                 mysql.connection.commit()
                 print("Schema executed and initial data inserted.")
+
             except mysql.connection.ProgrammingError as e:
                 # Handle any exceptions
                 print("Error:", e)
             finally:
+                cursor.fetchall()
                 cursor.close()
 
 # Execute schema.sql file upon Flask application startup
@@ -128,3 +115,23 @@ def register():
 if __name__ =="__main__":
     port = int(os.environ.get('PORT', 5000))
     app.run(debug=True, host='0.0.0.0', port=port)
+
+"""
+cursor.execute("SHOW TABLES LIKE 'user'")
+                result = cursor.fetchone()
+                if result:
+                    cursor.fetchall()
+                    print("drop all tables")
+
+                    # User table exists, drop all tables in the database
+                    cursor.execute("SET FOREIGN_KEY_CHECKS=0")  # Disable foreign key checks
+                    cursor.execute("SHOW TABLES")
+                    tables = cursor.fetchall()
+                    for table in tables:
+                        table_name = table[0]
+                        print("dropping", table_name)
+                        cursor.execute(f"DROP TABLE IF EXISTS {table_name}")
+                    cursor.execute("SET FOREIGN_KEY_CHECKS=1")  # Re-enable foreign key checks
+                
+                cursor.fetchall()
+"""
