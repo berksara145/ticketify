@@ -33,12 +33,12 @@ class ProfileItem extends StatelessWidget {
         ],
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Container(
-            height: 40,
+            height: 90,
+            width: 120,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(36)),
               image: DecorationImage(
                 image: NetworkImage(
                     'https://picsum.photos/200/300'), // Replace with your actual image URL

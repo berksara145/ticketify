@@ -10,6 +10,7 @@ class ProfileBrowseTickets extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    double width = size.width;
 
     final List<ProfileItemData> items = [
       ProfileItemData(
@@ -54,35 +55,43 @@ class ProfileBrowseTickets extends StatelessWidget {
           organizer: "Organizer 2"),
       // // Add more items as needed
     ];
-    return Container(
-      height: 800,
-      decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.black.withOpacity(0.5),
-              blurRadius: 4,
-              offset: const Offset(0, 4), // Shadow position
-            ),
-          ],
-          color: AppColors.greylight.withAlpha(255),
-          borderRadius: BorderRadius.circular(37)),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          const PageTitle(title: "Past Events"),
-          Wrap(
-            spacing: 8.0, // space between rows
-            runSpacing: 4.0, // space between columns
-            children: items
-                .map((item) => ProfileItem(
-                      title: item.title,
-                      acceptDate: item.acceptDate,
-                      location: item.location,
-                      organizer: item.organizer,
-                    ))
-                .toList(),
+    return Expanded(
+      child: Container(
+        height: 800,
+        // width: 2 * width / 3,
+        decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.black.withOpacity(0.5),
+                blurRadius: 4,
+                offset: const Offset(0, 4), // Shadow position
+              ),
+            ],
+            color: AppColors.greylight.withAlpha(255),
+            borderRadius: BorderRadius.circular(37)),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const PageTitle(title: "Past Events"),
+              Wrap(
+                alignment: WrapAlignment.spaceBetween,
+                //spacing: 8.0, // space between rows
+                runSpacing: 4.0, // space between columns
+                children: items
+                    .map((item) => Flexible(
+                          child: ProfileItem(
+                            title: item.title,
+                            acceptDate: item.acceptDate,
+                            location: item.location,
+                            organizer: item.organizer,
+                          ),
+                        ))
+                    .toList(),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
