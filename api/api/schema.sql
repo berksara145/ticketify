@@ -23,6 +23,13 @@ CREATE TABLE IF NOT EXISTS organizer (
     phone_no VARCHAR(13)
 );
 
+-- Insert dummy information for one organizer
+INSERT INTO organizer (password, first_name, last_name, email, user_type, phone_no)
+VALUES ('dummy_password', 'John', 'Doe', 'john@example.com', 'organizer', '1234567890');
+
+SELECT user_id, first_name, last_name, email, user_type, phone_no
+FROM organizer;
+
 CREATE TABLE IF NOT EXISTS  worker_bee (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     password VARCHAR(40) NOT NULL,
@@ -62,7 +69,7 @@ CREATE TABLE IF NOT EXISTS  venue(
     venue_name VARCHAR(64) NOT NULL,
     address VARCHAR(64) NOT NULL,
     phone_no VARCHAR(13),
-    section_count INT NOT NULL,
+    venue_section_count INT NOT NULL,
     url_photo VARCHAR(255),
     venue_row_length INT,
     venue_column_length INT
@@ -147,7 +154,7 @@ CREATE TABLE IF NOT EXISTS  organization_organize_event (
     user_id INT,
     event_id INT,
     PRIMARY KEY (user_id, event_id),
-    FOREIGN KEY (user_id) REFERENCES user(user_id)
+    FOREIGN KEY (user_id) REFERENCES organizer(user_id)
 );
 
 -- Table: perform
@@ -187,8 +194,7 @@ CREATE TABLE IF NOT EXISTS  buy (
 CREATE TABLE IF NOT EXISTS  event_in_venue (
     event_id INT,
     venue_id INT,
-    PRIMARY KEY (event_id, venue_id),
-    FOREIGN KEY (venue_id) REFERENCES venue(venue_id)
+    PRIMARY KEY (event_id, venue_id)
 );
 
 -- Table: ticket_seat

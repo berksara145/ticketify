@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from datetime import datetime
 from utils import get_db_connection
 import math
+import traceback
 
 event_bp = Blueprint('event', __name__, url_prefix='/event')
 
@@ -92,7 +93,7 @@ def create_event():
         # Add relation between organizer, event
         organizer_event_insert_query = """
         INSERT INTO organization_organize_event(user_id, event_id)
-        VALUES (%s, %s, %s)
+        VALUES (%s, %s)
         """
         cursor.execute(organizer_event_insert_query, (organizer_id, event_id))
 
@@ -114,11 +115,11 @@ def create_event():
             raise ValueError(f"No venue found with venue_id {venue_id}")
 
         # Extract relevant information from the retrieved venue
-        venue_id = venue[0] 
-        venue_name = venue[1] 
-        section_count = venue[4]  # Assuming section_count is the 5th column (index 4)
-        row_length = venue[6]  # Assuming venue_row_length is the 7th column (index 6)
-        column_length = venue[7]  # Assuming venue_column_length is the 8th column (index 7)
+        venue_id = venue[0][0] 
+        venue_name = venue[0][1] 
+        section_count = venue[0][4]  # Assuming section_count is the 5th column (index 4)
+        row_length = venue[0][6]  # Assuming venue_row_length is the 7th column (index 6)
+        column_length = venue[0][7]  # Assuming venue_column_length is the 8th column (index 7)
 
         print(f"Venue ID: {venue_id}, Venue Name: {venue_name}, Section Count: {section_count}, Row Length: {row_length}, Column Length: {column_length}")
 
@@ -143,8 +144,8 @@ def create_event():
                 if(num == 1):
                     num = row_length
 
-                ticket_id = create_tickets(event_id, ticket_prices[i], "")
-                insert_ticket_seat_entry(ticket_id, str(chr(ord('A') + letter - 1)) + str(num))
+                ticket_id = create_tickets(event_id, ticket_prices[i], "", cursor)
+                insert_ticket_seat_entry(ticket_id, str(chr(ord('A') + letter - 1)) + str(num), cursor)
 
         # Commit changes to the database
         connection.commit()
@@ -156,14 +157,11 @@ def create_event():
         return jsonify({'message': 'Event created successfully', 'event_id': event_id}), 200
 
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        traceback_info = traceback.format_exc()
+        return jsonify({'error': str(e), 'traceback': traceback_info}), 500
 
-def insert_ticket_seat_entry(ticket_id, seat_position):
+def insert_ticket_seat_entry(ticket_id, seat_position, cursor):
     try:
-        # Connect to the MySQL database
-        connection = get_db_connection()
-        cursor = connection.cursor()
-
         print(f"Inserting entry into ticket_seat table with Ticket ID: {ticket_id}, Seat Position: {seat_position}")
 
         # SQL query to insert an entry into the ticket_seat table
@@ -174,20 +172,16 @@ def insert_ticket_seat_entry(ticket_id, seat_position):
 
         # Execute the SQL query
         cursor.execute(sql_query, values)
-        connection.commit()
+
         
         print("Entry inserted into ticket_seat table successfully")
 
     except Exception as e:
-        connection.rollback()
         print("Error inserting entry into ticket_seat table:", e)
         raise  # Re-raise the exception here
 
-def create_tickets(event_id, ticket_price, barcode):
+def create_tickets(event_id, ticket_price, barcode, cursor):
     try:
-        # Connect to the MySQL database
-        connection = get_db_connection()
-        cursor = connection.cursor()
 
         print(f"Creating ticket for event ID: {event_id}, Ticket price: {ticket_price}, Barcode: {barcode}")
         is_bought = False  # By default, the ticket is not bought
@@ -203,14 +197,7 @@ def create_tickets(event_id, ticket_price, barcode):
         cursor.execute("INSERT INTO event_has_ticket (event_id, ticket_id) VALUES (%s, %s)",
                         (event_id, ticket_id))
         
-        # Commit changes to the database
-        connection.commit()
-
         print(f"Ticket event added to the relation")
-
-        # Close database connection
-        cursor.close()
-        connection.close()
 
         print(f"ticket created successfully and added to event {event_id}")
         return ticket_id
@@ -218,11 +205,5 @@ def create_tickets(event_id, ticket_price, barcode):
         print("Error creating tickets:", e)
         raise
         
-    finally:
-        # Close the database connection
-        if connection.is_connected():
-            cursor.close()
-            connection.close()
-            print("MySQL connection is closed")
 
         

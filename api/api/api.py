@@ -36,7 +36,23 @@ def execute_schema_sql():
             cursor = mysql.connection.cursor()
             try:
                 # Execute the SQL commands only if the table 'user' does not exist
+                cursor.execute("SHOW TABLES LIKE 'user'")
+                result = cursor.fetchone()
+                if result:
+                    cursor.fetchall()
+                    print("drop all tables")
+
+                    # User table exists, drop all tables in the database
+                    cursor.execute("SET FOREIGN_KEY_CHECKS=0")  # Disable foreign key checks
+                    cursor.execute("SHOW TABLES")
+                    tables = cursor.fetchall()
+                    for table in tables:
+                        table_name = table[0]
+                        print("dropping", table_name)
+                        cursor.execute(f"DROP TABLE IF EXISTS {table_name}")
+                    cursor.execute("SET FOREIGN_KEY_CHECKS=1")  # Re-enable foreign key checks
                 
+                cursor.fetchall()
                 
                 # Execute the schema SQL to create tables
                 cursor.execute(schema_sql)
@@ -86,39 +102,31 @@ def login():
     # User exists, return user data
     return jsonify({'user': user}), 200
 
-@app.route('/register', methods=['POST'])
+@app.route('/register', methods=['GET', 'POST'])
 def register():
-    data = request.get_json()
-    
-    first_name = data.get('first_name')
-    last_name = data.get('last_name')
-    email = data.get('email')
-    password = data.get('password')
-    user_type = data.get('user_type')
-    
-    if not first_name or not last_name or not email or not password or not user_type:
-        return jsonify({'message': 'All fields are required'}), 400
+    message = ''
+    if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
+        username = request.form['username']
+        password = request.form['password']
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM customer WHERE name = % s', (username,))
+        account = cursor.fetchone()
+        if account:
+            message = 'Choose a different username!'
 
-    # Check if email is valid
-    if not re.match(r'[^@]+@[^@]+\.[^@]+', email):
-        return jsonify({'message': 'Invalid email address'}), 400
+        elif not username or not password:
+            message = 'Please fill out the form!'
 
-    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    
-    # Check if the email is already registered
-    cursor.execute('SELECT * FROM user WHERE email = %s', (email,))
-    account = cursor.fetchone()
-    
-    if account:
-        return jsonify({'message': 'Email is already registered'}), 400
-    
-    # Insert the new user into the database
-    cursor.execute('INSERT INTO user (first_name, last_name, email, password, user_type) VALUES (%s, %s, %s, %s, %s)',
-                   ( first_name, last_name, email, password, user_type))
-    mysql.connection.commit()
-    cursor.close()
-    
-    return jsonify({'message': 'User successfully registered'}), 201
+        else:
+            cursor.execute('INSERT INTO customer (cid, name) VALUES (% s, % s)', (password, username))
+            mysql.connection.commit()
+            message = 'User successfully created!'
+
+    elif request.method == 'POST':
+
+        message = 'Please fill all the fields!'
+    #return render_template('register.html', message=message)
+
 
 if __name__ =="__main__":
     port = int(os.environ.get('PORT', 5000))

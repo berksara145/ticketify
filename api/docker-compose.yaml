@@ -19,6 +19,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: password1212
       MYSQL_DATABASE: cs353dbproject
+      MYSQL_INITDB_SKIP_TZINFO: "true"
+    command: ["--innodb_lock_wait_timeout=300"]
     volumes:
       - ./db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
     ports:
