@@ -131,7 +131,7 @@ def register():
     mysql.connection.commit()
     cursor.close()
     
-    return jsonify({'message': 'User successfully registered'}), 201
+    return jsonify({'message': 'User successfully registered'}), 200
 
 if __name__ =="__main__":
     port = int(os.environ.get('PORT', 5000))

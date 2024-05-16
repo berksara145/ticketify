@@ -45,6 +45,20 @@ class _RegisterFormState extends State<RegisterForm> {
       },
       body: jsonEncode(data),
     );
+
+    // Handle the response from the backend
+    if (response.statusCode == 200) {
+      // Successful login, navigate to homepage or perform other actions
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const Homepage()),
+      );
+    } else {
+      // Login failed, display error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Sign up failed')),
+      );
+    }
   }
 
   @override
