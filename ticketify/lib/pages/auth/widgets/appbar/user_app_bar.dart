@@ -59,7 +59,7 @@ class _UserAppBarState extends State<UserAppBar> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const CreateEventPage()));
+                      builder: (context) => const OrganizerHomepage()));
             },
             icon: Icon(Icons.event_available_outlined)),
         IconButton(
