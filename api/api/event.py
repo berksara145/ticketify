@@ -132,20 +132,34 @@ def create_event():
         # If there are any remaining seats after distributing evenly
         remaining_seats = total_seats % section_count
 
+        print(f"total_seats: {total_seats}, seats_per_section: {seats_per_section}, remaining_seats: {remaining_seats}")
+
         #create tickets
         # Create a list to store the seat counts for each section
         #event_has_ticket event ticket bağla
         #ticket_seat ticket seat bağla ama seat kendin üret biliyon ztn çekmene gerek yok
         for i in range(section_count):
             for j in range(seats_per_section):
-                seat_num = (i + 1) * seats_per_section + j + 1 #in total seat_num
+                seat_num = i * seats_per_section + j + 1 #in total seat_num
+                print(f"seatnum: {seat_num}")
                 letter = math.ceil(seat_num / row_length) #gives seat letter
-                num = (seat_num % row_length ) + 1 # gives seat num in row
-                if(num == 1):
+                num = (seat_num % row_length ) # gives seat num in row
+                if(num == 0):
                     num = row_length
 
                 ticket_id = create_tickets(event_id, ticket_prices[i], "", cursor)
                 insert_ticket_seat_entry(ticket_id, str(chr(ord('A') + letter - 1)) + str(num), cursor)
+
+        for j in range(remaining_seats):
+            seat_num = section_count * seats_per_section + j + 1 #in total seat_num
+            print(f"seatnum: {seat_num}")
+            letter = math.ceil(seat_num / row_length) #gives seat letter
+            num = (seat_num % row_length ) # gives seat num in row
+            if(num == 0):
+                num = row_length
+
+            ticket_id = create_tickets(event_id, ticket_prices[i], "", cursor)
+            insert_ticket_seat_entry(ticket_id, str(chr(ord('A') + letter - 1)) + str(num), cursor)
 
         # Commit changes to the database
         connection.commit()
@@ -190,14 +204,9 @@ def create_tickets(event_id, ticket_price, barcode, cursor):
         cursor.execute("INSERT INTO tickets (ticket_barcode, ticket_price, is_bought) VALUES (%s, %s, %s)",
                         (barcode, ticket_price, is_bought))
         ticket_id = cursor.lastrowid  # Get the ID of the newly inserted ticket
-
-        print(f"Ticket {ticket_id} created successfully")
-
         # Create a relation between the event and the ticket
         cursor.execute("INSERT INTO event_has_ticket (event_id, ticket_id) VALUES (%s, %s)",
                         (event_id, ticket_id))
-        
-        print(f"Ticket event added to the relation")
 
         print(f"ticket created successfully and added to event {event_id}")
         return ticket_id
