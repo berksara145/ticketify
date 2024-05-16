@@ -4,12 +4,15 @@ CREATE DATABASE IF NOT EXISTS cs353dbproject;
 -- Use the database
 USE cs353dbproject;
 
--- Create the user table
 CREATE TABLE user (
-    id VARCHAR(5) PRIMARY KEY,
-    email VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL,
-);
+user_id CHAR(11) PRIMARY KEY,
+password VARCHAR(40) NOT NULL,
+first_name VARCHAR(60),
+last_name VARCHAR(60),
+email VARCHAR(100),
+user_type VARCHAR(20)
+)
+
 
 -- Optionally, you can add any additional columns or constraints here.
 

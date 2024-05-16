@@ -18,7 +18,6 @@ app.config['MYSQL_DB'] = 'cs353dbproject'
 
 mysql = MySQL(app)
 
-# Function to execute schema.sql file
 def execute_schema_sql():
     with app.app_context():
         script_dir = os.path.dirname(__file__)
@@ -31,6 +30,8 @@ def execute_schema_sql():
                 cursor.execute("SHOW TABLES LIKE 'user'")
                 result = cursor.fetchone()
                 if not result:
+                    # Consume the entire result set before executing the next query
+                    cursor.fetchall()
                     cursor.execute(schema_sql)
                     mysql.connection.commit()
                 else:
@@ -108,8 +109,6 @@ def returnascii():
     answer = str(ord(inputchr))
     d['output'] = answer
     return d
-
-
 
 if __name__ =="__main__":
     port = int(os.environ.get('PORT', 5000))

@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 services:
   web:
     image: cs353app
@@ -7,11 +7,11 @@ services:
       - "5000:5000"
     environment:
       - FLASK_ENV=development
-      - FLASK_APP=api.py  
+      - FLASK_APP=api.py
     volumes:
       - ./api:/api
     depends_on:
-      - db  
+      - db
     working_dir: /api
     command: ["python", "api.py"]
   db:
