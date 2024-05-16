@@ -30,12 +30,20 @@ def execute_schema_sql():
                 cursor.execute("SHOW TABLES LIKE 'user'")
                 result = cursor.fetchone()
                 if not result:
-                    # Consume the entire result set before executing the next query
                     cursor.fetchall()
                     cursor.execute(schema_sql)
                     mysql.connection.commit()
+                    print("Schema executed and initial data inserted.")
                 else:
                     print("Table 'user' already exists.")
+
+                # Check if user with user_id = 1 exists
+                cursor.execute('SELECT * FROM user WHERE user_id = %s', ('111',))
+                user = cursor.fetchone()
+                if user:
+                    print("User with user_id = 111 exists.")
+                else:
+                    print("User with user_id = 111 does not exist.")
             except mysql.connection.ProgrammingError as e:
                 # Handle any exceptions
                 print("Error:", e)
@@ -44,6 +52,7 @@ def execute_schema_sql():
 
 # Execute schema.sql file upon Flask application startup
 execute_schema_sql()
+
 #@app.route('/')
 @app.route('/login', methods=['POST'])
 def login():
@@ -59,17 +68,18 @@ def login():
     cur = mysql.connection.cursor()
 
     # Execute query to fetch user from 'user' table
-    cur.execute('SELECT * FROM user WHERE email = %s AND password = %s', (email, password))
+    cur.execute('SELECT * FROM user WHERE email = % s AND password = % s', (email, password))
 
     # Fetch one row
     user = cur.fetchone()
 
     # Close cursor
-    cur.close()
+    #cur.close()
 
     # Check if user exists
     if not user:
         print(email)
+        print('here')
         print(password)
         return jsonify({'message': 'Invalid email or password'}), 401
 
@@ -101,14 +111,6 @@ def register():
         message = 'Please fill all the fields!'
     #return render_template('register.html', message=message)
 
-
-@app.route('/api', methods = ['GET'])
-def returnascii():
-    d = {}
-    inputchr = str(request.args['query'])
-    answer = str(ord(inputchr))
-    d['output'] = answer
-    return d
 
 if __name__ =="__main__":
     port = int(os.environ.get('PORT', 5000))
