@@ -15,7 +15,7 @@ class PageTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
+      width: 1000,
       height: 80,
       alignment: Alignment.centerLeft,
       padding: const EdgeInsets.symmetric(horizontal: 40.0),

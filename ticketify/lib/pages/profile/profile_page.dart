@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ticketify/general_widgets/page_selector/page_selector.dart';
+import 'package:ticketify/general_widgets/page_title.dart';
 import 'package:ticketify/pages/Organizator/event/create_event_widget.dart';
 import 'package:ticketify/pages/auth/widgets/appbar/user_app_bar.dart';
+import 'package:ticketify/pages/profile/widgets/profile_past_tickets.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -19,8 +21,10 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: UserAppBar(),
       body: Padding(
         padding: EdgeInsets.symmetric(
-            horizontal: 16.0), // Adjust the horizontal padding as needed
+            vertical: 50,
+            horizontal: 32.0), // Adjust the horizontal padding as needed
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             PageSelector(
               isCreateIssueEnabled: true,
@@ -29,7 +33,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   activePage = newName;
                 });
               },
-              title: "Memduh Tutuş Welcome back!",
+              title: "Memduh Tutuş Welcome back!sssssssss",
               pageListConfigs: [
                 PageListConfig(
                   title: 'Events',
@@ -50,6 +54,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ],
             ),
+
+            ProfileBrowseTickets()
+
 //            Text(activePage)
           ],
         ),
