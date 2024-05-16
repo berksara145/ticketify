@@ -9,6 +9,8 @@ from flask_cors import CORS
 
 from event import event_bp
 from venue import venue_bp
+from issue import issue_bp
+from response import response_bp
 
 
 app = Flask(__name__)
@@ -25,6 +27,9 @@ mysql = MySQL(app)
 
 app.register_blueprint(event_bp)
 app.register_blueprint(venue_bp)
+app.register_blueprint(issue_bp)
+app.register_blueprint(response_bp)
+
 
 def execute_schema_sql():
     print("handling schemas")
@@ -65,9 +70,6 @@ def execute_schema_sql():
             finally:
                 cursor.fetchall()
                 cursor.close()
-
-# Execute schema.sql file upon Flask application startup
-execute_schema_sql()
 
 #@app.route('/')
 @app.route('/login', methods=['POST'])

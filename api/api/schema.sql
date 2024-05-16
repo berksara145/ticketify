@@ -40,6 +40,9 @@ CREATE TABLE IF NOT EXISTS  worker_bee (
     issue_count INT
 );
 
+INSERT INTO worker_bee (password, first_name, last_name, email, user_type, issue_count)
+VALUES('password4', 'Emily', 'Brown', 'emily.brown@example.com', 'worker', 0);
+
 CREATE TABLE IF NOT EXISTS  buyer (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     password VARCHAR(40) NOT NULL,
@@ -94,8 +97,9 @@ CREATE TABLE IF NOT EXISTS  performer(
 
 CREATE TABLE IF NOT EXISTS  issue(
     issue_id INT AUTO_INCREMENT PRIMARY KEY,
+    issue_name VARCHAR(8192) NOT NULL,
     issue_text VARCHAR(8192) NOT NULL,
-    response_text VARCHAR(8192)
+    date DATE
 );
 
 CREATE TABLE IF NOT EXISTS  transaction(
@@ -131,22 +135,25 @@ CREATE TABLE IF NOT EXISTS  make (
     issue_id INT,
     user_id INT,
     PRIMARY KEY (issue_id, user_id),
-    FOREIGN KEY (user_id) REFERENCES user(user_id)
+    FOREIGN KEY (user_id) REFERENCES organizer(user_id)
 );
 
 -- Table: create
 CREATE TABLE IF NOT EXISTS  createe (
     issue_id INT,
     user_id INT,
-    PRIMARY KEY (issue_id, user_id)
+    PRIMARY KEY (issue_id, user_id),
+    FOREIGN KEY (user_id) REFERENCES buyer(user_id)
 );
 
 -- Table: respond
 CREATE TABLE IF NOT EXISTS  respond (
     issue_id INT,
     user_id INT,
-    PRIMARY KEY (issue_id, user_id),
-    FOREIGN KEY (user_id) REFERENCES user(user_id)
+    date DATE,
+    response_text VARCHAR(8192) NOT NULL,
+    PRIMARY KEY (issue_id, user_id, date),
+    FOREIGN KEY (user_id) REFERENCES worker_bee(user_id)
 );
 
 -- Table: organization_organize_event

@@ -4,7 +4,69 @@ from utils import get_db_connection
 import math
 import traceback
 
+
 event_bp = Blueprint('event', __name__, url_prefix='/event')
+
+
+# Event GET all endpoint
+@event_bp.route('/getAllEvents', methods=['GET'])
+def get_all_events():
+    try:
+        print("entered get all events")
+
+        event_query = """
+            SELECT e.event_id, e.event_name, e.start_date, e.end_date, e.event_category,
+                e.ticket_prices, e.url_photo AS event_photo, e.description_text, e.event_rules,
+                v.venue_name, v.address, v.url_photo AS venue_photo,
+                p.performer_name, o.first_name AS organizer_first_name, o.last_name AS organizer_last_name
+            FROM event_in_venue eiv
+            INNER JOIN event e ON eiv.event_id = e.event_id
+            INNER JOIN venue v ON eiv.venue_id = v.venue_id
+            INNER JOIN perform pf ON e.event_id = pf.event_id
+            INNER JOIN performer p ON pf.performer_id = p.performer_id
+            INNER JOIN organization_organize_event oo ON e.event_id = oo.event_id
+            INNER JOIN organizer o ON oo.user_id = o.user_id
+            ORDER BY e.start_date DESC;
+        """
+
+                
+        # Connect to the database
+        connection = get_db_connection()
+        cursor = connection.cursor()
+
+        # Execute SQL query to join event_in_venue and venue tables
+        cursor.execute(event_query)
+        events = cursor.fetchall()
+        
+        # Convert result to list of dictionaries
+        event_list = []
+        for event in events:
+            event_dict = {
+                "event_id": event[0],
+                "event_name": event[1],
+                "start_date": event[2],  # Format date as string
+                "end_date": event[3],  # Format date as string
+                "event_category": event[4],
+                "ticket_prices": event[5].split('-'),  # Convert ticket prices to list
+                "url_photo": event[6],
+                "description_text": event[7],
+                "event_rules": event[8],
+                "venue": {  # Nested dictionary for venue
+                    "venue_name": event[9],
+                    "address": event[10],
+                    "url_photo": event[11]
+                },
+                "performer_name": event[12],
+                "organizer_first_name": event[13], 
+                "organizer_last_name": event[14]
+
+            }
+            event_list.append(event_dict)
+        
+
+        return jsonify(event_list), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 
 # burada ticket logici çözülmeli daha yapmadım bide sqlde de table değişcek
