@@ -122,11 +122,10 @@ def register():
             mysql.connection.commit()
             message = 'User successfully created!'
 
-    elif request.method == 'POST':
-
-        message = 'Please fill all the fields!'
-    #return render_template('register.html', message=message)
-
+        mysql.connection.commit()
+        cursor.close()
+        
+        return jsonify({'message': 'User successfully registered'}), 200
 
 if __name__ =="__main__":
     port = int(os.environ.get('PORT', 5000))
