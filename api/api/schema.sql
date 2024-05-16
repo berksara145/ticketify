@@ -5,12 +5,12 @@ CREATE DATABASE IF NOT EXISTS cs353dbproject;
 USE cs353dbproject;
 
 CREATE TABLE user (
-user_id INT AUTO_INCREMENT PRIMARY KEY,
-password VARCHAR(40) NOT NULL,
-first_name VARCHAR(60),
-last_name VARCHAR(60),
-email VARCHAR(100),
-user_type VARCHAR(20)
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(60),
+    last_name VARCHAR(60),
+    email VARCHAR(100),
+    password VARCHAR(40) NOT NULL,
+    user_type VARCHAR(20)
 );
 
 CREATE TABLE organizer (
@@ -237,5 +237,3 @@ CREATE TABLE generate (
     FOREIGN KEY (user_id) REFERENCES user(user_id),
     FOREIGN KEY (venue_id) REFERENCES venue(venue_id)
 );
-
--- You can add more INSERT statements to insert more sample data if needed.
