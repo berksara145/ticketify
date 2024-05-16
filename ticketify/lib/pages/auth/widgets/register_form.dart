@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:ticketify/constants/constant_variables.dart';
 import 'package:ticketify/pages/auth/widgets/auth_text_field.dart';
 import 'package:ticketify/pages/homepage/homepage.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class RegisterForm extends StatefulWidget {
   RegisterForm({super.key, required this.setParentState});
@@ -25,6 +27,25 @@ class _RegisterFormState extends State<RegisterForm> {
   final String passwordLabel = "Password";
 
   String? userType;
+   Future<void> _signup() async {
+    // Construct the register request payload
+    final Map<String, dynamic> data = {
+      'first_name': nameController.text,
+      'last_name': surnameController.text,
+      'email': emailController.text,
+      'password': passwordController.text,
+      'user_type': userType,
+    };
+
+    // Send the register request to your Flask backend
+    final response = await http.post(
+      Uri.parse('http://127.0.0.1:5000/register'), // Update with your backend URL
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(data),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -130,11 +151,7 @@ class _RegisterFormState extends State<RegisterForm> {
           const SizedBox(height: 30),
 
           TextButton(
-            onPressed: () {
-              /*Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => const Homepage()));*/
-              GoRouter.of(context).go('/display/all');
-            },
+            onPressed: _signup,
             child: Container(
               width: 300,
               alignment: Alignment.center,
