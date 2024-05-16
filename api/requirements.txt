@@ -3,3 +3,4 @@ mysqlclient==2.2.4
 flask_mysqldb==2.0.0
 Werkzeug==3.0.2
 Flask-Cors==3.0.10
+mysql-connector-python==8.4.0
