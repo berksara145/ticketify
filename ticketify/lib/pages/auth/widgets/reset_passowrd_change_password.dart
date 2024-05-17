@@ -6,7 +6,7 @@ import 'package:ticketify/pages/auth/widgets/auth_text_field.dart';
 import 'package:ticketify/pages/homepage/homepage.dart';
 
 class ResetPasswordChangePassword extends StatefulWidget {
-  ResetPasswordChangePassword({super.key});
+  const ResetPasswordChangePassword({super.key});
 
   @override
   State<ResetPasswordChangePassword> createState() =>
