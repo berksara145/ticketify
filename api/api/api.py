@@ -106,28 +106,37 @@ def login():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    message = ''
-    if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
-        username = request.form['username']
-        password = request.form['password']
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM customer WHERE name = % s', (username,))
-        account = cursor.fetchone()
-        if account:
-            message = 'Choose a different username!'
+    data = request.get_json()
 
-        elif not username or not password:
-            message = 'Please fill out the form!'
+    first_name = data.get('first_name')
+    last_name = data.get('last_name')
+    email = data.get('email')
+    password = data.get('password')
+    user_type = data.get('user_type')
 
-        else:
-            cursor.execute('INSERT INTO customer (cid, name) VALUES (% s, % s)', (password, username))
-            mysql.connection.commit()
-            message = 'User successfully created!'
+    if not first_name or not last_name or not email or not password or not user_type:
+        return jsonify({'message': 'All fields are required'}), 400
 
-        mysql.connection.commit()
-        cursor.close()
-        
-        return jsonify({'message': 'User successfully registered'}), 200
+    # Check if email is valid
+    if not re.match(r'[^@]+@[^@]+\.[^@]+', email):
+        return jsonify({'message': 'Invalid email address'}), 400
+
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+
+    # Check if the email is already registered
+    cursor.execute('SELECT * FROM user WHERE email = %s', (email,))
+    account = cursor.fetchone()
+
+    if account:
+        return jsonify({'message': 'Email is already registered'}), 400
+
+    # Insert the new user into the database
+    cursor.execute('INSERT INTO user (first_name, last_name, email, password, user_type) VALUES (%s, %s, %s, %s, %s)',
+                   ( first_name, last_name, email, password, user_type))
+    mysql.connection.commit()
+    cursor.close()
+
+    return jsonify({'message': 'User successfully registered'}), 200
 
 if __name__ =="__main__":
     port = int(os.environ.get('PORT', 5000))
