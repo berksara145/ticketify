@@ -278,3 +278,32 @@ def create_tickets(event_id, ticket_price, barcode, cursor):
         
 
         
+@event_bp.route('/getFilteredEvents', methods=['GET'])
+def get_filtered_events():
+    try:
+        print("entered get all filtered events")
+
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+
+@event_bp.route('/addEventClicked', methods=['POST'])
+def add_event_clicked():
+    try:
+        print("entered get all filtered events")
+
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+    
+@event_bp.route('/getEventsClicked', methods=['GET'])
+def add_event_clicked():
+    try:
+        print("entered get all filtered events")
+
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500

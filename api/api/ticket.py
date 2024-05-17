@@ -248,3 +248,14 @@ def view_past_tickets():
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+@ticket_bp.route('/insertMoney', methods=['POST'])
+def insert_money():   
+    #inserts money to the user with user_id
+    return jsonify({}), 200
+
+
+@ticket_bp.route('/returnTicket', methods=['POST'])
+def return_ticket():   
+    #inserts money to the user with user_id
+    return jsonify({}), 200
