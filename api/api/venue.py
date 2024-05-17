@@ -30,7 +30,7 @@ def create_venue():
         print("creating venue")
         # Insert venue into venue table
         venue_insert_query = """
-        INSERT INTO venue(venue_name, address, phone_no, section_count, url_photo,
+        INSERT INTO venue(venue_name, address, phone_no, venue_section_count, url_photo,
         venue_row_length, venue_column_length)
         VALUES (%s, %s, %s, %s, %s, %s, %s)
         """
