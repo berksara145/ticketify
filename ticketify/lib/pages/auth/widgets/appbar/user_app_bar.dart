@@ -1,9 +1,11 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ticketify/pages/Organizator/organizer_homepage.dart';
 import 'package:ticketify/pages/auth/auth_screen.dart';
 import 'package:ticketify/pages/homepage/homepage.dart';
 import 'package:ticketify/constants/constant_variables.dart';
+import 'package:ticketify/pages/profile/profile_page.dart';
 
 class UserAppBar extends StatefulWidget implements PreferredSizeWidget {
   const UserAppBar({super.key});
@@ -52,6 +54,20 @@ class _UserAppBarState extends State<UserAppBar> {
         ],
       ),
       actions: [
+        IconButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const OrganizerHomepage()));
+            },
+            icon: Icon(Icons.event_available_outlined)),
+        IconButton(
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const ProfilePage()));
+            },
+            icon: Icon(Icons.account_circle)),
         TextButton(
             onPressed: () {
               Navigator.pushReplacement(context,
