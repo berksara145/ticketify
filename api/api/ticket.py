@@ -183,3 +183,68 @@ def buy_ticket():
     except Exception as e:
         return jsonify({'error': str(e), 'trace': traceback.format_exc()}), 500
         
+
+@ticket_bp.route('/viewPastTickets', methods=['GET'])
+def view_past_tickets():
+    try:
+        data = request.json
+        user_id = data.get('user_id')
+
+        # Validate required parameters
+        if not user_id:
+            return jsonify({'error': 'Missing user_id parameter'}), 400
+
+        # Connect to the database
+        connection = get_db_connection()
+        cursor = connection.cursor()
+
+        # Check if the buyer exists
+        cursor.execute("SELECT user_id FROM buyer WHERE user_id = %s", (user_id,))
+        buyer = cursor.fetchone()
+        if not buyer:
+            return jsonify({'error': 'Buyer does not exist'}), 404
+
+        # Fetch past tickets purchased by the buyer with event, venue, and organizer details
+        cursor.execute("""
+            SELECT 
+                t.ticket_id, t.ticket_barcode, t.ticket_price, p.amount,
+                e.event_name, v.venue_name, e.start_date,
+                o.first_name AS organizer_first_name, o.last_name AS organizer_last_name
+            FROM tickets t
+            INNER JOIN payment_has_tickets pt ON t.ticket_id = pt.ticket_id
+            INNER JOIN Payment p ON pt.payment_id = p.payment_id
+            INNER JOIN buy b ON p.payment_id = b.payment_id
+            INNER JOIN event_has_ticket eht ON t.ticket_id = eht.ticket_id
+            INNER JOIN event e ON eht.event_id = e.event_id
+            INNER JOIN event_in_venue eiv ON e.event_id = eiv.event_id
+            INNER JOIN venue v ON eiv.venue_id = v.venue_id
+            INNER JOIN organization_organize_event oo ON e.event_id = oo.event_id
+            INNER JOIN organizer o ON oo.user_id = o.user_id
+            WHERE b.user_id = %s
+        """, (user_id,))
+        past_tickets = cursor.fetchall()
+
+        # Close database connection
+        cursor.close()
+        connection.close()
+
+        # Prepare response data
+        tickets_info = []
+        for ticket in past_tickets:
+            ticket_info = {
+                "ticket_id": ticket[0],
+                "ticket_barcode": ticket[1],
+                "ticket_price": ticket[2],
+                "payment_amount": ticket[3],
+                "event_name": ticket[4],
+                "venue_name": ticket[5],
+                "start_date": ticket[6],
+                "organizer_first_name": ticket[7],
+                "organizer_last_name": ticket[8]
+            }
+            tickets_info.append(ticket_info)
+
+        return jsonify(tickets_info), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
