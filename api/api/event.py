@@ -300,7 +300,7 @@ def add_event_clicked():
 
     
 @event_bp.route('/getEventsClicked', methods=['GET'])
-def add_event_clicked():
+def get_events_clicked():
     try:
         print("entered get all filtered events")
 

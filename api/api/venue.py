@@ -4,11 +4,25 @@ from utils import get_db_connection
 venue_bp = Blueprint('venue', __name__, url_prefix='/venue')
 
 
+
+"""
+-- Table: generate
+CREATE TABLE IF NOT EXISTS  generate (
+    user_id INT,
+    venue_id INT,
+    PRIMARY KEY (user_id, venue_id),
+    FOREIGN KEY (user_id) REFERENCES user(user_id),
+    FOREIGN KEY (venue_id) REFERENCES venue(venue_id)
+);
+bu talbe relation eklenmeli create e unutulmuş
+"""
+
 # Endpoint to create a venue and associate it with an event
 @venue_bp.route('/create', methods=['POST'])
 def create_venue():
     # Extract data from request
     data = request.json
+    user_id = data.get('user_id')
     venue_name = data.get('venue_name')
     address = data.get('address')
     phone_no = data.get('phone_no')
@@ -19,7 +33,7 @@ def create_venue():
 
     # Validate required data
     if not (venue_name and address and phone_no and venue_image and
-            venue_row_length and venue_column_length and venue_section_count):
+            venue_row_length and venue_column_length and venue_section_count and user_id):
         return jsonify({'error': 'Missing required data'}), 400
 
     try:
@@ -45,6 +59,9 @@ def create_venue():
             for column in range(1, venue_column_length + 1):
                 seat_position = f"{chr(64 + row)}{column}"  # Convert row number to letter (A, B, C, ...)
                 cursor.execute("INSERT INTO seats (seat_position, venue_id) VALUES (%s, %s)", (seat_position, venue_id))
+
+        # Insert into generate table
+        cursor.execute("INSERT INTO generate (user_id, venue_id) VALUES (%s, %s)", (user_id, venue_id))
 
         # Commit changes to the database
         connection.commit()

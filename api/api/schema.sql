@@ -234,6 +234,6 @@ CREATE TABLE IF NOT EXISTS  generate (
     user_id INT,
     venue_id INT,
     PRIMARY KEY (user_id, venue_id),
-    FOREIGN KEY (user_id) REFERENCES user(user_id),
+    FOREIGN KEY (user_id) REFERENCES organizer(user_id),
     FOREIGN KEY (venue_id) REFERENCES venue(venue_id)
 );

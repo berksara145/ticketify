@@ -250,12 +250,95 @@ def view_past_tickets():
         return jsonify({'error': str(e)}), 500
 
 @ticket_bp.route('/insertMoney', methods=['POST'])
-def insert_money():   
-    #inserts money to the user with user_id
-    return jsonify({}), 200
+def insert_money():
+    try:
+        # Extract data from the request
+        data = request.json
+        user_id = data.get('user_id')
+        amount = data.get('amount')
+
+        # Validate required parameters
+        if not user_id or amount is None:
+            return jsonify({'error': 'Missing user_id or amount parameter'}), 400
+
+        # Connect to the database
+        connection = get_db_connection()
+        cursor = connection.cursor()
+
+        # Check if the buyer exists
+        cursor.execute("SELECT money FROM buyer WHERE user_id = %s", (user_id,))
+        buyer = cursor.fetchone()
+        if not buyer:
+            return jsonify({'error': 'Buyer does not exist'}), 404
+
+        # Update the buyer's money
+        new_balance = buyer[0] + amount
+        cursor.execute("UPDATE buyer SET money = %s WHERE user_id = %s", (new_balance, user_id))
+        connection.commit()
+
+        # Close database connection
+        cursor.close()
+        connection.close()
+
+        return jsonify({'message': 'Money inserted successfully', 'new_balance': new_balance}), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 
 @ticket_bp.route('/returnTicket', methods=['POST'])
-def return_ticket():   
-    #inserts money to the user with user_id
-    return jsonify({}), 200
+def return_ticket():
+    try:
+        # Extract data from the request
+        data = request.json
+        user_id = data.get('user_id')
+        ticket_id = data.get('ticket_id')
+
+        # Validate required parameters
+        if not user_id or not ticket_id:
+            return jsonify({'error': 'Missing user_id or ticket_id parameter'}), 400
+
+        # Connect to the database
+        connection = get_db_connection()
+        cursor = connection.cursor()
+
+        # Check if the user and ticket exist and if the ticket is owned by the buyer
+        cursor.execute("""
+            SELECT b.user_id, t.ticket_price, pht.payment_id
+            FROM buyer AS b
+            INNER JOIN buy AS buy_tbl ON b.user_id = buy_tbl.user_id
+            INNER JOIN payment_has_tickets AS pht ON buy_tbl.payment_id = pht.payment_id
+            INNER JOIN tickets AS t ON pht.ticket_id = t.ticket_id
+            WHERE b.user_id = %s AND t.ticket_id = %s
+        """, (user_id, ticket_id))
+
+        result = cursor.fetchone()
+        
+        if not result:
+            return jsonify({'error': 'No such ticket owned by the buyer'}), 404
+
+        buyer_id, ticket_price, payment_id = result
+
+        # Mark the ticket as not bought
+        cursor.execute("UPDATE tickets SET is_bought = FALSE WHERE ticket_id = %s", (ticket_id,))
+
+        # Update the payment amount
+        cursor.execute("UPDATE Payment SET amount = amount - %s WHERE payment_id = %s", (ticket_price, payment_id))
+
+        # Update the buyer's money
+        cursor.execute("UPDATE buyer SET money = money + %s WHERE user_id = %s", (ticket_price, user_id))
+
+        # Delete the ticket-payment relation from payment_has_tickets
+        cursor.execute("DELETE FROM payment_has_tickets WHERE payment_id = %s AND ticket_id = %s", (payment_id, ticket_id))
+
+        # Commit the transaction
+        connection.commit()
+
+        # Close database connection
+        cursor.close()
+        connection.close()
+
+        return jsonify({'message': 'Ticket returned successfully'}), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e), 'trace': traceback.format_exc()}), 500
