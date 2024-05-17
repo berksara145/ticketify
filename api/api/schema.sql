@@ -179,12 +179,12 @@ CREATE TABLE IF NOT EXISTS payment_has_tickets (
     FOREIGN KEY (payment_id) REFERENCES Payment(payment_id)
 );
 
--- Table: browse -- this table is trash buy relation is enough
+-- Table: browse
 CREATE TABLE IF NOT EXISTS  browse (
     user_id INT,
     event_id INT,
     PRIMARY KEY (user_id, event_id),
-    FOREIGN KEY (user_id) REFERENCES user(user_id),
+    FOREIGN KEY (user_id) REFERENCES buyer(user_id),
     FOREIGN KEY (event_id) REFERENCES event(event_id)
 );
 

@@ -281,9 +281,96 @@ def create_tickets(event_id, ticket_price, barcode, cursor):
 @event_bp.route('/getFilteredEvents', methods=['GET'])
 def get_filtered_events():
     try:
-        print("entered get all filtered events")
+        print("entered fileted event get")
+        data = request.json
 
-        
+        # Extract query parameters
+        category_name = data.get('category_name', '')
+        start_date = data.get('start_date', '')
+        end_date = data.get('end_date', '')
+        ticket_price_min = data.get('ticket_price_min', '')
+        ticket_price_max = data.get('ticket_price_max', '')
+        event_name = data.get('event_name', '')
+
+        # Connect to the database
+        connection = get_db_connection()
+        cursor = connection.cursor()
+
+        # Build the base query
+        query = """
+        SELECT e.event_id, e.event_name, e.start_date, e.end_date, e.event_category,
+        e.ticket_prices, e.url_photo, e.description_text, e.event_rules,
+        v.venue_name, v.address, v.url_photo,
+        pe.performer_name,
+        o.first_name, o.last_name
+        FROM event AS e
+        LEFT JOIN event_in_venue AS ev ON e.event_id = ev.event_id
+        LEFT JOIN venue AS v ON ev.venue_id = v.venue_id
+        LEFT JOIN organization_organize_event AS oe ON e.event_id = oe.event_id
+        LEFT JOIN organizer AS o ON oe.user_id = o.user_id
+        LEFT JOIN perform AS p ON e.event_id = p.event_id
+        LEFT JOIN performer AS pe ON p.performer_id = pe.performer_id
+        WHERE 1=1
+        """
+
+        # List to hold query parameters
+        query_params = []
+
+        # Add filters to the query if they are provided
+        if category_name:
+            query += " AND e.event_category = %s"
+            query_params.append(category_name)
+        if start_date:
+            query += " AND e.start_date >= %s"
+            query_params.append(start_date)
+        if end_date:
+            query += " AND e.end_date <= %s"
+            query_params.append(end_date)
+        if ticket_price_min:
+            query += " AND CAST(SUBSTRING_INDEX(e.ticket_prices, '-', 1) AS DECIMAL) >= %s"
+            query_params.append(ticket_price_min)
+        if ticket_price_max:
+            query += " AND CAST(SUBSTRING_INDEX(e.ticket_prices, '-', -1) AS DECIMAL) <= %s"
+            query_params.append(ticket_price_max)
+        if event_name:
+            query += " AND e.event_name LIKE %s"
+            query_params.append(f"%{event_name}%")
+
+        # Execute the query
+        cursor.execute(query, query_params)
+
+        # Fetch all matching events
+        events = cursor.fetchall()
+
+        # Close the cursor and connection
+        cursor.close()
+        connection.close()
+
+        # Format the results
+        result = []
+        for event in events:
+            result.append({
+                "event_id": event[0],
+                "event_name": event[1],
+                "start_date": event[2],  # Format date as string
+                "end_date": event[3],  # Format date as string
+                "event_category": event[4],
+                "ticket_prices": event[5].split('-'),  # Convert ticket prices to list
+                "url_photo": event[6],
+                "description_text": event[7],
+                "event_rules": event[8],
+                "venue": {  # Nested dictionary for venue
+                    "venue_name": event[9],
+                    "address": event[10],
+                    "url_photo": event[11]
+                },
+                "performer_name": event[12],
+                "organizer_first_name": event[13], 
+                "organizer_last_name": event[14]
+            })
+
+        return jsonify(result), 200
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -292,18 +379,114 @@ def get_filtered_events():
 @event_bp.route('/addEventClicked', methods=['POST'])
 def add_event_clicked():
     try:
-        print("entered get all filtered events")
-
+        # Extract data from the request
+        data = request.json
+        user_id = data.get('user_id')
+        event_id = data.get('event_id')
         
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        # Validate required data
+        if not (user_id and event_id):
+            return jsonify({'error': 'Missing required data'}), 400
 
-    
+        # Connect to the database
+        connection = get_db_connection()
+        cursor = connection.cursor()
+
+        # Check if the user exists
+        cursor.execute("SELECT * FROM buyer WHERE user_id = %s", (user_id,))
+        if not cursor.fetchone():
+            return jsonify({'error': 'User does not exist'}), 404
+
+        # Check if the event exists
+        cursor.execute("SELECT * FROM event WHERE event_id = %s", (event_id,))
+        if not cursor.fetchone():
+            return jsonify({'error': 'Event does not exist'}), 404
+
+        # Insert or update the browse table with the click information
+        cursor.execute("INSERT INTO browse (user_id, event_id) VALUES (%s, %s) ON DUPLICATE KEY UPDATE user_id=%s", (user_id, event_id, user_id))
+
+        # Commit changes to the database
+        connection.commit()
+
+        # Close database connection
+        cursor.close()
+        connection.close()
+
+        return jsonify({'message': 'Event click information stored successfully'}), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e), 'trace': traceback.format_exc()}), 500
+
+
+
 @event_bp.route('/getEventsClicked', methods=['GET'])
 def get_events_clicked():
     try:
-        print("entered get all filtered events")
+        # Extract user_id from the request query parameters
+        data = request.json
+        user_id = data.get('user_id')
 
-        
+        # Validate user_id
+        if not user_id:
+            return jsonify({'error': 'Missing user_id parameter'}), 400
+
+        # Connect to the database
+        connection = get_db_connection()
+        cursor = connection.cursor()
+
+        # Check if the user exists
+        cursor.execute("SELECT * FROM buyer WHERE user_id = %s", (user_id,))
+        if not cursor.fetchone():
+            return jsonify({'error': 'User does not exist'}), 404
+
+        # Retrieve events clicked by the user with detailed information
+        cursor.execute("""
+            SELECT e.event_id, e.event_name, e.start_date, e.end_date, e.event_category,
+                   e.ticket_prices, e.url_photo, e.description_text, e.event_rules,
+                   v.venue_name, v.address, v.url_photo,
+                   pe.performer_name,
+                   o.first_name, o.last_name
+            FROM event AS e
+            LEFT JOIN event_in_venue AS ev ON e.event_id = ev.event_id
+            LEFT JOIN venue AS v ON ev.venue_id = v.venue_id
+            LEFT JOIN organization_organize_event AS oe ON e.event_id = oe.event_id
+            LEFT JOIN organizer AS o ON oe.user_id = o.user_id
+            LEFT JOIN perform AS p ON e.event_id = p.event_id
+            LEFT JOIN performer AS pe ON p.performer_id = pe.performer_id
+            INNER JOIN browse AS b ON e.event_id = b.event_id
+            WHERE b.user_id = %s
+        """, (user_id,))
+        events_clicked = cursor.fetchall()
+
+        # Prepare response data
+        clicked_events = []
+        for event in events_clicked:
+            event_data = {
+                "event_id": event[0],
+                "event_name": event[1],
+                "start_date": event[2],  # Format date as string
+                "end_date": event[3],  # Format date as string
+                "event_category": event[4],
+                "ticket_prices": event[5].split('-'),  # Convert ticket prices to list
+                "url_photo": event[6],
+                "description_text": event[7],
+                "event_rules": event[8],
+                "venue": {  # Nested dictionary for venue
+                    "venue_name": event[9],
+                    "address": event[10],
+                    "url_photo": event[11]
+                },
+                "performer_name": event[12],
+                "organizer_first_name": event[13], 
+                "organizer_last_name": event[14]
+            }
+            clicked_events.append(event_data)
+
+        # Close database connection
+        cursor.close()
+        connection.close()
+
+        return jsonify({'clicked_events': clicked_events}), 200
+
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'error': str(e), 'trace': traceback.format_exc()}), 500
