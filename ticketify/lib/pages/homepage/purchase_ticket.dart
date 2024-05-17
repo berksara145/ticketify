@@ -13,12 +13,14 @@ import 'package:ticketify/pages/homepage/one_item_view.dart';
 import 'package:ticketify/pages/homepage/purchase_ticket.dart';
 
 class PurchaseTicket extends StatefulWidget {
-  const PurchaseTicket({
+  PurchaseTicket({
     Key? key,
-    required this.post,
+    this.post,
+    required this.event_id,
   }) : super(key: key);
 
-  final PostDTO post;
+  final PostDTO? post;
+  final String event_id;
 
   @override
   State<PurchaseTicket> createState() => _OneItemViewState();
@@ -31,21 +33,25 @@ class _OneItemViewState extends State<PurchaseTicket> {
   @override
   void initState() {
     super.initState();
-    post = widget.post;
+    post = widget.post!;
   }
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: UserAppBar(),
       body: Padding(
-        padding: EdgeInsets.all(50),
-        child: SingleChildScrollView(
-          child: Container(
-            decoration: BoxDecoration(
-              color: AppColors.secondBackground.withOpacity(0.5),
-              borderRadius: BorderRadius.circular(20),
-            ),
+        padding: const EdgeInsets.all(50.0),
+        child: Container(
+          height: height - 150, // Applying padding to the container
+          decoration: BoxDecoration(
+            color: AppColors.secondBackground.withOpacity(0.5),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -58,6 +64,7 @@ class _OneItemViewState extends State<PurchaseTicket> {
                         MaterialPageRoute(
                           builder: (context) => OneItemView(
                             post: post,
+                            event_id: post.id,
                           ),
                         ),
                       );
@@ -75,19 +82,31 @@ class _OneItemViewState extends State<PurchaseTicket> {
                         style: TextStyle(fontSize: 52),
                       ),
                       Text(
-                        "Date: ${widget.post.sdate}",
+                        "Date: ${widget.post?.sdate}",
                         style: TextStyle(fontSize: 20),
                       ),
                       Text(
-                        "Type:  ${widget.post.tags}",
+                        "Type:  ${widget.post?.tags}",
                         style: TextStyle(fontSize: 20),
                       ),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            padding: EdgeInsets.only(bottom: 50),
-                            child: Placeholder(),
+                          Column(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.only(bottom: 50),
+                                child: Placeholder(),
+                              ),
+                              Container(
+                                padding: EdgeInsets.only(bottom: 50),
+                                child: Placeholder(),
+                              ),
+                              Container(
+                                padding: EdgeInsets.only(bottom: 50),
+                                child: Placeholder(),
+                              ),
+                            ],
                           ),
                           Padding(
                             padding: const EdgeInsets.only(left: 20.0),
@@ -152,5 +171,3 @@ class _OneItemViewState extends State<PurchaseTicket> {
     );
   }
 }
-
-class PhonePurchaseTicketView {}

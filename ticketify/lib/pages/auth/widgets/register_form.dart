@@ -1,8 +1,11 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ticketify/constants/constant_variables.dart';
 import 'package:ticketify/pages/auth/widgets/auth_text_field.dart';
 import 'package:ticketify/pages/homepage/homepage.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class RegisterForm extends StatefulWidget {
   RegisterForm({super.key, required this.setParentState});
@@ -24,6 +27,39 @@ class _RegisterFormState extends State<RegisterForm> {
   final String passwordLabel = "Password";
 
   String? userType;
+   Future<void> _signup() async {
+    // Construct the register request payload
+    final Map<String, dynamic> data = {
+      'first_name': nameController.text,
+      'last_name': surnameController.text,
+      'email': emailController.text,
+      'password': passwordController.text,
+      'user_type': userType,
+    };
+
+    // Send the register request to your Flask backend
+    final response = await http.post(
+      Uri.parse('http://127.0.0.1:5000/register'), // Update with your backend URL
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(data),
+    );
+
+    // Handle the response from the backend
+    if (response.statusCode == 200) {
+      // Successful login, navigate to homepage or perform other actions
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const Homepage()),
+      );
+    } else {
+      // Login failed, display error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Sign up failed')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -129,10 +165,7 @@ class _RegisterFormState extends State<RegisterForm> {
           const SizedBox(height: 30),
 
           TextButton(
-            onPressed: () {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => const Homepage()));
-            },
+            onPressed: _signup,
             child: Container(
               width: 300,
               alignment: Alignment.center,

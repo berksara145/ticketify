@@ -54,11 +54,11 @@ class _AuthScreenState extends State<AuthScreen> {
           ),
           Expanded(
               child: isLogin
-                  ? ResetPasswordChangePassword()
-                  // ? LoginForm(
-                  //     setParentState: () => setState(() {
-                  //           isLogin = false;
-                  //         }))
+
+                   ? LoginForm(
+                       setParentState: () => setState(() {
+                             isLogin = false;
+                           }))
                   : RegisterForm(
                       setParentState: () => setState(() {
                             isLogin = true;
