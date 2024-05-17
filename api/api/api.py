@@ -11,7 +11,7 @@ from event import event_bp
 from venue import venue_bp
 from issue import issue_bp
 from response import response_bp
-
+from ticket import ticket_bp
 
 app = Flask(__name__)
 CORS(app) 
@@ -29,7 +29,7 @@ app.register_blueprint(event_bp)
 app.register_blueprint(venue_bp)
 app.register_blueprint(issue_bp)
 app.register_blueprint(response_bp)
-
+app.register_blueprint(ticket_bp)
 
 def execute_schema_sql():
     print("handling schemas")

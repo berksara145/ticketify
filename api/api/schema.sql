@@ -41,16 +41,21 @@ CREATE TABLE IF NOT EXISTS  worker_bee (
 );
 
 INSERT INTO worker_bee (password, first_name, last_name, email, user_type, issue_count)
-VALUES('password4', 'Emily', 'Brown', 'emily.brown@example.com', 'worker', 0);
+VALUES('password4', 'Emily', 'Brown', 'emily.brown@example.com', 'worker_bee', 0);
 
 CREATE TABLE IF NOT EXISTS  buyer (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     password VARCHAR(40) NOT NULL,
+    money INT NOT NULL DEFAULT 0,
     first_name VARCHAR(60),
     last_name VARCHAR(60),
     email VARCHAR(100),
     user_type VARCHAR(20)
 );
+
+INSERT INTO buyer (password, money, first_name, last_name, email, user_type)
+VALUES
+    ('pass456', 10000 ,'Jane', 'Smith', 'jane@example.com', 'buyer');
 
 CREATE TABLE IF NOT EXISTS  admin (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -99,11 +104,6 @@ CREATE TABLE IF NOT EXISTS  issue(
     issue_id INT AUTO_INCREMENT PRIMARY KEY,
     issue_name VARCHAR(8192) NOT NULL,
     issue_text VARCHAR(8192) NOT NULL,
-    date DATE
-);
-
-CREATE TABLE IF NOT EXISTS  transaction(
-    transaction_id INT AUTO_INCREMENT PRIMARY KEY,
     date DATE
 );
 
@@ -171,7 +171,15 @@ CREATE TABLE IF NOT EXISTS  perform (
     PRIMARY KEY (performer_id, event_id)
 );
 
--- Table: browse
+-- Table: paymenhas_tickets
+CREATE TABLE IF NOT EXISTS payment_has_tickets (
+    payment_id INT,
+    ticket_id INT,
+    PRIMARY KEY (payment_id, ticket_id),
+    FOREIGN KEY (payment_id) REFERENCES Payment(payment_id)
+);
+
+-- Table: browse -- this table is trash buy relation is enough
 CREATE TABLE IF NOT EXISTS  browse (
     user_id INT,
     event_id INT,
@@ -192,9 +200,10 @@ CREATE TABLE IF NOT EXISTS  event_has_ticket (
 CREATE TABLE IF NOT EXISTS  buy (
     user_id INT,
     payment_id INT,
-    ticket_id INT,
-    PRIMARY KEY (user_id, payment_id, ticket_id),
-    FOREIGN KEY (user_id) REFERENCES user(user_id)
+    organizer_id INT,
+    FOREIGN KEY (organizer_id) REFERENCES organizer(user_id),
+    PRIMARY KEY (user_id, payment_id),
+    FOREIGN KEY (user_id) REFERENCES buyer(user_id)
 );
 
 -- Table: event_in_venue
@@ -210,13 +219,6 @@ CREATE TABLE IF NOT EXISTS  ticket_seat (
     seat_position CHAR(11),
     PRIMARY KEY (ticket_id, seat_position),
     FOREIGN KEY (ticket_id) REFERENCES tickets(ticket_id)
-);
-
--- Table: contains
-CREATE TABLE IF NOT EXISTS  contains (
-    payment_id INT,
-    transaction_id INT,
-    PRIMARY KEY (payment_id, transaction_id)
 );
 
 -- Table: write
