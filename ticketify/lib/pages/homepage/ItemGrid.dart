@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ticketify/pages/auth/widgets/appbar/user_app_bar.dart';
 import 'package:ticketify/constants/constant_variables.dart';
 import 'package:ticketify/pages/homepage/one_item_view.dart';
@@ -224,16 +225,22 @@ class ProductCard extends StatefulWidget {
 }
 
 class _ProductCardState extends State<ProductCard> {
+
+
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.push(
+        print(widget.post.id);
+        GoRouter.of(context).go('/display/:eventID');
+
+        /*Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => OneItemView(post: widget.post),
-          ),
-        );
+            builder: (context) => OneItemView(post: widget.post, event_id: widget.post.id,),
+          ), // TODO: BURAYA GOROUTER
+        );*/
       },
       child: Card(
         color: widget.backgroundColor,
