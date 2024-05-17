@@ -54,7 +54,6 @@ class _AuthScreenState extends State<AuthScreen> {
           ),
           Expanded(
               child: isLogin
-
                    ? LoginForm(
                        setParentState: () => setState(() {
                              isLogin = false;

@@ -6,6 +6,8 @@ import 'package:ticketify/pages/auth/widgets/auth_text_field.dart';
 import 'package:ticketify/pages/homepage/homepage.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+
+import '../../Organizator/organizer_homepage.dart';
 class LoginForm extends StatefulWidget {
   LoginForm({super.key, required this.setParentState});
   final VoidCallback setParentState;
@@ -31,7 +33,7 @@ class _LoginFormState extends State<LoginForm> {
     final Map<String, dynamic> data = {
       'email': emailController.text,
       'password': passwordController.text,
-      'userType': userType,
+      'user_type': userType,
     };
 
     // Send the login request to your Flask backend
@@ -46,10 +48,19 @@ class _LoginFormState extends State<LoginForm> {
     // Handle the response from the backend
     if (response.statusCode == 200) {
       // Successful login, navigate to homepage or perform other actions
-      Navigator.pushReplacement(
+      if (userType == 'user'){  
+          Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const Homepage()),
+        );
+      }
+      if (userType == 'organizor'){
+        Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const Homepage()),
+        MaterialPageRoute(builder: (context) => const OrganizerHomepage()),
       );
+        
+      }
     } else {
       // Login failed, display error message
       ScaffoldMessenger.of(context).showSnackBar(
@@ -98,13 +109,13 @@ class _LoginFormState extends State<LoginForm> {
                 child: DropdownButton2<String>(
                   isExpanded: true,
                   hint: Text(
-                    'Select Item',
+                    'Select User Type',
                     style: TextStyle(
                       fontSize: 14,
                       color: Theme.of(context).hintColor,
                     ),
                   ),
-                  items: <String>['Admin', 'User', 'Guest']
+                  items: <String>['admin', 'buyer', 'organizer', 'worker_bee']
                       .map((String item) => DropdownMenuItem<String>(
                             value: item,
                             child: Text(
@@ -178,11 +189,11 @@ class _LoginFormState extends State<LoginForm> {
             child: Container(
               width: 300,
               alignment: Alignment.center,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   color: AppColors.buttonBlue,
                   borderRadius: BorderRadius.all(Radius.circular(15))),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: Text(
                   'Log In',
                   style: TextStyle(

@@ -7,6 +7,8 @@ import 'package:ticketify/pages/homepage/homepage.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+import 'login_form.dart';
+
 class RegisterForm extends StatefulWidget {
   RegisterForm({super.key, required this.setParentState});
   final VoidCallback setParentState;
@@ -20,11 +22,13 @@ class _RegisterFormState extends State<RegisterForm> {
   final TextEditingController surnameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
 
   final String nameLabel = "Name";
   final String surnameLabel = "Surname";
   final String emailLabel = "Email";
   final String passwordLabel = "Password";
+  final String phoneLabel = "Phone no.";
 
   String? userType;
    Future<void> _signup() async {
@@ -51,7 +55,7 @@ class _RegisterFormState extends State<RegisterForm> {
       // Successful login, navigate to homepage or perform other actions
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const Homepage()),
+        MaterialPageRoute(builder: (context) => LoginForm(setParentState: () {  },)),
       );
     } else {
       // Login failed, display error message
@@ -101,13 +105,13 @@ class _RegisterFormState extends State<RegisterForm> {
                 child: DropdownButton2<String>(
                   isExpanded: true,
                   hint: Text(
-                    'Select Item',
+                    'Select User Type',
                     style: TextStyle(
                       fontSize: 14,
                       color: Theme.of(context).hintColor,
                     ),
                   ),
-                  items: <String>['Admin', 'User', 'Guest']
+                  items: <String>['admin', 'buyer', 'organizor', 'worker_bee']
                       .map((String item) => DropdownMenuItem<String>(
                             value: item,
                             child: Text(
@@ -140,6 +144,10 @@ class _RegisterFormState extends State<RegisterForm> {
           AuthTextField(controller: emailController, label: emailLabel),
           const SizedBox(height: 20),
           AuthTextField(controller: passwordController, label: passwordLabel),
+          if (userType == 'organizor') ...[
+            const SizedBox(height: 20),
+            AuthTextField(controller: phoneController, label: phoneLabel),
+          ],
           GestureDetector(
             onTap: () => {widget.setParentState()},
             child: const Padding(

@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS  worker_bee (
     last_name VARCHAR(60),
     email VARCHAR(100),
     user_type VARCHAR(20),
-    issue_count INT
+    issue_count INT DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS  buyer (
