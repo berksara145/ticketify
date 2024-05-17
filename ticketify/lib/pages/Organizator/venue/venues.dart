@@ -20,8 +20,7 @@ class VenuesPage extends StatelessWidget {
         ),
         margin:
             const EdgeInsets.only(top: 50.0, bottom: 50, left: 20, right: 20),
-        padding:
-            const EdgeInsets.only(top: 50.0, bottom: 50, left: 20, right: 20),
+        padding: const EdgeInsets.only(bottom: 50, left: 20, right: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

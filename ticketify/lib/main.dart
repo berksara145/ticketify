@@ -1,10 +1,8 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
-import 'package:ticketify/pages/Organizator/event/create_event_widget.dart';
 import 'package:ticketify/pages/Organizator/organizer_homepage.dart';
-import 'package:ticketify/pages/auth/auth_screen.dart';
-import 'package:ticketify/pages/homepage/homepage.dart';
-import 'package:ticketify/pages/homepage/purchase_ticket.dart';
-import 'package:ticketify/pages/profile/profile_page.dart';
+import 'package:ticketify/pages/issue/create_issue.dart';
 
 void main() {
   runApp(const MyApp());
