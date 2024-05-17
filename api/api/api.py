@@ -77,16 +77,17 @@ def login():
        # Get email and password from request body
     email = request.json.get('email')
     password = request.json.get('password')
+    user_type = request.json.get('user_type')
 
     # Check if email and password are provided
-    if not email or not password:
-        return jsonify({'message': 'Email and password are required'}), 404
+    if not email or not password or not user_type:
+        return jsonify({'message': 'Email, password and user type are required'}), 404
 
     # Create MySQL cursor
     cur = mysql.connection.cursor()
 
     # Execute query to fetch user from 'user' table
-    cur.execute('SELECT * FROM user WHERE email = % s AND password = % s', (email, password))
+    cur.execute('SELECT * FROM % s WHERE email = % s AND password = % s', (user_type, email, password))
 
     # Fetch one row
     user = cur.fetchone()
@@ -104,40 +105,47 @@ def login():
     # User exists, return user data
     return jsonify({'user': user}), 200
 
-@app.route('/register', methods=['GET', 'POST'])
+@app.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
-
+    
     first_name = data.get('first_name')
     last_name = data.get('last_name')
     email = data.get('email')
     password = data.get('password')
     user_type = data.get('user_type')
-
+    phone_no = data.get('phone')
+    
     if not first_name or not last_name or not email or not password or not user_type:
         return jsonify({'message': 'All fields are required'}), 400
+    if user_type == 'organizor':
+        if not phone_no:
+            return jsonify({'message': 'Organizors are required to enter phone no.'}), 400
 
     # Check if email is valid
     if not re.match(r'[^@]+@[^@]+\.[^@]+', email):
         return jsonify({'message': 'Invalid email address'}), 400
 
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-
+    
     # Check if the email is already registered
-    cursor.execute('SELECT * FROM user WHERE email = %s', (email,))
+    cursor.execute('SELECT * FROM %s WHERE email = %s', (user_type, email,))
     account = cursor.fetchone()
-
+    
     if account:
         return jsonify({'message': 'Email is already registered'}), 400
-
+    
     # Insert the new user into the database
-    cursor.execute('INSERT INTO user (first_name, last_name, email, password, user_type) VALUES (%s, %s, %s, %s, %s)',
-                   ( first_name, last_name, email, password, user_type))
+    if user_type == 'organizor':
+        cursor.execute('INSERT INTO %s (first_name, last_name, email, password, user_type, phone_no) VALUES (%s, %s, %s, %s, %s, %s)',
+                   ( user_type, first_name, last_name, email, password, user_type, phone_no))
+    else:
+        cursor.execute('INSERT INTO %s (first_name, last_name, email, password, user_type) VALUES (%s, %s, %s, %s, %s)',
+                    ( user_type, first_name, last_name, email, password, user_type))
     mysql.connection.commit()
     cursor.close()
-
+    
     return jsonify({'message': 'User successfully registered'}), 200
-
 if __name__ =="__main__":
     port = int(os.environ.get('PORT', 5000))
     app.run(debug=True, host='0.0.0.0', port=port)
