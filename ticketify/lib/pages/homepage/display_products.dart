@@ -104,6 +104,8 @@ class _PageLayoutState extends State<PageLayout> {
 
   @override
   Widget build(BuildContext context) {
+    UtilConstants().getAllEvents();
+
     final ScrollController scrollController = ScrollController();
     Size screenSize = MediaQuery.of(context).size;
     return Padding(

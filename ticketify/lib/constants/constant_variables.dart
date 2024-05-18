@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
+
 import 'dart:ui';
 
 class AppFonts {
@@ -41,4 +44,42 @@ class AssetLocations {
 
 class ScreenConstants {
   static const int kMobileWidthThreshold = 500;
+}
+
+class UtilConstants {
+  final FlutterSecureStorage storage = const FlutterSecureStorage();
+
+  Future<String?> getToken() async {
+    return await storage.read(key: 'access_token');
+  }
+
+  Future<void> getAllEvents() async {
+    // Construct the login request payload
+    final String? token = await getToken();
+    // final Map<String, dynamic> data = {
+    //   'issue_text': _titleController.text,
+    //   'issue_name': _descriptionController.text,
+    // };
+
+    // Send the login request to your Flask backend
+    final response = await http.get(
+      Uri.parse(
+          'http://127.0.0.1:5000/event/getAllEvents'), // Update with your backend URL
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      },
+      //body: jsonEncode(data),
+    );
+
+    // Handle the response from the backend
+    if (response.statusCode == 200) {
+      // Successful login, navigate to homepage or perform other actions
+      print(response.body);
+    } else {
+      // Login failed, display error message in a dialog
+      // final Map<String, dynamic> responseBody = jsonDecode(response.body);
+      //_showErrorDialog(responseBody['message'] ?? 'Issue create failed');
+    }
+  }
 }
