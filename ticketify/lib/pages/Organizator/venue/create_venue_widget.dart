@@ -172,7 +172,7 @@ class _CreateVenueWidgetState extends State<CreateVenueWidget> {
                               decoration: InputDecoration(
                                 suffixIcon: Icon(Icons.phone),
                                 border: InputBorder.none,
-                                hintText: 'Enter Phone Number',
+                                hintText: '0 999 999 99 99',
                               ),
                             ),
                           ),
@@ -231,29 +231,6 @@ class _CreateVenueWidgetState extends State<CreateVenueWidget> {
                         ),
                         SizedBox(
                           width: 10,
-                        ),
-                        Spacer(), // Add Spacer to push the TextField to the right
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text("Venue Capacity"),
-                        ),
-                        Container(
-                          width: 100, // Set a fixed width for the TextField
-                          padding: EdgeInsets.only(left: 5),
-                          decoration: BoxDecoration(
-                            border: Border.all(width: 1),
-                          ),
-                          child: TextField(
-                            controller: sectionCountController,
-                            keyboardType: TextInputType.number,
-                            inputFormatters: <TextInputFormatter>[
-                              FilteringTextInputFormatter
-                                  .digitsOnly // Restrict input to digits only
-                            ],
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                            ),
-                          ),
                         ),
                       ],
                     ),
