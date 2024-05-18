@@ -5,11 +5,17 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
 from flask_cors import CORS
+from flask_jwt_extended import create_access_token
+from flask_jwt_extended import JWTManager
+import traceback
 
-
+from middleware import check_access_token, expired_token_callback, invalid_token_callback, unauthorized_callback, needs_fresh_token_callback, revoked_token_callback
 from event import event_bp
 from venue import venue_bp
-
+from issue import issue_bp
+from response import response_bp
+from ticket import ticket_bp
+from report import report_bp
 
 app = Flask(__name__)
 CORS(app) 
@@ -22,9 +28,44 @@ app.config['MYSQL_DB'] = 'cs353dbproject'
 
 mysql = MySQL(app)
 
+print("heree1")
 
+app.config['JWT_SECRET_KEY'] = 'very secret key'  # Change this to your preferred secret key
+jwt = JWTManager(app)
+
+
+print("heree2")
+
+# Register custom error handlers for JWT exceptions
+jwt.expired_token_loader(expired_token_callback)
+jwt.invalid_token_loader(invalid_token_callback)
+jwt.unauthorized_loader(unauthorized_callback)
+jwt.needs_fresh_token_loader(needs_fresh_token_callback)
+jwt.revoked_token_loader(revoked_token_callback)
+
+print("heree3")
+
+# Registerings
+event_bp.before_request(check_access_token)
 app.register_blueprint(event_bp)
+
+venue_bp.before_request(check_access_token)
 app.register_blueprint(venue_bp)
+
+issue_bp.before_request(check_access_token)
+app.register_blueprint(issue_bp)
+
+response_bp.before_request(check_access_token)
+app.register_blueprint(response_bp)
+
+ticket_bp.before_request(check_access_token)
+app.register_blueprint(ticket_bp)
+
+report_bp.before_request(check_access_token)
+app.register_blueprint(report_bp)
+
+
+print("heree4")
 
 def execute_schema_sql():
     print("handling schemas")
@@ -36,7 +77,23 @@ def execute_schema_sql():
             cursor = mysql.connection.cursor()
             try:
                 # Execute the SQL commands only if the table 'user' does not exist
+                cursor.execute("SHOW TABLES LIKE 'user'")
+                result = cursor.fetchone()
+                if result:
+                    cursor.fetchall()
+                    print("drop all tables")
+
+                    # User table exists, drop all tables in the database
+                    cursor.execute("SET FOREIGN_KEY_CHECKS=0")  # Disable foreign key checks
+                    cursor.execute("SHOW TABLES")
+                    tables = cursor.fetchall()
+                    for table in tables:
+                        table_name = table[0]
+                        print("dropping", table_name)
+                        cursor.execute(f"DROP TABLE IF EXISTS {table_name}")
+                    cursor.execute("SET FOREIGN_KEY_CHECKS=1")  # Re-enable foreign key checks
                 
+                cursor.fetchall()
                 
                 # Execute the schema SQL to create tables
                 cursor.execute(schema_sql)
@@ -50,77 +107,87 @@ def execute_schema_sql():
                 cursor.fetchall()
                 cursor.close()
 
-# Execute schema.sql file upon Flask application startup
-execute_schema_sql()
-
-#@app.route('/')
 @app.route('/login', methods=['POST'])
 def login():
-    data = request.get_json()
+    try:
+        # Get email, password, and user_type from request body
+        email = request.json.get('email')
+        password = request.json.get('password')
+        user_type = request.json.get('user_type')
 
-    email = data.get('email')
-    password = data.get('password')
-    user_type = data.get('user_type')
+        # Check if email, password, and user_type are provided
+        if not email or not password or not user_type:
+            return jsonify({'message': 'Email, password, and user type are required'}), 404
 
-    if not email or not password or not user_type:
-        return jsonify({'message': 'Email, password, and user type are required'}), 400
+        # Create MySQL cursor
+        cur = mysql.connection.cursor()
 
-    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        # Execute query to fetch user from 'user' table
+        cur.execute(f'SELECT * FROM {user_type} WHERE email = %s AND password = %s', (email, password))
 
-    # Fetch the user from the database
-    query = f'SELECT * FROM {user_type} WHERE email = %s AND password = %s'
-    cursor.execute(query, (email, password,))
-    account = cursor.fetchone()
+        # Fetch one row
+        user = cur.fetchone()
 
-    if account:
-        return jsonify({'message': 'Login successful', 'user': account}), 200
-    else:
-        return jsonify({'message': 'Invalid credentials'}), 400
+        # Close cursor
+        cur.close()
 
+        # Check if user exists
+        if not user:
+            return jsonify({'message': 'Invalid email or password'}), 401
+
+        # Generate JWT token
+        access_token = create_access_token(identity={'user_id': user[0], 'email': user[5], 'user_type': user_type})
+
+        # Return user data along with JWT token
+        return jsonify({'user': user, 'access_token': access_token}), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e), 'trace': traceback.format_exc()}), 500
 
 @app.route('/register', methods=['POST'])
 def register():
-    data = request.get_json()
+    try:
+        data = request.get_json()
+        
+        first_name = data.get('first_name')
+        last_name = data.get('last_name')
+        email = data.get('email')
+        password = data.get('password')
+        user_type = data.get('user_type')
+        phone_no = data.get('phone')
+        
+        if not first_name or not last_name or not email or not password or not user_type:
+            return jsonify({'message': 'All fields are required'}), 400
+        if user_type == 'organizor':
+            if not phone_no:
+                return jsonify({'message': 'Organizors are required to enter phone no.'}), 400
 
-    first_name = data.get('first_name')
-    last_name = data.get('last_name')
-    email = data.get('email')
-    password = data.get('password')
-    user_type = data.get('user_type')
-    phone_no = data.get('phone')
+        # Check if email is valid
+        if not re.match(r'[^@]+@[^@]+\.[^@]+', email):
+            return jsonify({'message': 'Invalid email address'}), 400
 
-    if not first_name or not last_name or not email or not password or not user_type:
-        return jsonify({'message': 'All fields are required'}), 400
-    if user_type == 'organizor':
-        if not phone_no:
-            return jsonify({'message': 'Organizors are required to enter phone no.'}), 404
-
-    # Check if email is valid
-    if not re.match(r'[^@]+@[^@]+\.[^@]+', email):
-        return jsonify({'message': 'Invalid email address'}), 400
-
-    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-
-    # Check if the email is already registered
-    query = f'SELECT * FROM {user_type} WHERE email = %s'
-    cursor.execute(query, (email,))
-    account = cursor.fetchone()
-
-    if account:
-        return jsonify({'message': 'Email is already registered'}), 400
-
-    # Insert the new user into the database
-    if user_type == 'organizor':
-        query = f'INSERT INTO {user_type} (first_name, last_name, email, password, user_type, phone_no) VALUES (%s, %s, %s, %s, %s, %s)'
-        cursor.execute(query, (first_name, last_name, email, password, user_type, phone_no))
-    else:
-        query = f'INSERT INTO {user_type} (first_name, last_name, email, password, user_type) VALUES (%s, %s, %s, %s, %s)'
-        cursor.execute(query, (first_name, last_name, email, password, user_type))
-
-    mysql.connection.commit()
-    cursor.close()
-    
-    return jsonify({'message': 'User successfully registered'}), 200
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        
+        # Check if the email is already registered
+        cursor.execute(f"SELECT * FROM {user_type} WHERE email = %s", (email,))
+        account = cursor.fetchone()
+        
+        if account:
+            return jsonify({'message': 'Email is already registered'}), 400
+        
+        # Insert the new user into the database
+        if user_type == 'organizor':
+            cursor.execute(f"INSERT INTO {user_type} (first_name, last_name, email, password, user_type, phone_no) VALUES (%s, %s, %s, %s, %s, %s)",
+                       (first_name, last_name, email, password, user_type, phone_no))
+        else:
+            cursor.execute(f"INSERT INTO {user_type} (first_name, last_name, email, password, user_type) VALUES (%s, %s, %s, %s, %s)",
+                        (first_name, last_name, email, password, user_type))
+        mysql.connection.commit()
+        cursor.close()
+        
+        return jsonify({'message': 'User successfully registered'}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 
 if __name__ =="__main__":

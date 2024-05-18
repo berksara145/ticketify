@@ -39,7 +39,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
     return Expanded(
       child: SingleChildScrollView(
         child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 20),
+          margin: const EdgeInsets.all(50),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(36),
             color: AppColors.greylight.withAlpha(255),

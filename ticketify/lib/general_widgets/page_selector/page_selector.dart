@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:ticketify/constants/constant_variables.dart';
 import 'package:ticketify/general_widgets/page_selector/page_selector_page_list.dart';
 import 'package:ticketify/general_widgets/page_selector/page_selector_title.dart';
+import 'package:ticketify/pages/issue/create_issue.dart';
 
 class PageSelector extends StatefulWidget {
   final List<PageListConfig> pageListConfigs;
@@ -83,7 +84,14 @@ class _PageSelectorState extends State<PageSelector> {
             children: [
               if (widget.isCreateIssueEnabled)
                 GestureDetector(
-                  onTap: () => print("Create Issue Tapped"),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CreateIssue(),
+                      ),
+                    );
+                  },
                   child: Text(
                     "Create Issue",
                     style: TextStyle(

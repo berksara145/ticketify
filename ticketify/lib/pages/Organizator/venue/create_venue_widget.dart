@@ -44,7 +44,7 @@ class _CreateVenueWidgetState extends State<CreateVenueWidget> {
     return Expanded(
       child: SingleChildScrollView(
         child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 50),
+          margin: const EdgeInsets.all(40),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(36),
             color: AppColors.greylight.withAlpha(255),
