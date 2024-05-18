@@ -11,8 +11,8 @@ def check_access_token():
         # Verify access token in the request headers
         verify_jwt_in_request()
 
-# Custom error handler for JWT exceptions
-def expired_token_callback():
+
+def expired_token_callback(jwt_header, jwt_payload):
     return jsonify({'message': 'Token has expired'}), 401
 
 def invalid_token_callback(error):
@@ -21,8 +21,8 @@ def invalid_token_callback(error):
 def unauthorized_callback(error):
     return jsonify({'message': 'Unauthorized access'}), 401
 
-def needs_fresh_token_callback():
+def needs_fresh_token_callback(jwt_header, jwt_payload):
     return jsonify({'message': 'Token is not fresh'}), 401
 
-def revoked_token_callback():
+def revoked_token_callback(jwt_header, jwt_payload):
     return jsonify({'message': 'Token has been revoked'}), 401
