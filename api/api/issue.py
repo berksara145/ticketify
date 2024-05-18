@@ -4,6 +4,7 @@ from utils import get_db_connection
 import math
 import traceback
 import uuid
+from flask_jwt_extended import get_jwt_identity
 
 issue_bp = Blueprint('issue', __name__, url_prefix='/issue')
 
@@ -11,6 +12,13 @@ issue_bp = Blueprint('issue', __name__, url_prefix='/issue')
 @issue_bp.route('/createIssue', methods=['POST'])
 def create_issue():
     try:
+        # Get the identity (claims) from the JWT token
+        identity = get_jwt_identity()
+        
+        # Extract user_id and user_type from the identity
+        user_id = identity.get('user_id')
+        user_type = identity.get('user_type')
+
         print("entered create issues")
 
         # Connect to the database
