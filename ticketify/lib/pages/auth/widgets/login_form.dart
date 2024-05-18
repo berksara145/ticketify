@@ -1,5 +1,6 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../../../constants/constant_variables.dart';
@@ -18,6 +19,7 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final FlutterSecureStorage storage = const FlutterSecureStorage();
 
   String? userType;
 
@@ -41,6 +43,11 @@ class _LoginFormState extends State<LoginForm> {
     // Handle the response from the backend
     if (response.statusCode == 200) {
       // Successful login, navigate to homepage or perform other actions
+      final Map<String, dynamic> responseBody = jsonDecode(response.body);
+      String token = responseBody['access_token'];
+
+      // Save the token securely
+      await storage.write(key: 'access_token', value: token);
       if (userType == 'buyer') {
         Navigator.pushReplacement(
           context,
