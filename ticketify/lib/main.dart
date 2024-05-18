@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const AuthScreen(), /*GoRouter.of(context).go('/auth'),*/
+      home: const OrganizerHomepage(), /*GoRouter.of(context).go('/auth'),*/
     );
   }
 }

@@ -57,41 +57,99 @@ class ProfileBrowseTickets extends StatelessWidget {
     ];
     return Expanded(
       child: Container(
-        height: 800,
-        // width: 2 * width / 3,
         decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.black.withOpacity(0.5),
-                blurRadius: 4,
-                offset: const Offset(0, 4), // Shadow position
-              ),
-            ],
-            color: AppColors.greylight.withAlpha(255),
-            borderRadius: BorderRadius.circular(37)),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const PageTitle(title: "Past Events"),
-              Wrap(
-                alignment: WrapAlignment.spaceBetween,
-                //spacing: 8.0, // space between rows
-                runSpacing: 4.0, // space between columns
-                children: items
-                    .map((item) => Flexible(
-                          child: ProfileItem(
-                            title: item.title,
-                            acceptDate: item.acceptDate,
-                            location: item.location,
-                            organizer: item.organizer,
-                          ),
-                        ))
-                    .toList(),
-              ),
-            ],
-          ),
+          borderRadius: BorderRadius.circular(37),
+          color: AppColors.greylight.withAlpha(255),
         ),
+        margin:
+            const EdgeInsets.only(top: 50.0, bottom: 50, left: 20, right: 20),
+        padding: const EdgeInsets.only(bottom: 50, left: 20, right: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            PageTitle(title: "Past Events"),
+            SizedBox(height: 20),
+            Expanded(
+              child: ListView(children: [
+                GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: items!.length,
+                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 300,
+                    mainAxisSpacing: 10,
+                    crossAxisSpacing: 10,
+                    childAspectRatio: 1,
+                  ),
+                  itemBuilder: (context, index) {
+                    final event = items[index];
+
+                    return InkWell(
+                      onTap: () {},
+                      child: Card(
+                        color: AppColors.greylight,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                        child: SingleChildScrollView(
+                          // Disable scrolling
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  alignment: Alignment.center,
+                                  height: 100, // Adjust height as needed
+                                  child: Image.network(
+                                    event.imageUrl,
+                                    fit: BoxFit
+                                        .cover, // or BoxFit.contain based on your preference
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                Text(
+                                  event.title ?? "",
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                ItemText(text: event.acceptDate),
+                                ItemText(text: event.acceptDate),
+                                ItemText(text: event.acceptDate),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ]),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ItemText extends StatelessWidget {
+  const ItemText({
+    super.key,
+    required this.text,
+  });
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: const TextStyle(
+        fontSize: 14,
+        //fontWeight: FontWeight.bold,
       ),
     );
   }
@@ -99,14 +157,18 @@ class ProfileBrowseTickets extends StatelessWidget {
 
 class ProfileItemData {
   final String title;
+  final String imageUrl;
   final String acceptDate;
   final String location;
   final String organizer;
 
   ProfileItemData({
+    this.imageUrl = "https://picsum.photos/200/300",
     required this.title,
     required this.acceptDate,
     required this.location,
     required this.organizer,
   });
+
+  get address => null;
 }

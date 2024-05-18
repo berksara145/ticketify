@@ -19,47 +19,42 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: UserAppBar(),
-      body: Padding(
-        padding: EdgeInsets.symmetric(
-            vertical: 50,
-            horizontal: 32.0), // Adjust the horizontal padding as needed
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            PageSelector(
-              isCreateIssueEnabled: true,
-              returnActivePageName: (newName) {
-                setState(() {
-                  activePage = newName;
-                });
-              },
-              title: "Memduh Tutuş Welcome back!sssssssss",
-              pageListConfigs: [
-                PageListConfig(
-                  title: 'Events',
-                  menuItems: [
-                    'Past Events',
-                    'Upcoming Events',
-                    'Create Event',
-                  ],
-                  iconData: Icons.event,
-                ),
-                PageListConfig(
-                  title: 'Venues',
-                  menuItems: [
-                    'Create',
-                    'Delete Event',
-                  ],
-                  iconData: Icons.place,
-                ),
-              ],
-            ),
+      body: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          PageSelector(
+            isCreateIssueEnabled: true,
+            returnActivePageName: (newName) {
+              setState(() {
+                activePage = newName;
+              });
+            },
+            title: "Memduh Tutuş Welcome back!sssssssss",
+            pageListConfigs: [
+              PageListConfig(
+                title: 'Events',
+                menuItems: [
+                  'Past Events',
+                  'Upcoming Events',
+                  'Create Event',
+                ],
+                iconData: Icons.event,
+              ),
+              PageListConfig(
+                title: 'Venues',
+                menuItems: [
+                  'Create',
+                  'Delete Event',
+                ],
+                iconData: Icons.place,
+              ),
+            ],
+          ),
 
-            ProfileBrowseTickets()
+          ProfileBrowseTickets()
 
 //            Text(activePage)
-          ],
-        ),
+        ],
       ),
     );
   }
