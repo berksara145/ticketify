@@ -347,6 +347,34 @@ class _BuyerProfileSettingsState extends State<BuyerProfileSettings> {
       _showErrorDialog(responseBody['message'] ?? 'Password change unsaved!');
     }
   }
+  Future<void> _viewPastTickets() async{
+
+    // Send the login request to your Flask backend
+    final response = await http.post(
+      Uri.parse('http://127.0.0.1:5000/ticket/viewPastTickets'), // Update with your backend URL
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    // Handle the response from the backend
+    if (response.statusCode == 200) {
+      // Successful login, navigate to homepage or perform other actions
+      final Map<String, dynamic> responseBody = jsonDecode(response.body);
+      String token = responseBody['access_token'];
+
+      // Save the token securely
+      await storage.write(key: 'access_token', value: token);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Last name is changed successfully!')),
+      );
+    } else {
+      // Login failed, display error message in a dialog
+      final Map<String, dynamic> responseBody = jsonDecode(response.body);
+      _showErrorDialog(responseBody['message'] ?? 'Last name change failed');
+    }
+  }
 
   Future<void> _viewPastTickets() async{
     final String? token = await _getToken();
