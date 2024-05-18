@@ -79,6 +79,62 @@ class ProfilePageBuyer extends StatefulWidget {
 
 class _ProfilePageBuyerState extends State<ProfilePageBuyer> {
   String activePage = "ssssss";
+  String? name;
+  String? surname;
+  final FlutterSecureStorage storage = const FlutterSecureStorage();
+
+  Future<void> _fetchUserDetails() async {
+    final String? token = await _getToken();
+
+    final response = await http.get(
+      Uri.parse('http://127.0.0.1:5000/profile/get_user_details'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> userDetails = jsonDecode(response.body);
+      setState(() {
+        name = userDetails['first_name'];
+        surname = userDetails['last_name'];
+      });
+    } else {
+      final Map<String, dynamic> responseBody = jsonDecode(response.body);
+      _showErrorDialog(responseBody['error'] ?? 'Failed to fetch user details');
+    }
+  }
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserDetails();
+  }
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
+  Future<String?> _getToken() async {
+    return await storage.read(key: 'access_token');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,7 +149,7 @@ class _ProfilePageBuyerState extends State<ProfilePageBuyer> {
                 activePage = newName;
               });
             },
-            title: "Welcome sssssssss",
+            title: "Welcome $name $surname",
             pageListConfigs: [
               PageListConfig(
                 title: 'Tickets',
