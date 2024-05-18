@@ -162,7 +162,7 @@ class _OrganizerHomepageState extends State<OrganizerHomepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: UserAppBar(),
+      appBar: OrganizerAppBar(),
       body: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [

@@ -64,6 +64,9 @@ class _LoginFormState extends State<LoginForm> {
           MaterialPageRoute(builder: (context) => const OrganizerHomepage()),
         );
       }
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Logged in successfully!')),
+      );
     } else {
       // Login failed, display error message in a dialog
       final Map<String, dynamic> responseBody = jsonDecode(response.body);
@@ -154,13 +157,10 @@ class _LoginFormState extends State<LoginForm> {
           const SizedBox(height: 20),
           AuthTextField(controller: passwordController, label: 'Password'),
           const SizedBox(height: 30),
-          const SizedBox(height: 20),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              AuthTextField(
-                  controller: passwordController, label: passwordLabel),
-              GestureDetector(
+              /*GestureDetector(
                 onTap: () => {widget.setParentState()},
                 child: Padding(
                   padding: const EdgeInsets.only(left: 4.0, top: 2.0),
@@ -169,7 +169,7 @@ class _LoginFormState extends State<LoginForm> {
                     style: TextStyle(),
                   ),
                 ),
-              ),
+              ),*/
               GestureDetector(
                 onTap: () => {widget.setParentState()},
                 child: Padding(
