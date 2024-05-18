@@ -76,6 +76,7 @@ def execute_schema_sql():
             schema_sql = file.read()
             cursor = mysql.connection.cursor()
             try:
+                
                 # Execute the SQL commands only if the table 'user' does not exist
                 cursor.execute("SHOW TABLES LIKE 'user'")
                 result = cursor.fetchone()
@@ -106,6 +107,8 @@ def execute_schema_sql():
             finally:
                 cursor.fetchall()
                 cursor.close()
+
+execute_schema_sql()
 
 @app.route('/login', methods=['POST'])
 def login():
