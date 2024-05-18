@@ -123,11 +123,44 @@ class BuyerProfileSettings extends StatefulWidget {
 
 class _BuyerProfileSettingsState extends State<BuyerProfileSettings> {
   String activePage = "ssssss";
+  String? name;
+  String? surname;
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _oldPasswordController = TextEditingController();
+  final TextEditingController _newPasswordController = TextEditingController();
+  final TextEditingController _newPassword2Controller = TextEditingController();
   final FlutterSecureStorage storage = const FlutterSecureStorage();
+
+  Future<void> _fetchUserDetails() async {
+    final String? token = await _getToken();
+
+    final response = await http.get(
+      Uri.parse('http://127.0.0.1:5000/profile/get_user_details'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> userDetails = jsonDecode(response.body);
+      setState(() {
+        name = userDetails['first_name'];
+        surname = userDetails['last_name'];
+      });
+    } else {
+      final Map<String, dynamic> responseBody = jsonDecode(response.body);
+      _showErrorDialog(responseBody['error'] ?? 'Failed to fetch user details');
+    }
+  }
+
+  Future<String?> _getToken() async {
+    return await storage.read(key: 'access_token');
+  }
+
   Future<void> _updateName() async{
+    final String? token = await _getToken();
     final Map<String, dynamic> data = {
       'first_name': _firstNameController.text,
       'last_name': _lastNameController.text,
@@ -138,21 +171,19 @@ class _BuyerProfileSettingsState extends State<BuyerProfileSettings> {
         Uri.parse('http://127.0.0.1:5000/profile/change_name'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
       },
       body: jsonEncode(data),
     );
-
     // Handle the response from the backend
     if (response.statusCode == 200) {
-      // Successful login, navigate to homepage or perform other actions
-      final Map<String, dynamic> responseBody = jsonDecode(response.body);
-      String token = responseBody['access_token'];
-
-      // Save the token securely
-      await storage.write(key: 'access_token', value: token);
-
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Name preferences saved successfully!')),
+      );
+      // Reload the current page
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => BuyerProfileSettings()),
       );
     } else {
       // Login failed, display error message in a dialog
@@ -161,8 +192,11 @@ class _BuyerProfileSettingsState extends State<BuyerProfileSettings> {
     }
   }
   Future<void> _changePassword() async{
+    final String? token = await _getToken();
     final Map<String, dynamic> data = {
-      'password': _passwordController.text,
+      'password_old': _oldPasswordController.text,
+      'password_new1': _newPasswordController.text,
+      'password_new2': _newPassword2Controller.text,
     };
 
     // Send the login request to your Flask backend
@@ -170,29 +204,30 @@ class _BuyerProfileSettingsState extends State<BuyerProfileSettings> {
       Uri.parse('http://127.0.0.1:5000/profile/change_password'), // Update with your backend URL
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
       },
       body: jsonEncode(data),
     );
 
     // Handle the response from the backend
     if (response.statusCode == 200) {
-      // Successful login, navigate to homepage or perform other actions
-      final Map<String, dynamic> responseBody = jsonDecode(response.body);
-      String token = responseBody['access_token'];
-
-      // Save the token securely
-      await storage.write(key: 'access_token', value: token);
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Last name is changed successfully!')),
+        const SnackBar(content: Text('Password is changed successfully!')),
       );
     } else {
       // Login failed, display error message in a dialog
       final Map<String, dynamic> responseBody = jsonDecode(response.body);
-      _showErrorDialog(responseBody['message'] ?? 'Last name change failed');
+      _showErrorDialog(responseBody['message'] ?? 'Password change unsaved!');
     }
   }
 
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserDetails();
+  }
   void _showErrorDialog(String message) {
     showDialog(
       context: context,
@@ -228,7 +263,7 @@ class _BuyerProfileSettingsState extends State<BuyerProfileSettings> {
                 activePage = newName;
               });
             },
-            title: "Welcome ",
+            title: "Welcome $name $surname",
             pageListConfigs: [
               PageListConfig(
                 title: 'Tickets',
@@ -275,13 +310,30 @@ class _BuyerProfileSettingsState extends State<BuyerProfileSettings> {
                       onPressed:_updateName,
                       child: const Text('Save Name Preferences'),
                     ),
+                    const SizedBox(height: 40),
+                    TextFormField(
+                      controller: _oldPasswordController,
+                      decoration: const InputDecoration(
+                        labelText: 'Enter old password',
+                      ),
+                    ),
                     const SizedBox(height: 20),
-                    ListTile(
-                      title: const Text('Change Password'),
-                      leading: const Icon(Icons.privacy_tip),
-                      onTap: () {
-                        // Navigate to privacy settings page
-                      },
+                    TextFormField(
+                      controller: _newPasswordController,
+                      decoration: const InputDecoration(
+                        labelText: 'Enter new password',
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      controller: _newPassword2Controller,
+                      decoration: const InputDecoration(
+                        labelText: 'Renter new password',
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed:_changePassword,
+                      child: const Text('Change Password'),
                     ),
                   ],),
               ),
