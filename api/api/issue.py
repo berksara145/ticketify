@@ -57,8 +57,6 @@ def create_issue():
         else:
             return jsonify({'error': 'Uwrong user type'}), 404
 
-
-
         # Insert issue into issue table
         cursor.execute("INSERT INTO issue(issue_name, issue_text, date) VALUES (%s, %s, %s)",
                        (issue_name, issue_text, date))
