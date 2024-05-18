@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:ticketify/constants/constant_variables.dart';
 import 'package:ticketify/general_widgets/page_title.dart';
 import 'package:ticketify/pages/profile/widgets/event_details.dart';
-import 'package:ticketify/pages/profile/widgets/profile_item.dart';
 
 class ProfileBrowseTickets extends StatelessWidget {
   final bool isPastTickets;
