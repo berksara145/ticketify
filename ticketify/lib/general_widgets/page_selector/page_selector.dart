@@ -31,96 +31,93 @@ class _PageSelectorState extends State<PageSelector> {
   @override
   Widget build(BuildContext context) {
     double containerWidth = 400;
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 50),
-      decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.black.withOpacity(0.5),
-              blurRadius: 4,
-              offset: Offset(0, 4), // Shadow position
-            ),
-          ],
-          color: AppColors.greylight.withAlpha(255),
-          borderRadius: BorderRadius.circular(37)),
-      width: containerWidth,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            children: [
-              PageSelectorTitle(title: widget.title),
-              const SizedBox(
-                height: 12,
+    return SingleChildScrollView(
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 50),
+        decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.black.withOpacity(0.5),
+                blurRadius: 4,
+                offset: Offset(0, 4), // Shadow position
               ),
-              ...widget.pageListConfigs.asMap().entries.map((entry) {
-                int currentIndex = entry.key;
-                PageListConfig config = entry.value;
-                return PageSelectorPageList(
-                  title: config.title,
-                  menuItems: config.menuItems,
-                  iconData: config.iconData,
-                  isActive: activeIndex == currentIndex,
-                  setParentState: (newIndex) {
-                    if (activeIndex != currentIndex) {
+            ],
+            color: AppColors.greylight.withAlpha(255),
+            borderRadius: BorderRadius.circular(37)),
+        width: containerWidth,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              children: [
+                PageSelectorTitle(title: widget.title),
+                const SizedBox(
+                  height: 12,
+                ),
+                ...widget.pageListConfigs.asMap().entries.map((entry) {
+                  int currentIndex = entry.key;
+                  PageListConfig config = entry.value;
+                  return PageSelectorPageList(
+                    title: config.title,
+                    menuItems: config.menuItems,
+                    iconData: config.iconData,
+                    isActive: activeIndex == currentIndex,
+                    setParentState: (newIndex) {
                       setState(() {
                         activeIndex = currentIndex;
                         innerIndex = newIndex;
                       });
-                    }
-                    setState(() {
-                      innerIndex = newIndex;
-                    });
-                    widget.returnActivePageName(config.menuItems[
-                        innerIndex]); // Pass the actual title of the active page list
-                  },
-                );
-              }),
-            ],
-          ),
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              if (widget.isCreateIssueEnabled)
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CreateIssue(),
+                      widget.returnActivePageName(config.menuItems[
+                          innerIndex]); // Pass the actual title of the active page list
+                    },
+                  );
+                }),
+              ],
+            ),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                if (widget.isCreateIssueEnabled)
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CreateIssue(),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      "Create Issue",
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontSize: 24,
                       ),
-                    );
-                  },
-                  child: Text(
-                    "Create Issue",
-                    style: TextStyle(
-                      color: Colors.blue,
-                      fontSize: 24,
                     ),
                   ),
-                ),
-              if (widget.isCreateIssueEnabled) SizedBox(height: 4),
-              GestureDetector(
-                onTap: () => print("Log Out Tapped"),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      "Log Out",
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 28,
+                if (widget.isCreateIssueEnabled) SizedBox(height: 4),
+                GestureDetector(
+                  onTap: () => print("Log Out Tapped"),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        "Log Out",
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 28,
+                        ),
                       ),
-                    ),
-                    Icon(Icons.exit_to_app, color: Colors.red, size: 32),
-                  ],
+                      Icon(Icons.exit_to_app, color: Colors.red, size: 32),
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(height: 36),
-            ],
-          )
-        ],
+                SizedBox(height: 36),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

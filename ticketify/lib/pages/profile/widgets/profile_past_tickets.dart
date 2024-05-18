@@ -64,74 +64,79 @@ class ProfileBrowseTickets extends StatelessWidget {
         ),
         margin:
             const EdgeInsets.only(top: 50.0, bottom: 50, left: 20, right: 20),
-        padding: const EdgeInsets.only(bottom: 50, left: 20, right: 20),
+        //padding: const EdgeInsets.only(bottom: 50, left: 20, right: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             PageTitle(title: "Past Events"),
             SizedBox(height: 20),
             Expanded(
-              child: ListView(children: [
-                GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: items!.length,
-                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: 300,
-                    mainAxisSpacing: 10,
-                    crossAxisSpacing: 10,
-                    childAspectRatio: 1,
-                  ),
-                  itemBuilder: (context, index) {
-                    final event = items[index];
+              child: Padding(
+                //
+                padding: const EdgeInsets.only(bottom: 50, left: 20, right: 20),
+                child: ListView(children: [
+                  GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: items!.length,
+                    gridDelegate:
+                        const SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 300,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10,
+                      childAspectRatio: 1,
+                    ),
+                    itemBuilder: (context, index) {
+                      final event = items[index];
 
-                    return InkWell(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => EventDetails(),
-                        ));
-                      },
-                      child: Card(
-                        color: AppColors.greylight,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                        child: SingleChildScrollView(
-                          // Disable scrolling
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  alignment: Alignment.center,
-                                  height: 100, // Adjust height as needed
-                                  child: Image.network(
-                                    event.imageUrl,
-                                    fit: BoxFit
-                                        .cover, // or BoxFit.contain based on your preference
+                      return InkWell(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => EventDetails(),
+                          ));
+                        },
+                        child: Card(
+                          color: AppColors.greylight,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                          child: SingleChildScrollView(
+                            // Disable scrolling
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    alignment: Alignment.center,
+                                    height: 100, // Adjust height as needed
+                                    child: Image.network(
+                                      event.imageUrl,
+                                      fit: BoxFit
+                                          .cover, // or BoxFit.contain based on your preference
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(height: 10),
-                                Text(
-                                  event.title ?? "",
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    event.title ?? "",
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
-                                ),
-                                ItemText(text: event.acceptDate),
-                                ItemText(text: event.acceptDate),
-                                ItemText(text: event.acceptDate),
-                              ],
+                                  ItemText(text: event.acceptDate),
+                                  ItemText(text: event.acceptDate),
+                                  ItemText(text: event.acceptDate),
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    );
-                  },
-                ),
-              ]),
+                      );
+                    },
+                  ),
+                ]),
+              ),
             ),
           ],
         ),

@@ -50,7 +50,7 @@ class _PageSelectorPageListState extends State<PageSelectorPageList> {
                     const SizedBox(width: 8), // Space between icon and title
                     Text(widget.title,
                         style: const TextStyle(
-                            fontSize: 20, overflow: TextOverflow.fade)),
+                            fontSize: 18, overflow: TextOverflow.fade)),
                   ],
                 ),
                 Icon(
@@ -81,7 +81,7 @@ class _PageSelectorPageListState extends State<PageSelectorPageList> {
                             child: Text(
                               item,
                               style: TextStyle(
-                                fontSize: 20,
+                                fontSize: 18,
                                 color: _selectedIdx == index && widget.isActive
                                     ? AppColors.buttonBlue
                                     : Colors
