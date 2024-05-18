@@ -1,16 +1,12 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:ticketify/constants/constant_variables.dart';
 import 'package:ticketify/pages/auth/widgets/auth_text_field.dart';
-import 'package:ticketify/pages/homepage/homepage.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-import 'login_form.dart';
-
 class RegisterForm extends StatefulWidget {
-  RegisterForm({super.key, required this.setParentState});
+  RegisterForm({Key? key, required this.setParentState}) : super(key: key);
   final VoidCallback setParentState;
 
   @override
@@ -31,7 +27,8 @@ class _RegisterFormState extends State<RegisterForm> {
   final String phoneLabel = "Phone no.";
 
   String? userType;
-   Future<void> _signup() async {
+
+  Future<void> _signup() async {
     // Construct the register request payload
     final Map<String, dynamic> data = {
       'first_name': nameController.text,
@@ -39,6 +36,7 @@ class _RegisterFormState extends State<RegisterForm> {
       'email': emailController.text,
       'password': passwordController.text,
       'user_type': userType,
+      'phone': phoneController.text,
     };
 
     // Send the register request to your Flask backend
@@ -52,15 +50,12 @@ class _RegisterFormState extends State<RegisterForm> {
 
     // Handle the response from the backend
     if (response.statusCode == 200) {
-      // Successful login, navigate to homepage or perform other actions
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => LoginForm(setParentState: () {  },)),
-      );
+      // Registration successful, switch to login form
+      widget.setParentState();
     } else {
-      // Login failed, display error message
+      // Registration failed, display error message
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Sign up failed')),
+        const SnackBar(content: Text('Sign up failed')),
       );
     }
   }
@@ -89,8 +84,7 @@ class _RegisterFormState extends State<RegisterForm> {
               height: 60,
               decoration: BoxDecoration(
                 // Set the background color
-                color: AppColors
-                    .blue, // Ensure AppColors.blue is defined in your application
+                color: AppColors.blue, // Ensure AppColors.blue is defined in your application
                 // Define the border
                 border: Border.all(
                   color: Colors.black, // Color of the border
@@ -111,16 +105,16 @@ class _RegisterFormState extends State<RegisterForm> {
                       color: Theme.of(context).hintColor,
                     ),
                   ),
-                  items: <String>['admin', 'buyer', 'organizor', 'worker_bee']
+                  items: <String>['admin', 'buyer', 'organizer', 'worker_bee']
                       .map((String item) => DropdownMenuItem<String>(
-                            value: item,
-                            child: Text(
-                              item,
-                              style: const TextStyle(
-                                fontSize: 14,
-                              ),
-                            ),
-                          ))
+                    value: item,
+                    child: Text(
+                      item,
+                      style: const TextStyle(
+                        fontSize: 14,
+                      ),
+                    ),
+                  ))
                       .toList(),
                   value: userType,
                   onChanged: (String? value) {
@@ -144,12 +138,12 @@ class _RegisterFormState extends State<RegisterForm> {
           AuthTextField(controller: emailController, label: emailLabel),
           const SizedBox(height: 20),
           AuthTextField(controller: passwordController, label: passwordLabel),
-          if (userType == 'organizor') ...[
+          if (userType == 'organizer') ...[
             const SizedBox(height: 20),
             AuthTextField(controller: phoneController, label: phoneLabel),
           ],
           GestureDetector(
-            onTap: () => {widget.setParentState()},
+            onTap: widget.setParentState,
             child: const Padding(
               padding: EdgeInsets.only(top: 2.0),
               child: Row(
@@ -171,7 +165,6 @@ class _RegisterFormState extends State<RegisterForm> {
             ),
           ),
           const SizedBox(height: 30),
-
           TextButton(
             onPressed: _signup,
             child: Container(

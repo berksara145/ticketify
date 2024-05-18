@@ -48,7 +48,7 @@ class _LoginFormState extends State<LoginForm> {
     // Handle the response from the backend
     if (response.statusCode == 200) {
       // Successful login, navigate to homepage or perform other actions
-      if (userType == 'user'){  
+      if (userType == 'buyer'){
           Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const Homepage()),
