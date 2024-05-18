@@ -19,11 +19,73 @@ class ProfilePage extends StatefulWidget {
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
+
 }
 
 class _ProfilePageState extends State<ProfilePage> {
   //TODO: activePage logici ile gösterilecek sayfa seçilebilir.
   String activePage = "ssssss";
+  List<ProfileItemData> pastTickets = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _viewPastTickets(); // Fetch past tickets when the widget initializes
+  }
+
+  Future<void> _viewPastTickets() async {
+    final String? token = await _getToken();
+
+    final response = await http.get(
+      Uri.parse('http://127.0.0.1:5000/ticket/viewPastTickets'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> ticketsJson = jsonDecode(response.body);
+      setState(() {
+        pastTickets = ticketsJson.map((json) => ProfileItemData(
+          title: json['event_name'],
+          acceptDate: json['start_date'],
+          location: json['venue_name'],
+          organizer: "${json['organizer_first_name']} ${json['organizer_last_name']}",
+          imageUrl: "https://picsum.photos/200/300", // Default image URL
+        )).toList();
+      });
+    } else {
+      final Map<String, dynamic> responseBody = jsonDecode(response.body);
+      _showErrorDialog(responseBody['message'] ?? 'Past tickets could not be displayed!');
+    }
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<String?> _getToken() async {
+    const storage = FlutterSecureStorage();
+    return await storage.read(key: 'access_token');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +123,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ],
           ),
           //AdminCreateReport()
-          ProfileBrowseTickets()
+          ProfileBrowseTickets(items: pastTickets)
 
 //            Text(activePage)
         ],
@@ -79,6 +141,71 @@ class ProfilePageBuyer extends StatefulWidget {
 
 class _ProfilePageBuyerState extends State<ProfilePageBuyer> {
   String activePage = "ssssss";
+  List<ProfileItemData> pastTickets = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _viewPastTickets();
+  }
+
+  Future<void> _viewPastTickets() async {
+    final String? token = await _getToken();
+
+    final response = await http.get(
+      Uri.parse('http://127.0.0.1:5000/ticket/viewPastTickets'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> ticketsJson = jsonDecode(response.body);
+      setState(() {
+        pastTickets = ticketsJson.map((json) => ProfileItemData(
+          title: json['event_name'],
+          acceptDate: json['start_date'],
+          location: json['venue_name'],
+          organizer: "${json['organizer_first_name']} ${json['organizer_last_name']}",
+          imageUrl: "https://picsum.photos/200/300", // Default image URL
+        )).toList();
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Tickets showed successfully')),
+      );
+    } else {
+      final Map<String, dynamic> responseBody = jsonDecode(response.body);
+      _showErrorDialog(responseBody['message'] ?? 'Past tickets couldn\'t be showed!');
+    }
+  }
+
+  Future<String?> _getToken() async {
+    const storage = FlutterSecureStorage();
+    return await storage.read(key: 'access_token');
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,14 +232,13 @@ class _ProfilePageBuyerState extends State<ProfilePageBuyer> {
               ),
             ],
           ),
-          ProfileBrowseTickets()
-
-//            Text(activePage)
+          ProfileBrowseTickets(items: pastTickets),
         ],
       ),
     );
   }
 }
+
 
 class BuyerProfileSettings extends StatefulWidget {
   const BuyerProfileSettings({super.key});
@@ -222,6 +348,30 @@ class _BuyerProfileSettingsState extends State<BuyerProfileSettings> {
     }
   }
 
+  Future<void> _viewPastTickets() async{
+    final String? token = await _getToken();
+
+    // Send the login request to your Flask backend
+    final response = await http.post(
+      Uri.parse('http://127.0.0.1:5000/ticket/viewPastTickets'), // Update with your backend URL
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      }
+    );
+
+    // Handle the response from the backend
+    if (response.statusCode == 200) {
+
+        ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('tickets showed successfully')),
+      );
+    } else {
+      // Login failed, display error message in a dialog
+      final Map<String, dynamic> responseBody = jsonDecode(response.body);
+      _showErrorDialog(responseBody['message'] ?? 'past Tickets couldnt be showed!');
+    }
+  }
 
   @override
   void initState() {
