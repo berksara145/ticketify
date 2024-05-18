@@ -107,9 +107,6 @@ def execute_schema_sql():
             finally:
                 cursor.fetchall()
                 cursor.close()
-
-execute_schema_sql()
-
 @app.route('/login', methods=['POST'])
 def login():
     try:

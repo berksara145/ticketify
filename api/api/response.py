@@ -5,16 +5,23 @@ import math
 import traceback
 
 
+from flask_jwt_extended import get_jwt_identity
+
 response_bp = Blueprint('response', __name__, url_prefix='/response')
 
 
 @response_bp.route('/createIssueResponse', methods=['POST'])
 def create_issue_response():
     try:
+        # Get the identity (claims) from the JWT token
+        identity = get_jwt_identity()
+        
+        # Extract user_id and user_type from the identity
+        user_id = identity.get('user_id')
+
         # Extract data from request
         data = request.json
         issue_id = data.get('issue_id')
-        user_id = data.get('user_id')
         response_text = data.get('response_text')
 
         # Validate required data

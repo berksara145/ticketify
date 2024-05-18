@@ -7,6 +7,12 @@ import uuid
 
 ticket_bp = Blueprint('ticket', __name__, url_prefix='/ticket')
 
+
+from flask_jwt_extended import get_jwt_identity
+
+# evente özel olan section fiyat döndürcek
+
+
 @ticket_bp.route('/chooseTicket', methods=['GET'])
 def choose_ticket():   
     try:
@@ -84,8 +90,13 @@ def choose_ticket():
 def buy_ticket():   
     # Extract parameters from request
     try:
+        # Get the identity (claims) from the JWT token
+        identity = get_jwt_identity()
+        
+        # Extract user_id and user_type from the identity
+        user_id = identity.get('user_id')
+
         data = request.json
-        user_id = data.get('user_id')
         ticket_ids = data.get('ticket_ids')
         event_id = data.get('event_id')
 
@@ -187,8 +198,11 @@ def buy_ticket():
 @ticket_bp.route('/viewPastTickets', methods=['GET'])
 def view_past_tickets():
     try:
-        data = request.json
-        user_id = data.get('user_id')
+        # Get the identity (claims) from the JWT token
+        identity = get_jwt_identity()
+        
+        # Extract user_id and user_type from the identity
+        user_id = identity.get('user_id')
 
         # Validate required parameters
         if not user_id:
@@ -252,9 +266,14 @@ def view_past_tickets():
 @ticket_bp.route('/insertMoney', methods=['POST'])
 def insert_money():
     try:
+        # Get the identity (claims) from the JWT token
+        identity = get_jwt_identity()
+        
+        # Extract user_id and user_type from the identity
+        user_id = identity.get('user_id')
+
         # Extract data from the request
         data = request.json
-        user_id = data.get('user_id')
         amount = data.get('amount')
 
         # Validate required parameters
@@ -289,9 +308,14 @@ def insert_money():
 @ticket_bp.route('/returnTicket', methods=['POST'])
 def return_ticket():
     try:
+        # Get the identity (claims) from the JWT token
+        identity = get_jwt_identity()
+        
+        # Extract user_id and user_type from the identity
+        user_id = identity.get('user_id')
+
         # Extract data from the request
         data = request.json
-        user_id = data.get('user_id')
         ticket_id = data.get('ticket_id')
 
         # Validate required parameters
