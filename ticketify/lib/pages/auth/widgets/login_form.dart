@@ -4,6 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../../../constants/constant_variables.dart';
+import '../../admin/admin_page.dart';
 import '../../homepage/homepage.dart';
 import '../../Organizator/organizer_homepage.dart';
 import 'auth_text_field.dart';
@@ -62,6 +63,12 @@ class _LoginFormState extends State<LoginForm> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const OrganizerHomepage()),
+        );
+      }
+      if (userType == 'admin'){
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const AdminPage()),
         );
       }
       ScaffoldMessenger.of(context).showSnackBar(
