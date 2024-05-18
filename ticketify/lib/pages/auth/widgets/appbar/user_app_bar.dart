@@ -57,7 +57,7 @@ class _UserAppBarState extends State<UserAppBar> {
         IconButton(
             onPressed: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const ProfilePage()));
+                  MaterialPageRoute(builder: (context) => const ProfilePageBuyer()));
             },
             icon: Icon(Icons.account_circle)),
         TextButton(
