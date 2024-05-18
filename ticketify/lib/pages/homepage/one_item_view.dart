@@ -37,10 +37,17 @@ class _OneItemViewState extends State<OneItemView> {
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     if (width <= 1000) {
-      return PhoneOneItemView(post: post, widget: widget, event_id: event_id,);
+      return PhoneOneItemView(
+        post: post,
+        widget: widget,
+        event_id: event_id,
+      );
     }
-    print(width);
-    return DesktopOneItemView(post: post, widget: widget, event_id: event_id,);
+    return DesktopOneItemView(
+      post: post,
+      widget: widget,
+      event_id: event_id,
+    );
   }
 }
 
@@ -112,9 +119,7 @@ class PhoneOneItemView extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => PurchaseTicket(
-                                  post: post,
-                                    event_id: event_id
-                                ),
+                                    post: post, event_id: event_id),
                               ),
                             );
                           },
@@ -160,7 +165,8 @@ class PhoneOneItemView extends StatelessWidget {
                                       padding:
                                           const EdgeInsets.only(bottom: 8.0),
                                       child: FittedBox(
-                                          child: Text("Artist(s): ${post?.id}")),
+                                          child:
+                                              Text("Artist(s): ${post?.id}")),
                                     ),
                                     Padding(
                                       padding:
@@ -170,7 +176,8 @@ class PhoneOneItemView extends StatelessWidget {
                                     Padding(
                                       padding:
                                           const EdgeInsets.only(bottom: 8.0),
-                                      child: Text("Location: ${post?.location}"),
+                                      child:
+                                          Text("Location: ${post?.location}"),
                                     ),
                                     Padding(
                                       padding:
@@ -276,7 +283,7 @@ class PhoneOneItemView extends StatelessWidget {
 class DesktopOneItemView extends StatelessWidget {
   DesktopOneItemView({
     super.key,
-    this.post ,
+    this.post,
     required this.event_id,
     required this.widget,
   });
@@ -334,16 +341,14 @@ class DesktopOneItemView extends StatelessWidget {
                             padding: const EdgeInsets.only(right: 75.0),
                             child: TextButton(
                               onPressed: () {
-                                GoRouter.of(context).go('/purchase/:eventID');
-                               /* Navigator.push(
+                                //GoRouter.of(context).go('/purchase/:eventID');
+                                Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => PurchaseTicket(
-                                      post: post,
-                                        event_id : event_id
-                                    ),// TODO
+                                        post: post, event_id: event_id), // TODO
                                   ),
-                                );*/
+                                );
                               },
                               style: ButtonStyle(
                                 backgroundColor:
