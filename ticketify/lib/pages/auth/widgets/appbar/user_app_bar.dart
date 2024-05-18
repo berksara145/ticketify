@@ -56,18 +56,79 @@ class _UserAppBarState extends State<UserAppBar> {
       actions: [
         IconButton(
             onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const ProfilePage()));
+            },
+            icon: Icon(Icons.account_circle)),
+        TextButton(
+            onPressed: () {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => const AuthScreen()));
+            },
+            child: const Text(
+              "Log out",
+              style: TextStyle(color: AppColors.black),
+            )),
+      ],
+    );
+  }
+}
+
+class OrganizerAppBar extends StatefulWidget implements PreferredSizeWidget {
+  const OrganizerAppBar({super.key});
+
+  @override
+  State<OrganizerAppBar> createState() => _OrganizerAppBarState();
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+}
+
+class _OrganizerAppBarState extends State<OrganizerAppBar> {
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      backgroundColor: AppColors.green.withOpacity(0.55),
+      automaticallyImplyLeading: false,
+      title: Row(
+        children: [
+          IconButton(
+            icon: Row(
+              children: [
+                Image.asset(
+                  AssetLocations.design,
+                  width: 35,
+                  height: 35,
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                Text(
+                  "TICKETIFY",
+                  style: GoogleFonts.allertaStencil(
+                      textStyle: const TextStyle(
+                        color: AppColors.black,
+                        fontSize: 25,
+                      )),
+                ),
+              ],
+            ),
+            onPressed: () {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => const OrganizerHomepage()));
+            },
+          ),
+        ],
+      ),
+      actions: [
+        IconButton(
+            onPressed: () {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => const OrganizerHomepage()));
             },
             icon: Icon(Icons.event_available_outlined)),
-        IconButton(
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const ProfilePage()));
-            },
-            icon: Icon(Icons.account_circle)),
         TextButton(
             onPressed: () {
               Navigator.pushReplacement(context,

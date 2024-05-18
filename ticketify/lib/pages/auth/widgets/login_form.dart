@@ -21,6 +21,10 @@ class _LoginFormState extends State<LoginForm> {
   final TextEditingController passwordController = TextEditingController();
   final FlutterSecureStorage storage = const FlutterSecureStorage();
 
+  final String nameLabel = "Name";
+  final String surnameLabel = "Surname";
+  final String emailLabel = "Email";
+  final String passwordLabel = "Password";
   String? userType;
 
   Future<void> _login() async {
@@ -60,6 +64,9 @@ class _LoginFormState extends State<LoginForm> {
           MaterialPageRoute(builder: (context) => const OrganizerHomepage()),
         );
       }
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Logged in successfully!')),
+      );
     } else {
       // Login failed, display error message in a dialog
       final Map<String, dynamic> responseBody = jsonDecode(response.body);
@@ -150,6 +157,44 @@ class _LoginFormState extends State<LoginForm> {
           const SizedBox(height: 20),
           AuthTextField(controller: passwordController, label: 'Password'),
           const SizedBox(height: 30),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              /*GestureDetector(
+                onTap: () => {widget.setParentState()},
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 4.0, top: 2.0),
+                  child: Text(
+                    "Forgot Password?",
+                    style: TextStyle(),
+                  ),
+                ),
+              ),*/
+              GestureDetector(
+                onTap: () => {widget.setParentState()},
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 2.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Don't have an account? ",
+                        style: TextStyle(
+                            color: AppColors.buttonBlue,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        "Register.",
+                        style: TextStyle(
+                            color: AppColors.black,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
           TextButton(
             onPressed: _login,
             child: Container(

@@ -52,6 +52,10 @@ class _RegisterFormState extends State<RegisterForm> {
     if (response.statusCode == 200) {
       // Registration successful, switch to login form
       widget.setParentState();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Account created successfully!')),
+      );
     } else {
       // Registration failed, display error message in a dialog
       final Map<String, dynamic> responseBody = jsonDecode(response.body);
