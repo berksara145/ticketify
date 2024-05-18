@@ -65,7 +65,7 @@ class _LoginFormState extends State<LoginForm> {
           MaterialPageRoute(builder: (context) => const OrganizerHomepage()),
         );
       }
-      if (userType == 'admin') {
+      if (userType == 'admin'){
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const AdminPage()),

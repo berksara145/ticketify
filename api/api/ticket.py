@@ -138,7 +138,7 @@ def buy_ticket():
             return jsonify({'error': 'Invalid ticket IDs or tickets already bought'}), 400
 
         if buyer_money < total_price:
-            return jsonify({'error': 'Insufficient funds'}), 400
+            return jsonify({'error': 'Insufficient funds', "money": buyer_money, "price":total_price}), 400
 
         
         query = """
@@ -268,6 +268,7 @@ def view_past_tickets():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+
 @ticket_bp.route('/insertMoney', methods=['POST'])
 def insert_money():
     try:
@@ -304,7 +305,7 @@ def insert_money():
         cursor.close()
         connection.close()
 
-        return jsonify({'message': 'Money inserted successfully', 'new_balance': new_balance}), 200
+        return jsonify({'message': 'Money inserted successfully', 'new_balance': new_balance, "user_id":user_id}), 200
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500

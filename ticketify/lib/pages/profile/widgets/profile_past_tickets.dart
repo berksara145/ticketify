@@ -2,60 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:ticketify/constants/constant_variables.dart';
 import 'package:ticketify/general_widgets/page_title.dart';
 import 'package:ticketify/pages/profile/widgets/event_details.dart';
-import 'package:ticketify/pages/profile/widgets/profile_item.dart';
 
 class ProfileBrowseTickets extends StatelessWidget {
   final bool isPastTickets;
-  const ProfileBrowseTickets({super.key, this.isPastTickets = true});
+  final List<ProfileItemData> items; // Add this line
+  const ProfileBrowseTickets({super.key, this.isPastTickets = true, required this.items});
 
+  @override
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     double width = size.width;
 
-    final List<ProfileItemData> items = [
-      ProfileItemData(
-          title: "Event 1",
-          acceptDate: "Date 1",
-          location: "Location 1",
-          organizer: "Organizer 1"),
-      ProfileItemData(
-          title: "Event 2",
-          acceptDate: "Date 2",
-          location: "Location 2",
-          organizer: "Organizer 2"),
-      ProfileItemData(
-          title: "Event 2",
-          acceptDate: "Date 2",
-          location: "Location 2",
-          organizer: "Organizer 2"),
-      ProfileItemData(
-          title: "Event 2",
-          acceptDate: "Date 2",
-          location: "Location 2",
-          organizer: "Organizer 2"),
-      ProfileItemData(
-          title: "Event 2",
-          acceptDate: "Date 2",
-          location: "Location 2",
-          organizer: "Organizer 2"),
-      ProfileItemData(
-          title: "Event 2",
-          acceptDate: "Date 2",
-          location: "Location 2",
-          organizer: "Organizer 2"),
-      ProfileItemData(
-          title: "Event 2",
-          acceptDate: "Date 2",
-          location: "Location 2",
-          organizer: "Organizer 2"),
-      ProfileItemData(
-          title: "Event 2",
-          acceptDate: "Date 2",
-          location: "Location 2",
-          organizer: "Organizer 2"),
-      // // Add more items as needed
-    ];
     return Expanded(
       child: Container(
         decoration: BoxDecoration(
@@ -68,17 +26,16 @@ class ProfileBrowseTickets extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            PageTitle(title: "Past Events"),
+            PageTitle(title: isPastTickets ? "Past Events" : "Upcoming Events"),
             SizedBox(height: 20),
             Expanded(
               child: Padding(
-                //
                 padding: const EdgeInsets.only(bottom: 50, left: 20, right: 20),
                 child: ListView(children: [
                   GridView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: items!.length,
+                    itemCount: items.length,
                     gridDelegate:
                         const SliverGridDelegateWithMaxCrossAxisExtent(
                       maxCrossAxisExtent: 300,
@@ -92,7 +49,7 @@ class ProfileBrowseTickets extends StatelessWidget {
                       return InkWell(
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => EventDetails(),
+                            builder: (context) => EventDetails(event: event),
                           ));
                         },
                         child: Card(
@@ -125,8 +82,8 @@ class ProfileBrowseTickets extends StatelessWidget {
                                     ),
                                   ),
                                   ItemText(text: event.acceptDate),
-                                  ItemText(text: event.acceptDate),
-                                  ItemText(text: event.acceptDate),
+                                  ItemText(text: event.location),
+                                  ItemText(text: event.organizer),
                                 ],
                               ),
                             ),

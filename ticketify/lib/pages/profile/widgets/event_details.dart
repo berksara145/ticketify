@@ -1,19 +1,22 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:ticketify/constants/constant_variables.dart';
+import 'package:ticketify/pages/profile/widgets/profile_past_tickets.dart'; // Import the ProfileItemData class
 
 class EventDetails extends StatelessWidget {
+  final ProfileItemData event;
+
+  const EventDetails({super.key, required this.event});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('Concert Ticket'),
+        title: Text('Event Details'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            // Handle back button
+            Navigator.of(context).pop();
           },
         ),
       ),
@@ -22,15 +25,16 @@ class EventDetails extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 20),
           child: Container(
             decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.black.withOpacity(0.5),
-                    blurRadius: 4,
-                    offset: Offset(0, 4), // Shadow position
-                  ),
-                ],
-                color: AppColors.greylight.withAlpha(255),
-                borderRadius: BorderRadius.circular(37)),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.black.withOpacity(0.5),
+                  blurRadius: 4,
+                  offset: Offset(0, 4), // Shadow position
+                ),
+              ],
+              color: AppColors.greylight.withAlpha(255),
+              borderRadius: BorderRadius.circular(37),
+            ),
             child: Column(
               children: <Widget>[
                 Padding(
@@ -40,14 +44,14 @@ class EventDetails extends StatelessWidget {
                     children: <Widget>[
                       ListTile(
                         title: Text(
-                          'Dolu Kadehi Ters Tut',
+                          event.title,
                           style: TextStyle(fontSize: 18),
                         ),
                       ),
-                      Text('Date: 22 March 2020'),
-                      Text('Type: Concert'),
+                      Text('Date: ${event.acceptDate}'),
+                      Text('Location: ${event.location}'),
+                      Text('Organizer: ${event.organizer}'),
                       SizedBox(height: 10),
-
                       // Add more details as needed
                     ],
                   ),
@@ -65,13 +69,10 @@ class EventDetails extends StatelessWidget {
                             height: 400,
                             width: 400,
                             child: FittedBox(
-                              child: Image.network(
-                                  'https://picsum.photos/400/450'),
+                              child: Image.network('https://picsum.photos/200/300'),
                             ),
-                          ), // Placeholder image
-                          SizedBox(
-                            width: 100,
                           ),
+                          SizedBox(width: 100),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -80,15 +81,7 @@ class EventDetails extends StatelessWidget {
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 24)),
-                              Text('Artist: Dolu Kadehi Ters Tut'),
-                              Text('Starts at: 20:00      Ends At: 000'),
-                              Text('Location at: Ankara'),
-                              Text('Organized by'),
-                              Text(
-                                'Event Info: Dolu Kadehi Ters Tut is getting ready to bring you its popular songs with the KerkiSolfej organization.',
-                                softWrap: true,
-                              ),
-                              Text('Event Rules:'),
+                              // Display additional event details if needed
                             ],
                           ),
                         ],
@@ -102,29 +95,27 @@ class EventDetails extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16.0, vertical: 8.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                         child: Text('450 TL',
                             style: TextStyle(fontWeight: FontWeight.bold)),
                       ),
-                      SizedBox(
-                        width: 20,
-                      ),
+                      SizedBox(width: 20),
                       InkWell(
                         onTap: () {
                           // Handle refund
                         },
                         child: Container(
                           decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: AppColors.black.withOpacity(0.5),
-                                  blurRadius: 1,
-                                  offset: Offset(0, 1), // Shadow position
-                                ),
-                              ],
-                              color: Colors.red,
-                              borderRadius: BorderRadius.circular(37)),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.black.withOpacity(0.5),
+                                blurRadius: 1,
+                                offset: Offset(0, 1), // Shadow position
+                              ),
+                            ],
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(37),
+                          ),
                           child: Text('Refund Ticket'),
                           padding: EdgeInsets.all(12),
                         ),
