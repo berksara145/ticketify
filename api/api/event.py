@@ -4,6 +4,7 @@ from utils import get_db_connection
 import math
 import traceback
 
+from flask_jwt_extended import get_jwt_identity
 
 event_bp = Blueprint('event', __name__, url_prefix='/event')
 
@@ -74,6 +75,12 @@ def get_all_events():
 def create_event():
     try:
         print("entered create event")
+
+        identity = get_jwt_identity()
+        
+        # Extract user_id and user_type from the identity
+        organizer_id = identity.get('user_id')
+
         # Extract data from request
         data = request.json
         event_name = data.get('event_name')
@@ -83,7 +90,6 @@ def create_event():
         event_image = data.get('event_image')
         description_text = data.get('description_text')
         event_rules = data.get('event_rules')
-        organizer_id = data.get('organizer_id')
         venue_id = data.get('venue_id')
         performer_name = data.get('performer_name')
         ticket_prices = data.get('ticket_prices')  # Array of ticket prices)
@@ -379,9 +385,14 @@ def get_filtered_events():
 @event_bp.route('/addEventClicked', methods=['POST'])
 def add_event_clicked():
     try:
+        # Get the identity (claims) from the JWT token
+        identity = get_jwt_identity()
+        
+        # Extract user_id and user_type from the identity
+        user_id = identity.get('user_id')
+
         # Extract data from the request
         data = request.json
-        user_id = data.get('user_id')
         event_id = data.get('event_id')
         
         # Validate required data
@@ -422,9 +433,11 @@ def add_event_clicked():
 @event_bp.route('/getEventsClicked', methods=['GET'])
 def get_events_clicked():
     try:
-        # Extract user_id from the request query parameters
-        data = request.json
-        user_id = data.get('user_id')
+        # Get the identity (claims) from the JWT token
+        identity = get_jwt_identity()
+        
+        # Extract user_id and user_type from the identity
+        user_id = identity.get('user_id')
 
         # Validate user_id
         if not user_id:

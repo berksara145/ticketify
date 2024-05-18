@@ -4,6 +4,7 @@ from utils import get_db_connection
 venue_bp = Blueprint('venue', __name__, url_prefix='/venue')
 
 
+from flask_jwt_extended import get_jwt_identity
 
 """
 -- Table: generate
@@ -20,9 +21,14 @@ bu talbe relation eklenmeli create e unutulmuş
 # Endpoint to create a venue and associate it with an event
 @venue_bp.route('/create', methods=['POST'])
 def create_venue():
+    # Get the identity (claims) from the JWT token
+    identity = get_jwt_identity()
+    
+    # Extract user_id and user_type from the identity
+    user_id = identity.get('user_id')
+
     # Extract data from request
     data = request.json
-    user_id = data.get('user_id')
     venue_name = data.get('venue_name')
     address = data.get('address')
     phone_no = data.get('phone_no')
