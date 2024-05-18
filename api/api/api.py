@@ -16,6 +16,7 @@ from issue import issue_bp
 from response import response_bp
 from ticket import ticket_bp
 from report import report_bp
+from profile import profile_bp
 
 app = Flask(__name__)
 CORS(app) 
@@ -64,6 +65,8 @@ app.register_blueprint(ticket_bp)
 report_bp.before_request(check_access_token)
 app.register_blueprint(report_bp)
 
+profile_bp.before_request(check_access_token)
+app.register_blueprint(profile_bp)
 
 print("heree4")
 
