@@ -119,7 +119,7 @@ def buy_ticket():
         if not buyer:
             return jsonify({'error': 'Buyer does not exist'}), 404
 
-        buyer_money = buyer[0]
+        buyer_money = buyer[2]
         # Calculate the total ticket price
 
         # Construct the SQL query with placeholders for each ticket ID
