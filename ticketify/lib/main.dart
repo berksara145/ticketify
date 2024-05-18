@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: EventDetails(), /*GoRouter.of(context).go('/auth'),*/
+      home: AuthScreen(),/*EventDetails(), *//*GoRouter.of(context).go('/auth'),*/
     );
   }
 }

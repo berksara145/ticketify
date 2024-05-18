@@ -27,8 +27,8 @@ class _CreateIssueState extends State<CreateIssue> {
     // Construct the login request payload
     final String? token = await _getToken();
     final Map<String, dynamic> data = {
-      'title': _titleController.text,
-      'description': _descriptionController.text,
+      'issue_text': _titleController.text,
+      'issue_name': _descriptionController.text,
     };
 
     // Send the login request to your Flask backend
