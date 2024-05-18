@@ -176,18 +176,25 @@ def register():
             return jsonify({'message': 'Email is already registered'}), 400
         
         # Insert the new user into the database
-        if user_type == 'organizor':
+        if user_type == 'organizer':
             cursor.execute(f"INSERT INTO {user_type} (first_name, last_name, email, password, user_type, phone_no) VALUES (%s, %s, %s, %s, %s, %s)",
                        (first_name, last_name, email, password, user_type, phone_no))
+        elif user_type == 'buyer':
+            cursor.execute(f"INSERT INTO {user_type} (password, money, first_name, last_name, email, user_type) VALUES (%s, %s, %s, %s, %s, %s)",
+                       (password, 0, first_name, last_name, email, user_type))            
         else:
             cursor.execute(f"INSERT INTO {user_type} (first_name, last_name, email, password, user_type) VALUES (%s, %s, %s, %s, %s)",
                         (first_name, last_name, email, password, user_type))
+                        # Retrieve the created user
+        cursor.execute(f"SELECT * FROM {user_type} WHERE email = %s", (email,))
+        created_user = cursor.fetchone()
+        
         mysql.connection.commit()
         cursor.close()
-        
-        return jsonify({'message': 'User successfully registered'}), 200
+ 
+        return jsonify({'message': 'User successfully registered', "user": created_user}), 200
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'error': str(e), 'trace': traceback.format_exc()}), 500
 
 
 if __name__ =="__main__":

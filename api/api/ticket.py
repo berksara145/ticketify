@@ -110,7 +110,11 @@ def buy_ticket():
 
         # Check if the buyer exists and has sufficient funds
         cursor.execute("SELECT money FROM buyer WHERE user_id = %s", (user_id,))
-        buyer = cursor.fetchone()
+        
+        buyer = cursor.lastrowid
+
+        print("buyer: ",buyer)
+
         if not buyer:
             return jsonify({'error': 'Buyer does not exist'}), 404
 
