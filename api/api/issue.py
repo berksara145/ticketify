@@ -29,12 +29,10 @@ def create_issue():
         data = request.json
         issue_text = data.get('issue_text')
         issue_name = data.get('issue_name')
-        user_id = data.get('user_id')
-        user_type = data.get('user_type')
         date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
         # Validate required data
-        if not (issue_text and user_id):
+        if not (issue_text and issue_name):
             return jsonify({'error': 'Missing required data'}), 400
 
         
