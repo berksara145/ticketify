@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 import 'dart:ui';
+
+import 'package:ticketify/objects/venue_model.dart';
 
 class AppFonts {
   static TextStyle allertaStencil = GoogleFonts.allertaStencil();
@@ -46,6 +50,26 @@ class ScreenConstants {
   static const int kMobileWidthThreshold = 500;
 }
 
+void _showErrorDialog(String message, BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Error'),
+        content: Text(message),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('OK'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
 class UtilConstants {
   final FlutterSecureStorage storage = const FlutterSecureStorage();
 
@@ -80,6 +104,91 @@ class UtilConstants {
       // Login failed, display error message in a dialog
       // final Map<String, dynamic> responseBody = jsonDecode(response.body);
       //_showErrorDialog(responseBody['message'] ?? 'Issue create failed');
+    }
+  }
+
+  Future<void> createVenue(
+      BuildContext context,
+      String venueName,
+      String address,
+      String phoneNo,
+      String venueImage,
+      int venueRowLength,
+      int venueColumnLength,
+      int venueSectionCount) async {
+    // Retrieve the token
+    final String? token = await getToken();
+
+    // Construct the data payload with provided arguments
+    final Map<String, dynamic> data = {
+      'venue_name': venueName,
+      'address': address,
+      'phone_no': phoneNo,
+      'venue_image': venueImage,
+      'venue_row_length': venueRowLength,
+      'venue_column_length': venueColumnLength,
+      'venue_section_count': venueSectionCount,
+    };
+    print(jsonEncode(data));
+
+    // Send the request to your Flask backend
+    final response = await http.post(
+      Uri.parse(
+          'http://127.0.0.1:5000/venue/create'), // Update with your backend URL
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode(data),
+    );
+
+    // Handle the response from the backend
+    if (response.statusCode == 200) {
+      // Operation successful, navigate to homepage or perform other actions
+      // Example: Navigator.pushReplacementNamed(context, '/homepage');
+    } else {
+      // Operation failed, display error message in a dialog
+      final Map<String, dynamic> responseBody = jsonDecode(response.body);
+      _showErrorDialog(
+          responseBody['message'] ?? 'Venue creation failed', context);
+    }
+  }
+
+  Future<VenueModel> getAllVenues() async {
+    // Fetch the token; ensure you handle the potential null token appropriately
+    final String? token = await getToken();
+
+    if (token == null) {
+      throw Exception('Authentication token not found');
+    }
+
+    try {
+      // Construct the URI for your Flask backend endpoint
+      final uri = Uri.parse('http://127.0.0.1:5000/venue/getVenue');
+
+      // Send the HTTP GET request
+      final response = await http.get(
+        uri,
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      // Check if the response is successful
+      if (response.statusCode == 200) {
+        // Decode the JSON response
+        final jsonData = jsonDecode(response.body);
+
+        // Parse the JSON into your VenueModel
+        return VenueModel.fromJson(jsonData);
+      } else {
+        // Throw an exception if the server returns an error
+        throw Exception('Failed to load venues: ${response.body}');
+      }
+    } catch (e) {
+      // Handle any errors that might occur during the HTTP request
+      throw Exception('Error fetching venue data: $e');
     }
   }
 }

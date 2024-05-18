@@ -1,14 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:ticketify/constants/constant_variables.dart';
 import 'package:ticketify/general_widgets/page_title.dart';
-import 'package:ticketify/objects/venue.dart';
+import 'package:ticketify/objects/venue_model.dart';
 import 'package:ticketify/pages/homepage/ItemGrid.dart';
 import 'package:ticketify/pages/homepage/one_item_view.dart';
 
-class VenuesPage extends StatelessWidget {
-  final List<Venue> venues;
+class VenuesPage extends StatefulWidget {
+  VenuesPage({super.key});
 
-  VenuesPage({required this.venues});
+  @override
+  _VenuesPageState createState() => _VenuesPageState();
+}
+
+class _VenuesPageState extends State<VenuesPage> {
+  late Future<VenueModel> _venuesFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _venuesFuture = UtilConstants().getAllVenues();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,85 +38,85 @@ class VenuesPage extends StatelessWidget {
             PageTitle(title: "Venues"),
             SizedBox(height: 20),
             Expanded(
-              child: ListView(children: [
-                GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: venues!.length,
-                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: 300,
-                    mainAxisSpacing: 10,
-                    crossAxisSpacing: 10,
-                    childAspectRatio: 1,
-                  ),
-                  itemBuilder: (context, index) {
-                    final venue = venues[index];
-
-                    return InkWell(
-                      onTap: () {},
-                      child: Card(
-                        color: Colors.grey,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                        child: SingleChildScrollView(
-                          // Disable scrolling
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  alignment: Alignment.center,
-                                  height: 100, // Adjust height as needed
-                                  child: Image.network(
-                                    venue.imageUrl,
-                                    fit: BoxFit
-                                        .cover, // or BoxFit.contain based on your preference
-                                  ),
-                                ),
-                                const SizedBox(height: 10),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+              child: FutureBuilder<VenueModel>(
+                future: _venuesFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text("Error: ${snapshot.error}"));
+                  } else if (snapshot.hasData) {
+                    final venues = snapshot.data!.venues;
+                    return GridView.builder(
+                      itemCount: venues!.length,
+                      gridDelegate:
+                          const SliverGridDelegateWithMaxCrossAxisExtent(
+                        maxCrossAxisExtent: 300,
+                        mainAxisSpacing: 10,
+                        crossAxisSpacing: 10,
+                        childAspectRatio: 1,
+                      ),
+                      itemBuilder: (context, index) {
+                        final venue = venues[index];
+                        return InkWell(
+                          onTap: () {
+                            // Handle the tap
+                          },
+                          child: Card(
+                            color: Colors.grey,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
+                            child: SingleChildScrollView(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Expanded(
-                                      // Wrap the title with Expanded
-                                      child: Text(
-                                        venue.name ?? "",
-                                        style: const TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                    Container(
+                                      alignment: Alignment.center,
+                                      height: 100,
+                                      child: Image.network(
+                                        venue.urlPhoto ??
+                                            "default_image_url", // Provide a default URL
+                                        fit: BoxFit.cover,
                                       ),
                                     ),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.amber,
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
+                                    const SizedBox(height: 10),
+                                    Text(
+                                      venue.venueName ?? "Unknown",
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                      padding: const EdgeInsets.all(5.0),
-                                      child: Text(
-                                        venue.address ?? "",
-                                        style: const TextStyle(
-                                          fontSize: 8,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                        ),
+                                    ),
+                                    Text(
+                                      venue.address ?? "No address",
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    Text(
+                                      (venue.venueColumnLength! *
+                                              venue!.venueRowLength!)
+                                          .toString(),
+                                      style: const TextStyle(
+                                        fontSize: 14,
                                       ),
                                     ),
                                   ],
                                 ),
-                              ],
+                              ),
                             ),
                           ),
-                        ),
-                      ),
+                        );
+                      },
                     );
-                  },
-                ),
-              ]),
+                  } else {
+                    return Center(child: Text("No data available"));
+                  }
+                },
+              ),
             ),
           ],
         ),

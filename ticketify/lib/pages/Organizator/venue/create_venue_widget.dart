@@ -236,7 +236,15 @@ class _CreateVenueWidgetState extends State<CreateVenueWidget> {
                     ),
                     InkWell(
                       onTap: () {
-                        // Create event logic here
+                        UtilConstants().createVenue(
+                            context,
+                            venueName,
+                            location,
+                            phoneController.text,
+                            "https://picsum.photos/200",
+                            int.parse(_rowController.text),
+                            int.parse(_columnController.text),
+                            int.parse(sectionCountController.text));
                       },
                       child: Container(
                           decoration:
