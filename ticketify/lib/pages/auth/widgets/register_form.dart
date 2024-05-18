@@ -53,12 +53,32 @@ class _RegisterFormState extends State<RegisterForm> {
       // Registration successful, switch to login form
       widget.setParentState();
     } else {
-      // Registration failed, display error message
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Sign up failed')),
-      );
+      // Registration failed, display error message in a dialog
+      final Map<String, dynamic> responseBody = jsonDecode(response.body);
+      _showErrorDialog(responseBody['message'] ?? 'Sign up failed');
     }
   }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
