@@ -347,65 +347,47 @@ class _BuyerProfileSettingsState extends State<BuyerProfileSettings> {
       _showErrorDialog(responseBody['message'] ?? 'Password change unsaved!');
     }
   }
-  Future<void> _viewPastTickets() async{
-
-    // Send the login request to your Flask backend
-    final response = await http.post(
-      Uri.parse('http://127.0.0.1:5000/ticket/viewPastTickets'), // Update with your backend URL
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-    );
-
-    // Handle the response from the backend
-    if (response.statusCode == 200) {
-      // Successful login, navigate to homepage or perform other actions
-      final Map<String, dynamic> responseBody = jsonDecode(response.body);
-      String token = responseBody['access_token'];
-
-      // Save the token securely
-      await storage.write(key: 'access_token', value: token);
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Last name is changed successfully!')),
-      );
-    } else {
-      // Login failed, display error message in a dialog
-      final Map<String, dynamic> responseBody = jsonDecode(response.body);
-      _showErrorDialog(responseBody['message'] ?? 'Last name change failed');
-    }
-  }
-
-  Future<void> _viewPastTickets() async{
-    final String? token = await _getToken();
-
-    // Send the login request to your Flask backend
-    final response = await http.post(
-      Uri.parse('http://127.0.0.1:5000/ticket/viewPastTickets'), // Update with your backend URL
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $token',
-      }
-    );
-
-    // Handle the response from the backend
-    if (response.statusCode == 200) {
-
-        ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('tickets showed successfully')),
-      );
-    } else {
-      // Login failed, display error message in a dialog
-      final Map<String, dynamic> responseBody = jsonDecode(response.body);
-      _showErrorDialog(responseBody['message'] ?? 'past Tickets couldnt be showed!');
-    }
-  }
+  List<ProfileItemData> pastTickets = [];
 
   @override
   void initState() {
     super.initState();
-    _fetchUserDetails();
+    _viewPastTickets();
   }
+
+  Future<void> _viewPastTickets() async {
+    final String? token = await _getToken();
+
+    final response = await http.get(
+      Uri.parse('http://127.0.0.1:5000/ticket/viewPastTickets'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> ticketsJson = jsonDecode(response.body);
+      setState(() {
+        pastTickets = ticketsJson.map((json) => ProfileItemData(
+          title: json['event_name'],
+          acceptDate: json['start_date'],
+          location: json['venue_name'],
+          organizer: "${json['organizer_first_name']} ${json['organizer_last_name']}",
+          imageUrl: "https://picsum.photos/200/300", // Default image URL
+        )).toList();
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Tickets showed successfully')),
+      );
+    } else {
+      final Map<String, dynamic> responseBody = jsonDecode(response.body);
+      _showErrorDialog(responseBody['message'] ?? 'Past tickets couldn\'t be showed!');
+    }
+  }
+
+
   void _showErrorDialog(String message) {
     showDialog(
       context: context,
