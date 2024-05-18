@@ -108,10 +108,11 @@ def buy_ticket():
         connection = get_db_connection()
         cursor = connection.cursor()
 
+        print(user_id)
         # Check if the buyer exists and has sufficient funds
-        cursor.execute("SELECT money FROM buyer WHERE user_id = %s", (user_id,))
+        cursor.execute("SELECT * FROM buyer WHERE user_id = %s", (user_id,))
         
-        buyer = cursor.lastrowid
+        buyer = cursor.fetchone()
 
         print("buyer: ",buyer)
 
