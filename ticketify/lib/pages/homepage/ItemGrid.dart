@@ -232,15 +232,12 @@ class _ProductCardState extends State<ProductCard> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        print(widget.post.id);
-        GoRouter.of(context).go('/display/:eventID');
-
-        /*Navigator.push(
+        Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => OneItemView(post: widget.post, event_id: widget.post.id,),
           ), // TODO: BURAYA GOROUTER
-        );*/
+        );
       },
       child: Card(
         color: widget.backgroundColor,

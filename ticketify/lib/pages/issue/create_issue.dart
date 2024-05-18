@@ -1,7 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:ticketify/constants/constant_variables.dart';
 import 'package:ticketify/general_widgets/page_selector/page_selector_title.dart';
 import 'package:ticketify/pages/auth/widgets/appbar/user_app_bar.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+import '../homepage/homepage.dart';
 
 class CreateIssue extends StatefulWidget {
   const CreateIssue({Key? key}) : super(key: key);
@@ -13,6 +19,62 @@ class CreateIssue extends StatefulWidget {
 class _CreateIssueState extends State<CreateIssue> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  final FlutterSecureStorage storage = const FlutterSecureStorage();
+  Future<String?> _getToken() async {
+    return await storage.read(key: 'access_token');
+  }
+  Future<void> _createIssue() async {
+    // Construct the login request payload
+    final String? token = await _getToken();
+    final Map<String, dynamic> data = {
+      'title': _titleController.text,
+      'description': _descriptionController.text,
+    };
+
+    // Send the login request to your Flask backend
+    final response = await http.post(
+      Uri.parse('http://127.0.0.1:5000/issue/createIssue'), // Update with your backend URL
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode(data),
+    );
+
+    // Handle the response from the backend
+    if (response.statusCode == 200) {
+      // Successful login, navigate to homepage or perform other actions
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const Homepage()),
+      );
+    }
+     else {
+      // Login failed, display error message in a dialog
+      final Map<String, dynamic> responseBody = jsonDecode(response.body);
+      _showErrorDialog(responseBody['message'] ?? 'Issue create failed');
+    }
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +99,7 @@ class _CreateIssueState extends State<CreateIssue> {
                 borderRadius: BorderRadius.circular(37),
               ),
               width: 400,
-              child: Column(
+              child: const Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   PageSelectorTitle(title: "Create Issue"),
@@ -165,7 +227,7 @@ class _CreateIssueState extends State<CreateIssue> {
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
                     child: InkWell(
-                      onTap: () {},
+                      onTap: _createIssue,
                       child: Container(
                         padding: EdgeInsets.all(5),
                         decoration: BoxDecoration(
