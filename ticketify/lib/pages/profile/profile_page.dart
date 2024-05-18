@@ -105,15 +105,6 @@ class _ProfilePageBuyerState extends State<ProfilePageBuyer> {
               ),
             ],
           ),
-          TextButton(
-              onPressed: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => const BuyerProfileSettings()));
-              },
-              child: const Text(
-                "Settings",
-                style: TextStyle(color: AppColors.black),
-              )),
           ProfileBrowseTickets()
 
 //            Text(activePage)
@@ -249,15 +240,6 @@ class _BuyerProfileSettingsState extends State<BuyerProfileSettings> {
               ),
             ],
           ),
-          TextButton(
-              onPressed: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => const BuyerProfileSettings()));
-              },
-              child: const Text(
-                "Settings",
-                style: TextStyle(color: AppColors.black),
-              )),
       ]),
       Expanded(
         child: Container(
