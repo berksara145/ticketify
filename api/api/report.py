@@ -87,3 +87,25 @@ def create_report():
 
     finally:
         cursor.close()
+    
+
+@report_bp.route('/getOrganizers', methods=['GET'])
+def get_organizers():
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(dictionary=True)
+        
+        # Execute the query to fetch organizers
+        cursor.execute("SELECT user_id, CONCAT(first_name, ' ', last_name) AS name FROM organizer")
+
+        # Fetch all organizers
+        organizers = cursor.fetchall()
+
+        return jsonify(organizers), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e), 'trace': traceback.format_exc()}), 500
+
+    finally:
+        cursor.close()
+        connection.close()
