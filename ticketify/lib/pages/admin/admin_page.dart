@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:ticketify/general_widgets/page_selector/page_selector.dart';
 import 'package:ticketify/general_widgets/page_title.dart';
 import 'package:ticketify/pages/Organizator/event/create_event_widget.dart';
+import 'package:ticketify/pages/Organizator/venue/venues.dart';
 import 'package:ticketify/pages/auth/widgets/appbar/user_app_bar.dart';
 import 'package:ticketify/pages/admin/admin_create_report.dart';
 import 'package:ticketify/pages/profile/widgets/profile_past_tickets.dart';
@@ -18,8 +19,7 @@ class AdminPage extends StatefulWidget {
 
 class _AdminPageState extends State<AdminPage> {
   //TODO: activePage logici ile gösterilecek sayfa seçilebilir.
-  String activePage = "ssssss";
-
+  String activePage = "View Venues";
 
   @override
   Widget build(BuildContext context) {
@@ -53,9 +53,24 @@ class _AdminPageState extends State<AdminPage> {
                 ],
                 iconData: Icons.place,
               ),
-            ], settingsPage: AdminProfileSettings(),
+              PageListConfig(
+                title: 'Report',
+                menuItems: [
+                  'Create Report',
+                ],
+                iconData: Icons.data_saver_on_sharp,
+              )
+            ],
+            settingsPage: AdminProfileSettings(),
           ),
-          AdminCreateReport()
+          if (activePage == 'View Users') ...[],
+          if (activePage == 'Edit Users') ...[
+            CreateEventWidget(),
+          ],
+          if (activePage == 'View Venues') ...[VenuesPage()],
+          if (activePage == 'Create Report') ...[
+            AdminCreateReport(),
+          ],
 
 //            Text(activePage)
         ],

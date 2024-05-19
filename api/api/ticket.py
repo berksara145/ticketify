@@ -13,6 +13,7 @@ from flask_jwt_extended import get_jwt_identity
 # evente özel olan section fiyat döndürcek
 
 
+
 @ticket_bp.route('/chooseTicket', methods=['GET'])
 def choose_ticket():   
     try:

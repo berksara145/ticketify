@@ -284,7 +284,7 @@ def create_tickets(event_id, ticket_price, barcode, cursor):
         
 
         
-@event_bp.route('/getFilteredEvents', methods=['GET'])
+@event_bp.route('/getFilteredEvents', methods=['POST'])
 def get_filtered_events():
     try:
         print("entered fileted event get")
