@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ticketify/constants/constant_variables.dart';
 import 'package:ticketify/general_widgets/page_title.dart';
 import 'package:ticketify/objects/venue_model.dart';
+import 'package:ticketify/pages/Organizator/venue/one_item_venue.dart';
 import 'package:ticketify/pages/homepage/ItemGrid.dart';
 import 'package:ticketify/pages/homepage/one_item_view.dart';
 
@@ -60,7 +61,14 @@ class _VenuesPageState extends State<VenuesPage> {
                         final venue = venues[index];
                         return InkWell(
                           onTap: () {
-                            // Handle the tap
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => VenueOneItemView(
+                                  venue: venue,
+                                ),
+                              ), // TODO: BURAYA GOROUTER
+                            );
                           },
                           child: Card(
                             color: Colors.grey,
