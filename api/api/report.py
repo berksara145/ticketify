@@ -20,6 +20,7 @@ def is_admin(user_id, cursor):
 def organizer_exists(organizer_id, cursor):
     cursor.execute("SELECT * FROM organizer WHERE user_id = %s", (organizer_id,))
     organizer = cursor.fetchone()
+    print(organizer)
     return organizer is not None
 
 @report_bp.route('/createReport', methods=['POST'])
@@ -47,13 +48,16 @@ def create_report():
         if not start_date or not end_date or not organizer_id:
             return jsonify({'message': 'Invalid input'}), 400
 
+        print("org",organizer_id)
         # Check if the organizer exists
         if not organizer_exists(organizer_id, cursor):
-            return jsonify({'message': 'Organizer not found'}), 404
+            return jsonify({'message': 'Organizer not found', "organizer_id":organizer_id}), 404
 
         # Convert date strings to datetime objects for comparison
         start_date_dt = datetime.strptime(start_date, "%Y-%m-%d")
         end_date_dt = datetime.strptime(end_date, "%Y-%m-%d")
+
+        
 
         # Calculate total revenue from sold tickets for each event organized by the organizer
         cursor.execute("""
@@ -79,7 +83,9 @@ def create_report():
                 'event_name': event['event_name'],
                 'total_revenue': event['total_revenue'] if event['total_revenue'] is not None else 0
             })
-
+        
+        print(response)
+        
         return jsonify(response), 200
 
     except Exception as e:
@@ -94,12 +100,14 @@ def get_organizers():
     try:
         connection = get_db_connection()
         cursor = connection.cursor(dictionary=True)
-        
+
         # Execute the query to fetch organizers
         cursor.execute("SELECT user_id, CONCAT(first_name, ' ', last_name) AS name FROM organizer")
 
         # Fetch all organizers
         organizers = cursor.fetchall()
+        
+        print(organizers)
 
         return jsonify(organizers), 200
 
