@@ -55,23 +55,15 @@ class _PageLayoutState extends State<PageLayout> {
     );
 
     if (response.statusCode == 200) {
-      final dynamic responseData = jsonDecode(response.body);
+      final List<dynamic> jsonData = jsonDecode(response.body);
 
-      // Check if responseData is null or empty
-      if (responseData == null || responseData.isEmpty) {
-        return []; // Return an empty list
-      }
+      // Convert each item in the list to an EventModel
+      List<EventModel> events = jsonData
+          .map<EventModel>((json) => EventModel.fromJson(json))
+          .toList();
 
-      // Check if responseData is a list
-      if (responseData is List) {
-        List<EventModel> filteredEvents = responseData.map((eventJson) {
-          return EventModel.fromJson(eventJson);
-        }).toList();
-        return filteredEvents;
-      } else {
-        throw Exception('Unexpected response format: ${response.body}');
+      return events;
       }
-    }
 
     if (response.statusCode == 204) {
       return [];

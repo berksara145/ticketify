@@ -11,9 +11,9 @@ import 'package:ticketify/pages/Organizator/event/events.dart';
 
 
 List<String> categoryOptions = [
-  'Concert',
-  'Festival',
-  'Opera',
+  'concert',
+  'festival',
+  'opera',
   // Add more categories as needed
 ];
 

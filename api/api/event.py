@@ -433,7 +433,6 @@ def get_filtered_events():
             # Close the cursor and connection
             cursor.close()
             connection.close()
-
             # Format the results
             result = []
             for event in events:
