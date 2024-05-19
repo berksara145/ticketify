@@ -6,8 +6,14 @@ import 'package:ticketify/pages/homepage/ItemGrid.dart';
 import 'package:ticketify/pages/homepage/one_item_view.dart';
 
 class EventsPage extends StatefulWidget {
-  EventsPage({super.key});
-
+  EventsPage({
+    super.key,
+    this.filters = "empty",
+  });
+  //TODO: FILTRELEME IÇIN BOYLE PARAMETRE VERIN
+  //FILTRELER STRING DEĞILSE DE ONA UYARLARSINIZ
+  //OPTION OLARAK DA _eventsFuture = getFilteredEvents(filtreler) tarzı bi set state atarsanız çalışır.
+  final String? filters;
   @override
   _EventsPageState createState() => _EventsPageState();
 }
