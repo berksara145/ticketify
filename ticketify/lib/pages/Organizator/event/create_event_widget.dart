@@ -317,6 +317,15 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                               [];
                         */
                           noofsections = venue?.venueSectionCount;
+                          // Dispose existing controllers
+                          for (var controller in controllers) {
+                            controller.dispose();
+                          }
+
+                          // Initialize new controllers based on the new number of sections
+                          controllers = List.generate(noofsections ?? 0,
+                              (index) => TextEditingController());
+
                           print("noofsections $noofsections");
                         });
                       },
