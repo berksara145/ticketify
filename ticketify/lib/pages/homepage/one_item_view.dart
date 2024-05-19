@@ -379,7 +379,7 @@ class DesktopOneItemView extends StatelessWidget {
                         style: TextStyle(fontSize: 20),
                       ),
                       Text(
-                        "Ticket Price:  250-8000 TL",
+                        "Ticket Price:  ${widget.post?.ticket_prices}",
                         style: TextStyle(fontSize: 20),
                       ),
                       Row(

@@ -9,7 +9,7 @@ class EventModel {
   String? organizerLastName;
   String? performerName;
   String? startDate;
-  List<String>? ticketPrices;
+  String? ticketPrices;
   String? urlPhoto;
   EventVenue? venue;
 
@@ -39,7 +39,7 @@ class EventModel {
     organizerLastName = json['organizer_last_name'];
     performerName = json['performer_name'];
     startDate = json['start_date'];
-    ticketPrices = json['ticket_prices'].cast<String>();
+    ticketPrices = json['ticket_prices'];
     urlPhoto = json['url_photo'];
     venue =
         json['venue'] != null ? new EventVenue.fromJson(json['venue']) : null;

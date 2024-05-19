@@ -164,6 +164,8 @@ class _ItemGridState extends State<ItemGrid> {
                           "Bilkent", // Example: Replace '10.0' with the actual price
                       organizer:
                           'Bilkent', // Example: Replace 'Sample User' with the actual user
+                      ticket_prices : 
+                          "50-100",
                     );
 
                     return ProductCard(
@@ -203,6 +205,7 @@ class PostDTO {
   final String organizer;
   final String rules;
   final String desc;
+  final String ticket_prices;
 
   PostDTO({
     required this.rules,
@@ -213,6 +216,7 @@ class PostDTO {
     required this.imageUrl,
     required this.sdate,
     required this.location,
+    required this.ticket_prices,
     required this.organizer,
   });
 }
