@@ -257,4 +257,39 @@ class UtilConstants {
           responseBody['message'] ?? 'Event creation failed', context);
     }
   }
+
+  Future<void> getAllUsers(BuildContext context) async {
+    // Construct the login request payload
+    final String? token = await getToken();
+    try {
+      final uri = Uri.parse('http://127.0.0.1:5000/user/getUsers');
+      final response = await http.get(
+        uri,
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $token',
+        },
+      );
+      if (response.statusCode == 200) {
+        // final List<dynamic> jsonData = jsonDecode(response.body);
+
+        // // Convert each item in the list to an EventModel
+        // List<EventModel> events = jsonData
+        //     .map<EventModel>((json) => EventModel.fromJson(json))
+        //     .toList();
+        print(response.body);
+        //return events;
+      } else {
+        final Map<String, dynamic> responseBody = jsonDecode(response.body);
+        print(token); // Optional: For debugging purposes
+
+        _showErrorDialog(
+            responseBody['message'] ?? 'User loading failed', context);
+        throw Exception('Failed to load Users: ${response.body}');
+      }
+    } catch (e) {
+      // Handle any errors that might occur during the HTTP request
+      throw Exception('Error fetching user data: $e');
+    }
+  }
 }
