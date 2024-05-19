@@ -66,6 +66,9 @@ class _PageLayoutState extends State<PageLayout> {
       }
 
     if (response.statusCode == 204) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('No Event Found!')),
+      );
       return [];
     }else {
       throw Exception('Failed to load events');
