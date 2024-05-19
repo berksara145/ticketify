@@ -74,10 +74,7 @@ CREATE TABLE IF NOT EXISTS report (
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
     generated_by INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (organizer_id) REFERENCES organizer(user_id),
-    FOREIGN KEY (event_id) REFERENCES event(event_id),
-    FOREIGN KEY (generated_by) REFERENCES admin(user_id)
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 
