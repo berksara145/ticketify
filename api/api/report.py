@@ -79,8 +79,8 @@ def create_report():
                 INSERT INTO report (organizer_id, event_id, total_revenue, start_date, end_date, generated_by)
                 VALUES (%s, %s, %s, %s, %s, %s)
             """, (organizer_id, event['event_id'], event['total_revenue'], start_date_dt, end_date_dt, user_id))
-        # Commit the transaction
-        connection.commit()
+            # Commit the transaction
+            connection.commit()
 
 
         # Format the response
@@ -144,13 +144,10 @@ def get_reports():
             return jsonify({'message': 'Unauthorized: Admin access required'}), 401
 
         # Execute SQL query to fetch reports for the current user
-        cursor.execute("SELECT * FROM report WHERE generated_by = % s", (current_user_id,) )
+        cursor.execute("SELECT organizer_id, event_id, total_revenue, start_date, end_date, created_at FROM report WHERE generated_by = %s", (current_user_id,))
 
         # Fetch all reports
         reports = cursor.fetchall()
-        if not reports:
-            print("WTF")
-        print("LANET")
         print(reports)
         logging.debug('Reports fetched successfully')
 
@@ -164,3 +161,4 @@ def get_reports():
     finally:
         cursor.close()
         connection.close()
+
