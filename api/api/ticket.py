@@ -31,16 +31,16 @@ def get_max_ticket():
         cursor = connection.cursor()
 
         # Retrieve event and its ticket prices
-        cursor.execute("SELECT ticket_prices FROM event WHERE event_id = %s", (event_id,))
+        cursor.execute("SELECT * FROM event WHERE event_id = %s", (event_id,))
         event = cursor.fetchone()
         if event is None:
             return jsonify({'error': 'Event not found'}), 404
 
-        ticket_prices = event['ticket_prices'].split('-')
-        if category_num >= len(ticket_prices) or category_num < 0:
+        ticket_prices_list = [int(price) for price in event[5].split('-')]
+        if category_num >= len(ticket_prices_list) or category_num < 0:
             return jsonify({'error': 'Invalid category number'}), 400
 
-        category_price = int(ticket_prices[category_num])
+        category_price = ticket_prices_list
 
         # Count the number of available tickets for the event and category
         cursor.execute("""
