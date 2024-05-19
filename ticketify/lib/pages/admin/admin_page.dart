@@ -20,7 +20,7 @@ class AdminPage extends StatefulWidget {
 
 class _AdminPageState extends State<AdminPage> {
   //TODO: activePage logici ile gösterilecek sayfa seçilebilir.
-  String activePage = "View Venues";
+  String activePage = "View Users";
 
   @override
   Widget build(BuildContext context) {

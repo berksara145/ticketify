@@ -8,7 +8,7 @@ from flask_jwt_extended import get_jwt_identity
 
 user_bp = Blueprint('user', __name__, url_prefix='/user')
 
-@user_bp.route('/getUsers', methods=['POST'])
+@user_bp.route('/getUsers', methods=['GET'])
 def getUsers():
     try:
         connection = get_db_connection()
