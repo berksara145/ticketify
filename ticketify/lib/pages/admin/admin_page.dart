@@ -66,7 +66,9 @@ class _AdminPageState extends State<AdminPage> {
           ),
           if (activePage == 'View Users') ...[UsersPage()],
           if (activePage == 'Edit Users') ...[
-            CreateEventWidget(),
+            UsersPage(
+              isDeleteEnabled: true,
+            ),
           ],
           if (activePage == 'View Venues') ...[VenuesPage()],
           if (activePage == 'Create Report') ...[

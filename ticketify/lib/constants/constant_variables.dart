@@ -308,4 +308,43 @@ class UtilConstants {
       throw Exception('Error fetching user data: $e');
     }
   }
+
+  Future<void> deleteUser(
+    BuildContext context,
+    String userId,
+    String userType,
+  ) async {
+    // Retrieve the token
+    final String? token = await getToken();
+
+    // Construct the data payload with provided arguments
+    final Map<String, dynamic> data = {
+      'user_id': userId,
+      'user_type': userType,
+    };
+
+    // Send the request to your Flask backend
+    final response = await http.delete(
+      Uri.parse(
+          'http://127.0.0.1:5000/user/deleteUser'), // Update with your backend URL
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode(data),
+    );
+
+    // Handle the response from the backend
+    if (response.statusCode == 200) {
+      // Operation successful, navigate to homepage or perform other actions
+      // Example: Navigator.pushReplacementNamed(context, '/homepage');
+    } else {
+      // Operation failed, display error message in a dialog
+      final Map<String, dynamic> responseBody = jsonDecode(response.body);
+      print(response.body); // Optional: For debugging purposes
+
+      _showErrorDialog(
+          responseBody['message'] ?? 'User deletion failed', context);
+    }
+  }
 }
