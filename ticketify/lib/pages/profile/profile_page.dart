@@ -384,22 +384,13 @@ class _BuyerProfileSettingsState extends State<BuyerProfileSettings> {
               title: "Welcome $name $surname",
               pageListConfigs: [
                 PageListConfig(
-                  title: 'Tickets',
-                  menuItems: [
-                    'Purchased Tickets',
-                    'Upcoming Tickets',
-                  ],
+                  title: '',
+                  menuItems: [],
                   iconData: Icons.event,
                 ),
               ],
               settingsPage: BuyerProfileSettings(),
             ),
-            if (activePage == 'Purchased Tickets' || activePage == 'Upcoming Tickets') ...[
-              ProfileBrowseTickets(
-                isPastTickets: activePage == 'Purchased Tickets',
-                items: pastTickets,
-              ),
-            ],
           ]),
           Expanded(
             child: Container(
