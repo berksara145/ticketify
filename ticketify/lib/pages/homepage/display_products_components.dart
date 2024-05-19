@@ -346,7 +346,7 @@ class _FilterContainerState extends State<FilterContainer> {
                       ],
                     )),
                 ElevatedButton(
-                  onPressed: _resetFilters,
+                  onPressed: _filterEvents,
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     textStyle: const TextStyle(

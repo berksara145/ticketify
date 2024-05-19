@@ -444,7 +444,6 @@ def get_filtered_events():
                 "organizer_first_name": event[13], 
                 "organizer_last_name": event[14]
             })
-
         return jsonify(result), 200
 
     except Exception as e:
