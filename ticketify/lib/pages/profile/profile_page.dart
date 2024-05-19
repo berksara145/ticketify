@@ -9,6 +9,7 @@ import 'package:ticketify/general_widgets/page_selector/page_selector.dart';
 import 'package:ticketify/general_widgets/page_title.dart';
 import 'package:ticketify/pages/Organizator/event/create_event_widget.dart';
 import 'package:ticketify/pages/Organizator/organizer_homepage.dart';
+import 'package:ticketify/pages/auth/auth_screen.dart';
 import 'package:ticketify/pages/auth/widgets/appbar/user_app_bar.dart';
 import 'package:ticketify/pages/admin/admin_create_report.dart';
 import 'package:ticketify/pages/profile/widgets/profile_past_tickets.dart';
@@ -752,8 +753,8 @@ class _AdminProfileSettingsState extends State<AdminProfileSettings> {
 
   @override
   void initState() {
-    super.initState();
     _fetchUserDetails();
+    super.initState();
   }
 
   void _showErrorDialog(String message) {
@@ -791,6 +792,8 @@ class _AdminProfileSettingsState extends State<AdminProfileSettings> {
         ),
         title: const Text('Admin Settings'),
         backgroundColor: AppColors.green.withOpacity(0.55),
+        actions: [
+        ],
       ),
       body: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -803,9 +806,10 @@ class _AdminProfileSettingsState extends State<AdminProfileSettings> {
                   activePage = newName;
                 });
               },
-              title: "Welcome $name $surname",
+              title: "Admin Account!",
               pageListConfigs: [
-              ], settingsPage: AdminProfileSettings(),
+              ],
+              settingsPage: AdminProfileSettings(),
             ),
           ]),
           Expanded(
@@ -814,7 +818,8 @@ class _AdminProfileSettingsState extends State<AdminProfileSettings> {
                 borderRadius: BorderRadius.circular(37),
                 color: AppColors.greylight.withAlpha(255),
               ),
-              margin: const EdgeInsets.only(top: 50.0, bottom: 50, left: 20, right: 20),
+              margin: const EdgeInsets.only(
+                  top: 50.0, bottom: 50, left: 20, right: 20),
               padding: const EdgeInsets.only(bottom: 50, left: 20, right: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
