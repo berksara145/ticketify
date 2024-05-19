@@ -183,7 +183,7 @@ class PhoneOneItemView extends StatelessWidget {
                                       padding:
                                           const EdgeInsets.only(bottom: 8.0),
                                       child: Text(
-                                        "Event Info: ${post?.id} is getting ready to bring you its popular songs with the ${post?.organizer} organization.",
+                                        post!.desc,
                                         softWrap:
                                             true, // Allow text to wrap to multiple lines
                                       ),
@@ -436,7 +436,7 @@ class DesktopOneItemView extends StatelessWidget {
                                                   true, // Allow text to wrap to multiple lines
                                             ),
                                           ),
-                                          const Column(
+                                          Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
@@ -446,79 +446,14 @@ class DesktopOneItemView extends StatelessWidget {
                                                 child: Text("Event Rules:"),
                                               ),
                                               Padding(
-                                                padding: const EdgeInsets.only(
+                                                padding: EdgeInsets.only(
                                                     bottom: 4.0),
                                                 child: Text(
-                                                  "- All participants are required to have their valid ID with them.",
+                                                  post!.rules,
+                                                  //post.
                                                   softWrap: true,
                                                 ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    bottom: 4.0),
-                                                child: Text(
-                                                  "- It is forbidden to bring outside food and drinks into the area.",
-                                                  softWrap: true,
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    bottom: 4.0),
-                                                child: Text(
-                                                    softWrap: true,
-                                                    "- For security reasons, piercing, cutting tools, flammable materials, drugs and illegal substances will not be taken into the area.",
-                                                    overflow:
-                                                        TextOverflow.ellipsis),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    bottom: 4.0),
-                                                child: Text(
-                                                    softWrap: true,
-                                                    "- For security reasons, piercing, cutting tools, flammable materials, drugs and illegal substances will not be taken into the area.",
-                                                    overflow:
-                                                        TextOverflow.ellipsis),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    bottom: 4.0),
-                                                child: Text(
-                                                    softWrap: true,
-                                                    "- For security reasons, piercing, cutting tools, flammable materials, drugs and illegal substances will not be taken into the area.",
-                                                    overflow:
-                                                        TextOverflow.ellipsis),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    bottom: 4.0),
-                                                child: Text(
-                                                    softWrap: true,
-                                                    "- For security reasons, piercing, cutting tools, flammable materials, drugs and illegal substances will not be taken into the area.",
-                                                    overflow:
-                                                        TextOverflow.ellipsis),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    bottom: 4.0),
-                                                child: Text(
-                                                    softWrap: true,
-                                                    "- For security reasons, piercing, cutting tools, flammable materials, drugs and illegal substances will not be taken into the area.",
-                                                    overflow:
-                                                        TextOverflow.ellipsis),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    bottom: 4.0),
-                                                child: Text(
-                                                    softWrap: true,
-                                                    "- For security reasons, piercing, cutting tools, flammable materials, drugs and illegal substances will not be taken into the area.",
-                                                    overflow:
-                                                        TextOverflow.ellipsis),
-                                              ),
-                                              Text(
-                                                softWrap: true,
-                                                "- It is forbidden to enter the area with pets.",
-                                              ),
+                                              )
                                             ],
                                           ),
                                         ],

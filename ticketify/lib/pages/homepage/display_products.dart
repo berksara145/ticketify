@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:ticketify/pages/Organizator/event/events.dart';
 
 import 'package:ticketify/pages/auth/widgets/appbar/user_app_bar.dart';
 import 'package:ticketify/constants/constant_variables.dart';
@@ -43,45 +45,6 @@ class PageLayout extends StatefulWidget {
 }
 
 class _PageLayoutState extends State<PageLayout> {
-  Future<void> _fetchData() async {
-    // Send the login request to your Flask backend
-    final response = await http.get(
-      Uri.parse(
-          'http://127.0.0.1:5000/getAllEvents'), // Update with your backend URL
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-    );
-    print(response.body);
-
-    // Handle the response from the backend
-    if (response.statusCode == 200) {
-      // Successful login, navigate to homepage or perform other actions
-      final Map<String, dynamic> responseBody = jsonDecode(response.body);
-      String token = responseBody['access_token'];
-
-      // Save the token securely
-      //   await storage.write(key: 'access_token', value: token);
-      //   if (userType == 'buyer') {
-      //     Navigator.pushReplacement(
-      //       context,
-      //       MaterialPageRoute(builder: (context) => const Homepage()),
-      //     );
-      //   }
-      //   if (userType == 'organizer') {
-      //     Navigator.pushReplacement(
-      //       context,
-      //       MaterialPageRoute(builder: (context) => const OrganizerHomepage()),
-      //     );
-      //   }
-      // } else {
-      //   // Login failed, display error message in a dialog
-      //   final Map<String, dynamic> responseBody = jsonDecode(response.body);
-      //   _showErrorDialog(responseBody['message'] ?? 'Login failed');
-      // }
-    }
-  }
-
   void _showErrorDialog(String message) {
     showDialog(
       context: context,
@@ -104,7 +67,7 @@ class _PageLayoutState extends State<PageLayout> {
 
   @override
   Widget build(BuildContext context) {
-    UtilConstants().getAllEvents();
+    UtilConstants().getAllEvents(context);
 
     final ScrollController scrollController = ScrollController();
     Size screenSize = MediaQuery.of(context).size;
@@ -153,15 +116,16 @@ class _PageLayoutState extends State<PageLayout> {
                     },
                     icon: const Icon(Icons.list_alt_sharp),
                   ),
-                Expanded(
-                  child: ItemGrid(
-                    scrollController: scrollController,
-                    fetchDataFunction: (int currentPage, int pageSize) async {
-                      // Replace this function with your actual data fetching logic
-                      return [];
-                    },
-                  ),
-                ),
+                EventsPage(),
+                // Expanded(
+                //   child: ItemGrid(
+                //     scrollController: scrollController,
+                //     fetchDataFunction: (int currentPage, int pageSize) async {
+                //       // Replace this function with your actual data fetching logic
+                //       return [];
+                //     },
+                //   ),
+                // ),
               ],
             ),
           ),

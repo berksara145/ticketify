@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:ticketify/constants/constant_variables.dart';
 import 'package:ticketify/general_widgets/page_title.dart';
-import 'package:ticketify/objects/venue_model.dart';
+import 'package:ticketify/objects/event_model.dart';
 import 'package:ticketify/pages/homepage/ItemGrid.dart';
 import 'package:ticketify/pages/homepage/one_item_view.dart';
 
-class VenuesPage extends StatefulWidget {
-  VenuesPage({super.key});
+class EventsPage extends StatefulWidget {
+  EventsPage({super.key});
 
   @override
-  _VenuesPageState createState() => _VenuesPageState();
+  _EventsPageState createState() => _EventsPageState();
 }
 
-class _VenuesPageState extends State<VenuesPage> {
-  late Future<VenueModel> _venuesFuture;
+class _EventsPageState extends State<EventsPage> {
+  late Future<List<EventModel>> _eventsFuture;
 
   @override
   void initState() {
     super.initState();
-    _venuesFuture = UtilConstants().getAllVenues(context);
+    _eventsFuture = UtilConstants().getAllEvents(context);
   }
 
   @override
@@ -35,20 +35,19 @@ class _VenuesPageState extends State<VenuesPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            PageTitle(title: "Venues"),
+            PageTitle(title: "Events"),
             SizedBox(height: 20),
             Expanded(
-              child: FutureBuilder<VenueModel>(
-                future: _venuesFuture,
+              child: FutureBuilder<List<EventModel>>(
+                future: _eventsFuture,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
                     return Center(child: Text("Error: ${snapshot.error}"));
                   } else if (snapshot.hasData) {
-                    final venues = snapshot.data!.venues;
                     return GridView.builder(
-                      itemCount: venues!.length,
+                      itemCount: snapshot.data!.length,
                       gridDelegate:
                           const SliverGridDelegateWithMaxCrossAxisExtent(
                         maxCrossAxisExtent: 300,
@@ -57,10 +56,29 @@ class _VenuesPageState extends State<VenuesPage> {
                         childAspectRatio: 1,
                       ),
                       itemBuilder: (context, index) {
-                        final venue = venues[index];
+                        final event = snapshot.data![index];
                         return InkWell(
                           onTap: () {
-                            // Handle the tap
+                            PostDTO post = PostDTO(
+                              id: event.eventId.toString(),
+                              tags: event.eventCategory!,
+                              title: event.eventName!,
+                              imageUrl: event.urlPhoto!,
+                              sdate: DateTime.now(),
+                              location: event.venue!.address!,
+                              organizer: event.organizerFirstName!,
+                              rules: event.eventRules!,
+                              desc: event.descriptionText!,
+                            );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => OneItemView(
+                                  post: post,
+                                  event_id: event.eventId.toString(),
+                                ),
+                              ), // TODO: BURAYA GOROUTER
+                            );
                           },
                           child: Card(
                             color: Colors.grey,
@@ -77,29 +95,22 @@ class _VenuesPageState extends State<VenuesPage> {
                                       alignment: Alignment.center,
                                       height: 100,
                                       child: Image.network(
-                                        venue.urlPhoto ??
+                                        event.urlPhoto ??
                                             "default_image_url", // Provide a default URL
                                         fit: BoxFit.cover,
                                       ),
                                     ),
                                     const SizedBox(height: 10),
                                     Text(
-                                      venue.venueName ?? "Unknown",
+                                      event.eventName ?? "Unknown",
                                       style: const TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                     Text(
-                                      venue.address ?? "No address",
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                    Text(
-                                      (venue.venueColumnLength! *
-                                              venue!.venueRowLength!)
-                                          .toString(),
+                                      event.venue?.venueName ??
+                                          "No venue specified",
                                       style: const TextStyle(
                                         fontSize: 14,
                                       ),

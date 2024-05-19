@@ -101,8 +101,8 @@ def create_event():
             return jsonify({'error': 'Missing required data'}), 400
 
         # Convert date strings to datetime objects
-        start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
-        end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
+        start_date = datetime.strptime(start_date, '%Y-%m-%d %H:%M:%S.%f').date()
+        end_date = datetime.strptime(end_date, '%Y-%m-%d %H:%M:%S.%f').date()
 
         # Connect to the database
         connection = get_db_connection()

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ticketify/constants/constant_variables.dart';
 import 'package:ticketify/general_widgets/page_title.dart';
+import 'package:ticketify/objects/venue_model.dart';
 import 'package:ticketify/pages/homepage/display_products_components.dart';
 
 class CreateEventWidget extends StatefulWidget {
@@ -18,21 +19,27 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
   DateTime _endDate = DateTime.now();
   TimeOfDay _startTime = TimeOfDay.now();
   TimeOfDay _endTime = TimeOfDay.now();
-  String? selectedVenue = '';
+  Venue? selectedVenue;
   String? selectedCategory = '';
   String briefDescription = '';
   String eventRules = '';
-  List<String> items = [];
-  final TextEditingController selectVenueController = TextEditingController();
-
-  List<String> venues = ['Venue A', 'Venue B', 'Venue C'];
-  Map<String, List<String>> venueCategories = {
-    'Venue A': ['Category 1', 'Category 2'],
-    'Venue B': ['Category 3', 'Category 4'],
-    'Venue C': ['Category 5', 'Category 6'],
-  };
-  String dropdownValue = "";
+  List<String?> categories = [];
+  VenueModel? venueModel;
   List<String> eventType = ['concert', 'opera', 'comedy', 'theater'];
+
+  @override
+  void initState() {
+    super.initState();
+    loadVenues();
+  }
+
+  Future<void> loadVenues() async {
+    var fetchedVenues = await UtilConstants()
+        .getAllVenues(context); // Make sure this returns VenueModel
+    setState(() {
+      venueModel = fetchedVenues;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,18 +68,24 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                 child: Column(
                   children: [
                     DropdownMenu<String>(
-                      expandedInsets: EdgeInsets.all(0),
+                      expandedInsets: const EdgeInsets.all(0),
                       hintText: "Select type of the event",
-                      initialSelection: "",
-                      dropdownMenuEntries: eventType.map((category) {
+                      initialSelection: _selectedEventType,
+                      dropdownMenuEntries: eventType.map((String type) {
                         return DropdownMenuEntry<String>(
-                          value: category,
-                          label: category,
+                          value: type,
+                          label: type.toUpperCase(),
                         );
                       }).toList(),
+                      onSelected: (String? type) {
+                        setState(() {
+                          _selectedEventType = type!;
+                        });
+                      },
                     ),
                     const SizedBox(height: 10.0),
                     TextFormField(
+                      initialValue: _eventName,
                       onChanged: (value) {
                         setState(() {
                           _eventName = value;
@@ -84,189 +97,6 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                       ),
                     ),
                     const SizedBox(height: 10.0),
-                    _isOneDayEvent
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              InkWell(
-                                onTap: () async {
-                                  final selectedDate = await showDatePicker(
-                                    context: context,
-                                    initialDate: _startDate,
-                                    firstDate: DateTime(2022),
-                                    lastDate: DateTime(2025),
-                                  );
-                                  if (selectedDate != null) {
-                                    setState(() {
-                                      _startDate = selectedDate;
-                                    });
-                                  }
-                                },
-                                child: Row(
-                                  children: [
-                                    const Icon(Icons.calendar_month_outlined),
-                                    Text(
-                                        'Select Date: ${_formatDate(_startDate)}'),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(height: 10.0),
-                              InkWell(
-                                onTap: () async {
-                                  final selectedTime = await showTimePicker(
-                                    context: context,
-                                    initialTime: _startTime,
-                                  );
-                                  if (selectedTime != null) {
-                                    setState(() {
-                                      _startTime = selectedTime;
-                                    });
-                                  }
-                                },
-                                child: Row(
-                                  children: [
-                                    const Icon(Icons.access_time),
-                                    Text(
-                                        'Start Time: ${_formatTime(_startTime)}'),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(height: 10.0),
-                              InkWell(
-                                onTap: () async {
-                                  final selectedTime = await showTimePicker(
-                                    context: context,
-                                    initialTime: _endTime,
-                                  );
-                                  if (selectedTime != null) {
-                                    setState(() {
-                                      _endTime = selectedTime;
-                                    });
-                                  }
-                                },
-                                child: Row(
-                                  children: [
-                                    const Icon(Icons.access_time),
-                                    Text('End Time: ${_formatTime(_endTime)}'),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          )
-                        : Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: InkWell(
-                                      onTap: () async {
-                                        final selectedDate =
-                                            await showDatePicker(
-                                          context: context,
-                                          initialDate: _startDate,
-                                          firstDate: DateTime(2022),
-                                          lastDate: DateTime(2025),
-                                        );
-                                        if (selectedDate != null) {
-                                          setState(() {
-                                            _startDate = selectedDate;
-                                          });
-                                        }
-                                      },
-                                      child: Row(
-                                        children: [
-                                          const Icon(
-                                              Icons.calendar_month_outlined),
-                                          Text(
-                                              'Start Date: ${_formatDate(_startDate)}'),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 10.0),
-                                  Expanded(
-                                    child: InkWell(
-                                      onTap: () async {
-                                        final selectedDate =
-                                            await showDatePicker(
-                                          context: context,
-                                          initialDate: _endDate,
-                                          firstDate: _startDate,
-                                          lastDate: DateTime(2025),
-                                        );
-                                        if (selectedDate != null) {
-                                          setState(() {
-                                            _endDate = selectedDate;
-                                          });
-                                        }
-                                      },
-                                      child: Row(
-                                        children: [
-                                          const Icon(
-                                              Icons.calendar_month_outlined),
-                                          Text(
-                                              'End Date: ${_formatDate(_endDate)}'),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 10.0),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: InkWell(
-                                      onTap: () async {
-                                        final selectedTime =
-                                            await showTimePicker(
-                                          context: context,
-                                          initialTime: _startTime,
-                                        );
-                                        if (selectedTime != null) {
-                                          setState(() {
-                                            _startTime = selectedTime;
-                                          });
-                                        }
-                                      },
-                                      child: Row(
-                                        children: [
-                                          const Icon(Icons.access_time),
-                                          Text(
-                                              'Start Time: ${_formatTime(_startTime)}'),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 10.0),
-                                  Expanded(
-                                    child: InkWell(
-                                      onTap: () async {
-                                        final selectedTime =
-                                            await showTimePicker(
-                                          context: context,
-                                          initialTime: _endTime,
-                                        );
-                                        if (selectedTime != null) {
-                                          setState(() {
-                                            _endTime = selectedTime;
-                                          });
-                                        }
-                                      },
-                                      child: Row(
-                                        children: [
-                                          const Icon(Icons.access_time),
-                                          Text(
-                                              'End Time: ${_formatTime(_endTime)}'),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                    const SizedBox(height: 10.0),
                     Row(
                       children: [
                         Checkbox(
@@ -274,9 +104,12 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                               MaterialStateProperty.all(Colors.transparent),
                           checkColor: Colors.black,
                           value: _isOneDayEvent,
-                          onChanged: (value) {
+                          onChanged: (bool? value) {
                             setState(() {
                               _isOneDayEvent = value!;
+                              if (value) {
+                                _endDate = _startDate;
+                              }
                             });
                           },
                         ),
@@ -284,42 +117,41 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                       ],
                     ),
                     const SizedBox(height: 10.0),
-                    DropdownMenu<String>(
+                    // Additional Widgets for date and time selection, venue, and category selection
+                    DropdownMenu<Venue>(
                       expandedInsets: const EdgeInsets.all(0),
                       hintText: "Select Venue",
-                      onSelected: (String? color) {
+                      onSelected: (Venue? venue) {
                         setState(() {
-                          selectedVenue = color;
-                          items = venueCategories[selectedVenue]!;
+                          selectedVenue = venue;
+                          categories = venue?.seats
+                                  ?.map((seat) => seat.seatPosition)
+                                  .toList() ??
+                              [];
                         });
                       },
-                      controller: selectVenueController,
-                      dropdownMenuEntries:
-                          venues.map<DropdownMenuEntry<String>>((String color) {
+                      dropdownMenuEntries: venueModel?.venues?.map((venue) {
+                            return DropdownMenuEntry<Venue>(
+                              value: venue,
+                              label: venue.venueName ?? 'Unknown Venue',
+                            );
+                          }).toList() ??
+                          [],
+                    ),
+                    const SizedBox(height: 10.0),
+                    DropdownMenu<String>(
+                      expandedInsets: const EdgeInsets.all(0),
+                      hintText: categories.isEmpty
+                          ? "Select Venue First"
+                          : "Select Category",
+                      dropdownMenuEntries: categories.map((category) {
                         return DropdownMenuEntry<String>(
-                          value: color,
-                          label: color,
+                          value: category!,
+                          label: category,
                         );
                       }).toList(),
                     ),
-                    const SizedBox(height: 10.0),
-                    SizedBox(
-                      width: double.infinity,
-                      child: DropdownMenu<String>(
-                        expandedInsets: const EdgeInsets.all(0),
-                        hintText: items.isEmpty
-                            ? "Select Venue First"
-                            : "Select Category",
-                        dropdownMenuEntries: items.isEmpty
-                            ? []
-                            : venueCategories[selectedVenue]!.map((category) {
-                                return DropdownMenuEntry<String>(
-                                  value: category,
-                                  label: category,
-                                );
-                              }).toList(),
-                      ),
-                    ),
+
                     const SizedBox(height: 10.0),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -380,7 +212,18 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                         const SizedBox(width: 10.0),
                         InkWell(
                           onTap: () {
-                            // Create event logic here
+                            UtilConstants().createEvent(
+                                context,
+                                _eventName,
+                                _startDate.toString(),
+                                _endDate.toString(),
+                                "selectedCategory",
+                                "https://picsum.photos/200/300",
+                                briefDescription,
+                                eventRules,
+                                selectedVenue!.venueId!,
+                                "performerName",
+                                [10, 20]);
                           },
                           child: Container(
                               decoration:

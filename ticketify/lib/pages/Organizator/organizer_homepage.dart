@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ticketify/general_widgets/page_selector/page_selector.dart';
 import 'package:ticketify/pages/Organizator/event/create_event_widget.dart';
+import 'package:ticketify/pages/Organizator/event/events.dart';
 import 'package:ticketify/pages/Organizator/venue/create_venue_widget.dart';
 import 'package:ticketify/pages/Organizator/venue/venues.dart';
 import 'package:ticketify/pages/auth/widgets/appbar/user_app_bar.dart';
@@ -47,6 +48,9 @@ class _OrganizerHomepageState extends State<OrganizerHomepage> {
                   });
                 }, settingsPage: OrganizerProfileSettings(),),
           ),
+          if (page == "Upcoming Events") ...[
+            EventsPage(),
+          ],
           if (page == "Create Event") ...[
             CreateEventWidget(),
           ],

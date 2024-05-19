@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:ticketify/objects/event_model.dart';
 
 import 'dart:ui';
 
@@ -77,33 +78,38 @@ class UtilConstants {
     return await storage.read(key: 'access_token');
   }
 
-  Future<void> getAllEvents() async {
+  Future<List<EventModel>> getAllEvents(BuildContext context) async {
     // Construct the login request payload
     final String? token = await getToken();
-    // final Map<String, dynamic> data = {
-    //   'issue_text': _titleController.text,
-    //   'issue_name': _descriptionController.text,
-    // };
+    try {
+      final uri = Uri.parse('http://127.0.0.1:5000/event/getAllEvents');
+      final response = await http.get(
+        uri,
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $token',
+        },
+      );
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonData = jsonDecode(response.body);
 
-    // Send the login request to your Flask backend
-    final response = await http.get(
-      Uri.parse(
-          'http://127.0.0.1:5000/event/getAllEvents'), // Update with your backend URL
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $token',
-      },
-      //body: jsonEncode(data),
-    );
+        // Convert each item in the list to an EventModel
+        List<EventModel> events = jsonData
+            .map<EventModel>((json) => EventModel.fromJson(json))
+            .toList();
 
-    // Handle the response from the backend
-    if (response.statusCode == 200) {
-      // Successful login, navigate to homepage or perform other actions
-      print(response.body);
-    } else {
-      // Login failed, display error message in a dialog
-      // final Map<String, dynamic> responseBody = jsonDecode(response.body);
-      //_showErrorDialog(responseBody['message'] ?? 'Issue create failed');
+        return events;
+      } else {
+        final Map<String, dynamic> responseBody = jsonDecode(response.body);
+        print(response.body); // Optional: For debugging purposes
+
+        _showErrorDialog(
+            responseBody['message'] ?? 'Event loading failed', context);
+        throw Exception('Failed to load Events: ${response.body}');
+      }
+    } catch (e) {
+      // Handle any errors that might occur during the HTTP request
+      throw Exception('Error fetching event data: $e');
     }
   }
 
@@ -154,7 +160,9 @@ class UtilConstants {
     }
   }
 
-  Future<VenueModel> getAllVenues() async {
+  Future<VenueModel> getAllVenues(
+    BuildContext context,
+  ) async {
     // Fetch the token; ensure you handle the potential null token appropriately
     final String? token = await getToken();
 
@@ -183,12 +191,70 @@ class UtilConstants {
         // Parse the JSON into your VenueModel
         return VenueModel.fromJson(jsonData);
       } else {
-        // Throw an exception if the server returns an error
+        final Map<String, dynamic> responseBody = jsonDecode(response.body);
+        print(response.body); // Optional: For debugging purposes
+
+        _showErrorDialog(
+            responseBody['message'] ?? 'Event creation failed', context);
         throw Exception('Failed to load venues: ${response.body}');
       }
     } catch (e) {
       // Handle any errors that might occur during the HTTP request
       throw Exception('Error fetching venue data: $e');
+    }
+  }
+
+  Future<void> createEvent(
+      BuildContext context,
+      String eventName,
+      String startDate,
+      String endDate,
+      String eventCategory,
+      String eventImage,
+      String descriptionText,
+      String eventRules,
+      int venueId,
+      String performerName,
+      List<int> ticketPrices) async {
+    // Retrieve the token
+    final String? token = await getToken();
+
+    // Construct the data payload with provided arguments
+    final Map<String, dynamic> data = {
+      'event_name': eventName,
+      'start_date': startDate,
+      'end_date': endDate,
+      'event_category': eventCategory,
+      'event_image': eventImage,
+      'description_text': descriptionText,
+      'event_rules': eventRules,
+      'venue_id': venueId,
+      'performer_name': performerName,
+      'ticket_prices': ticketPrices,
+    };
+
+    // Send the request to your Flask backend
+    final response = await http.post(
+      Uri.parse(
+          'http://127.0.0.1:5000/event/createEvent'), // Update with your backend URL
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode(data),
+    );
+
+    // Handle the response from the backend
+    if (response.statusCode == 200) {
+      // Operation successful, navigate to homepage or perform other actions
+      // Example: Navigator.pushReplacementNamed(context, '/homepage');
+    } else {
+      // Operation failed, display error message in a dialog
+      final Map<String, dynamic> responseBody = jsonDecode(response.body);
+      print(response.body); // Optional: For debugging purposes
+
+      _showErrorDialog(
+          responseBody['message'] ?? 'Event creation failed', context);
     }
   }
 }

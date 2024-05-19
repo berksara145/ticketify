@@ -149,6 +149,8 @@ class _ItemGridState extends State<ItemGrid> {
                   ),
                   itemBuilder: (context, index) {
                     PostDTO post = PostDTO(
+                      rules: "rule",
+                      desc: "desc",
                       id: '1', // Example: Replace '1' with the actual ID
                       tags:
                           'Concert', // Example: Replace 'Sample Tags' with the actual tags
@@ -199,8 +201,12 @@ class PostDTO {
   final DateTime sdate;
   final String location;
   final String organizer;
+  final String rules;
+  final String desc;
 
   PostDTO({
+    required this.rules,
+    required this.desc,
     required this.id,
     required this.tags,
     required this.title,
@@ -225,9 +231,6 @@ class ProductCard extends StatefulWidget {
 }
 
 class _ProductCardState extends State<ProductCard> {
-
-
-
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -235,7 +238,10 @@ class _ProductCardState extends State<ProductCard> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => OneItemView(post: widget.post, event_id: widget.post.id,),
+            builder: (context) => OneItemView(
+              post: widget.post,
+              event_id: widget.post.id,
+            ),
           ), // TODO: BURAYA GOROUTER
         );
       },
