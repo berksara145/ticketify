@@ -2,38 +2,85 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:html';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:ticketify/pages/Organizator/event/events.dart';
 
 import 'package:ticketify/pages/auth/widgets/appbar/user_app_bar.dart';
 import 'package:ticketify/constants/constant_variables.dart';
+import '../../objects/event_model.dart';
 import 'ItemGrid.dart';
 import 'display_products_components.dart';
 
-class DisplayProducts extends StatefulWidget {
-  const DisplayProducts({Key? key}) : super(key: key);
+class PageLayout extends StatefulWidget {
+  const PageLayout({Key? key}) : super(key: key);
 
   @override
-  State<DisplayProducts> createState() => _DisplayProductsState();
+  State<PageLayout> createState() => _PageLayoutState();
 }
 
-class _DisplayProductsState extends State<DisplayProducts> {
+class _PageLayoutState extends State<PageLayout> {
   // Define state variables
+  late Future<List<EventModel>> _eventsFuture;
   String eventName = '';
-  List<String> selectedCategories = [];
+  String? selectedCategories;
   DateTime? startDate;
   DateTime? endDate;
   double minPrice = 0;
   double maxPrice = 10000000;
 
+  final FlutterSecureStorage storage = const FlutterSecureStorage();
+
+  Future<String?> _getToken() async {
+    return await storage.read(key: 'access_token');
+  }
+
+  Future<List<EventModel>> _filterEvents() async {
+    final String? token = await _getToken();
+
+    final response = await http.post(
+      Uri.parse('http://127.0.0.1:5000/event/getFilteredEvents'), // Update with your backend URL
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode({
+        'event_name': eventName,
+        'selected_categories': selectedCategories,
+        'start_date': startDate?.toIso8601String(), // Convert DateTime to String
+        'end_date': endDate?.toIso8601String(), // Convert DateTime to String
+        'min_price': minPrice,
+        'max_price': maxPrice,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> responseData = jsonDecode(response.body);
+
+      // Check if responseData is a list
+      if (responseData is List) {
+        List<EventModel> filteredEvents = responseData.map((eventJson) {
+          return EventModel.fromJson(eventJson);
+        }).toList();
+        return filteredEvents;
+      } else {
+        throw Exception('Unexpected response format: ${response.body}');
+      }
+    } else {
+      throw Exception('Failed to load events');
+    }
+  }
+
+
   // Method to update state with filter data
-  void updateFilters(
-      {String eventName = '',
-        List<String> selectedCategories = const [],
-        DateTime? startDate,
-        DateTime? endDate,
-        double minPrice = 0,
-        double maxPrice = 10000000}) {
+  void updateFilters({
+    String eventName = '',
+    String? selectedCategories,
+    DateTime? startDate,
+    DateTime? endDate,
+    double minPrice = 0,
+    double maxPrice = 10000000,
+  }) {
     setState(() {
       this.eventName = eventName;
       this.selectedCategories = selectedCategories;
@@ -42,65 +89,26 @@ class _DisplayProductsState extends State<DisplayProducts> {
       this.minPrice = minPrice;
       this.maxPrice = maxPrice;
     });
+    _updateEvents();
   }
 
   @override
-  Widget build(BuildContext context) {
-    return PageLayout(
-      // Pass state data and update method to PageLayout
-      eventName: eventName,
-      selectedCategories: selectedCategories,
-      startDate: startDate,
-      endDate: endDate,
-      minPrice: minPrice,
-      maxPrice: maxPrice,
-      updateFilters: updateFilters,
-    );
+  void initState() {
+    super.initState();
+    _updateEvents();
   }
-}
 
-class PageLayout extends StatefulWidget {
-  final String eventName;
-  final List<String> selectedCategories;
-  final DateTime? startDate;
-  final DateTime? endDate;
-  final double minPrice;
-  final double maxPrice;
-  final Function({
-  String eventName,
-  List<String> selectedCategories,
-  DateTime? startDate,
-  DateTime? endDate,
-  double minPrice,
-  double maxPrice,
-  }) updateFilters;
-
-  const PageLayout({
-    Key? key,
-    required this.eventName,
-    required this.selectedCategories,
-    required this.startDate,
-    required this.endDate,
-    required this.minPrice,
-    required this.maxPrice,
-    required this.updateFilters,
-  }) : super(key: key);
-
-  @override
-  _PageLayoutState createState() => _PageLayoutState();
-}
-
-class _PageLayoutState extends State<PageLayout> {
-  // Method to pass filter data to EventsPage
-  Map<String, dynamic> getFilterData() {
-    return {
-      'event_name': widget.eventName,
-      'selected_categories': widget.selectedCategories,
-      'start_date': widget.startDate,
-      'end_date': widget.endDate,
-      'min_price': widget.minPrice,
-      'max_price': widget.maxPrice,
-    };
+  void _updateEvents() {
+    if (eventName.isEmpty &&
+        selectedCategories == null &&
+        startDate == null &&
+        endDate == null &&
+        minPrice == 0 &&
+        maxPrice == 10000000) {
+      _eventsFuture = UtilConstants().getAllEvents(context);
+    } else {
+      _eventsFuture = _filterEvents();
+    }
   }
 
   @override
@@ -115,7 +123,7 @@ class _PageLayoutState extends State<PageLayout> {
           if (screenSize.width > ScreenConstants.kMobileWidthThreshold)
             FilterContainer(
               title: 'Filters',
-              updateFilters: widget.updateFilters, // Pass update method
+              updateFilters:updateFilters, // Pass update method
             ),
           Expanded(
             child: Column(
@@ -144,7 +152,7 @@ class _PageLayoutState extends State<PageLayout> {
                               child: FilterContainer(
                                 title: 'Filters',
                                 // Pass update method
-                                updateFilters: widget.updateFilters,
+                                updateFilters: updateFilters,
                               ),
                             ),
                           );
@@ -153,9 +161,7 @@ class _PageLayoutState extends State<PageLayout> {
                     },
                     icon: const Icon(Icons.list_alt_sharp),
                   ),
-                EventsPage(
-                  data: getFilterData(), // Pass filter data to EventsPage
-                ),
+                EventsPage(eventsFuture: _eventsFuture,),
                 // Expanded(
                 //   child: ItemGrid(
                 //     scrollController: scrollController,

@@ -21,7 +21,7 @@ class FilterContainer extends StatefulWidget {
   final String title;
   final Function({
   required String eventName,
-  required List<String> selectedCategories,
+  required String? selectedCategories,
   required DateTime? startDate,
   required DateTime? endDate,
   required double minPrice,
@@ -41,7 +41,7 @@ class FilterContainer extends StatefulWidget {
 class _FilterContainerState extends State<FilterContainer> {
   // Define variables to hold filter values
   String eventName = '';
-  List<String> selectedCategories = [];
+  String? selectedCategories;
   DateTime? startDate;
   DateTime? endDate;
   double minPrice = 0;
@@ -109,13 +109,10 @@ class _FilterContainerState extends State<FilterContainer> {
                 _buildFilterOption(
                   'Choose Categories:',
                   DropdownButtonFormField<String>(
-                    value: selectedCategories.isNotEmpty ? selectedCategories[0] : null,
+                    value: selectedCategories,
                     onChanged: (newValue) {
                       setState(() {
-                        selectedCategories.clear();
-                        if (newValue != null) {
-                          selectedCategories.add(newValue);
-                        }
+                        selectedCategories = newValue;
                       });
                     },
                     decoration: InputDecoration(

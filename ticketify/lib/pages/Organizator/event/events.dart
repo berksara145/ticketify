@@ -13,12 +13,10 @@ import 'package:http/http.dart' as http;
 class EventsPage extends StatefulWidget {
   EventsPage({
     Key? key,
-    this.filters = "empty",
-    this.data,
+    required this.eventsFuture,
   }) : super(key: key);
 
-  final String? filters;
-  final Map<String, dynamic>? data;
+  final Future<List<EventModel>> eventsFuture;
 
   @override
   _EventsPageState createState() => _EventsPageState();
@@ -26,59 +24,13 @@ class EventsPage extends StatefulWidget {
 
 
 class _EventsPageState extends State<EventsPage> {
-  late Future<List<EventModel>>? _eventsFuture;
+  //late Future<List<EventModel>>? _eventsFuture;
   //late List<EventModel> filteredEvents;
-  final FlutterSecureStorage storage = const FlutterSecureStorage();
-
-  Future<String?> _getToken() async {
-    return await storage.read(key: 'access_token');
-  }
-
-  Future<List<EventModel>> _filterEvents() async {
-
-    final String? token = await _getToken();
-
-    final response = await http.post(
-      Uri.parse('http://127.0.0.1:5000/event/getFilteredEvents'), // Update with your backend URL
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $token',
-      },
-      body: jsonEncode(widget.data),
-    );
-
-    if (response.statusCode == 200) {
-      // Handle successful response
-      final List<dynamic> eventsData = jsonDecode(response.body);
-      List<EventModel> filteredEvents = eventsData.map((event) {
-        // Convert dynamic data to EventModel objects
-        return EventModel.fromJson(event);
-      }).toList();
-      return filteredEvents;
-    }else {
-      // Handle error response
-      throw Exception('Failed to load events');
-    }
-  }
 
 
   @override
   void initState() {
     super.initState();
-    if (widget.data!['event_name'] == '' &&
-        widget.data!['selected_categories'] is List &&
-        widget.data!['selected_categories'].isEmpty &&
-        widget.data!['start_date'] == null &&
-        widget.data!['end_date'] == null &&
-        widget.data!['min_price'] == 0 &&
-        widget.data!['max_price'] == 10000000) {
-      // Use the filtered events if provided
-      _eventsFuture = UtilConstants().getAllEvents(context);
-
-    } else {
-      print('Filter Data: ${widget.data}');
-      _eventsFuture = _filterEvents();
-    }
   }
 
   @override
@@ -99,7 +51,7 @@ class _EventsPageState extends State<EventsPage> {
             SizedBox(height: 20),
             Expanded(
               child: FutureBuilder<List<EventModel>>(
-                future: _eventsFuture,
+                future: widget.eventsFuture,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(child: CircularProgressIndicator());
