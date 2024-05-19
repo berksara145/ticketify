@@ -4,6 +4,7 @@ import 'package:ticketify/general_widgets/page_selector/page_selector.dart';
 import 'package:ticketify/general_widgets/page_title.dart';
 import 'package:ticketify/pages/Organizator/event/create_event_widget.dart';
 import 'package:ticketify/pages/Organizator/venue/venues.dart';
+import 'package:ticketify/pages/admin/users/users.dart';
 import 'package:ticketify/pages/auth/widgets/appbar/user_app_bar.dart';
 import 'package:ticketify/pages/admin/admin_create_report.dart';
 import 'package:ticketify/pages/profile/widgets/profile_past_tickets.dart';
@@ -63,7 +64,7 @@ class _AdminPageState extends State<AdminPage> {
             ],
             settingsPage: AdminProfileSettings(),
           ),
-          if (activePage == 'View Users') ...[],
+          if (activePage == 'View Users') ...[UsersPage()],
           if (activePage == 'Edit Users') ...[
             CreateEventWidget(),
           ],
