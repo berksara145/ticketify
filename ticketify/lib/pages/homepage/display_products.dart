@@ -55,7 +55,12 @@ class _PageLayoutState extends State<PageLayout> {
     );
 
     if (response.statusCode == 200) {
-      final List<dynamic> responseData = jsonDecode(response.body);
+      final dynamic responseData = jsonDecode(response.body);
+
+      // Check if responseData is null or empty
+      if (responseData == null || responseData.isEmpty) {
+        return []; // Return an empty list
+      }
 
       // Check if responseData is a list
       if (responseData is List) {
@@ -70,6 +75,8 @@ class _PageLayoutState extends State<PageLayout> {
       throw Exception('Failed to load events');
     }
   }
+
+
 
 
   // Method to update state with filter data

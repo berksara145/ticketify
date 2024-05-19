@@ -418,34 +418,36 @@ def get_filtered_events():
 
         # Fetch all matching events
         events = cursor.fetchall()
+        if not events:  # If no events found
+            return jsonify([]), 204 # or perform any other action
+        else:
+            # Close the cursor and connection
+            cursor.close()
+            connection.close()
 
-        # Close the cursor and connection
-        cursor.close()
-        connection.close()
-
-        # Format the results
-        result = []
-        for event in events:
-            result.append({
-                "event_id": event[0],
-                "event_name": event[1],
-                "start_date": event[2],  # Format date as string
-                "end_date": event[3],  # Format date as string
-                "event_category": event[4],
-                "ticket_prices": event[5].split('-'),  # Convert ticket prices to list
-                "url_photo": event[6],
-                "description_text": event[7],
-                "event_rules": event[8],
-                "venue": {  # Nested dictionary for venue
-                    "venue_name": event[9],
-                    "address": event[10],
-                    "url_photo": event[11]
-                },
-                "performer_name": event[12],
-                "organizer_first_name": event[13], 
-                "organizer_last_name": event[14]
-            })
-        return jsonify(result), 200
+            # Format the results
+            result = []
+            for event in events:
+                result.append({
+                    "event_id": event[0],
+                    "event_name": event[1],
+                    "start_date": event[2],  # Format date as string
+                    "end_date": event[3],  # Format date as string
+                    "event_category": event[4],
+                    "ticket_prices": event[5].split('-'),  # Convert ticket prices to list
+                    "url_photo": event[6],
+                    "description_text": event[7],
+                    "event_rules": event[8],
+                    "venue": {  # Nested dictionary for venue
+                        "venue_name": event[9],
+                        "address": event[10],
+                        "url_photo": event[11]
+                    },
+                    "performer_name": event[12],
+                    "organizer_first_name": event[13],
+                    "organizer_last_name": event[14]
+                })
+            return jsonify(result), 200
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
