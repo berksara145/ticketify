@@ -50,11 +50,11 @@ def get_user_details():
 
         connection = get_db_connection()
         cursor = connection.cursor()
-        cursor.execute(f"SELECT first_name, last_name FROM {user_type} WHERE user_id = %s", (user_id,))
+        cursor.execute(f"SELECT first_name, last_name, user_id FROM {user_type} WHERE user_id = %s", (user_id,))
         user = cursor.fetchone()
 
         if user:
-            return jsonify({'first_name': user[0], 'last_name': user[1]}), 200
+            return jsonify({'first_name': user[0], 'last_name': user[1], 'user_type': user[2]}), 200
         else:
             return jsonify({'error': 'User not found'}), 404
     except Exception as e:
@@ -66,6 +66,8 @@ def get_user_details():
 
 @profile_bp.route('/change_password', methods=['POST'])
 def change_password():
+    connection = None
+    cursor = None
     try:
         current_user = get_jwt_identity()
         user_id = current_user['user_id']
@@ -102,5 +104,7 @@ def change_password():
         logger.exception("An error occurred during password change")
         return jsonify({'error': 'An unexpected error occurred'}), 500
     finally:
-        cursor.close()
-        connection.close()
+        if cursor:
+            cursor.close()
+        if connection:
+            connection.close()

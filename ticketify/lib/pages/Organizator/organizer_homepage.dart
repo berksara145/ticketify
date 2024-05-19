@@ -45,7 +45,7 @@ class _OrganizerHomepageState extends State<OrganizerHomepage> {
                   setState(() {
                     page = name;
                   });
-                }),
+                }, settingsPage: OrganizerProfileSettings(),),
           ),
           if (page == "Create Event") ...[
             CreateEventWidget(),

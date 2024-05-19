@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ticketify/pages/Organizator/organizer_homepage.dart';
 import 'package:ticketify/pages/admin/admin_page.dart';
@@ -7,6 +10,7 @@ import 'package:ticketify/pages/auth/auth_screen.dart';
 import 'package:ticketify/pages/homepage/homepage.dart';
 import 'package:ticketify/constants/constant_variables.dart';
 import 'package:ticketify/pages/profile/profile_page.dart';
+import 'package:http/http.dart' as http;
 
 class UserAppBar extends StatefulWidget implements PreferredSizeWidget {
   const UserAppBar({super.key});
