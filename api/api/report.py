@@ -3,6 +3,7 @@ from datetime import datetime
 from utils import get_db_connection
 from datetime import datetime
 import traceback
+import  logging
 
 
 report_bp = Blueprint('report', __name__, url_prefix='/report')
@@ -30,8 +31,8 @@ def create_report():
     try:
         # Get the current user ID from the JWT
         identity = get_jwt_identity()
-        
-        # Extract user_id and user_type from the identity
+
+        # Extract user_id from the identity
         user_id = identity.get('user_id')
 
         # Check if the current user is an admin
@@ -48,16 +49,13 @@ def create_report():
         if not start_date or not end_date or not organizer_id:
             return jsonify({'message': 'Invalid input'}), 400
 
-        print("org",organizer_id)
         # Check if the organizer exists
         if not organizer_exists(organizer_id, cursor):
-            return jsonify({'message': 'Organizer not found', "organizer_id":organizer_id}), 404
+            return jsonify({'message': 'Organizer not found'}), 404
 
         # Convert date strings to datetime objects for comparison
         start_date_dt = datetime.strptime(start_date, "%Y-%m-%d")
         end_date_dt = datetime.strptime(end_date, "%Y-%m-%d")
-
-        
 
         # Calculate total revenue from sold tickets for each event organized by the organizer
         cursor.execute("""
@@ -75,6 +73,16 @@ def create_report():
 
         events_revenue = cursor.fetchall()
 
+        # Insert the report into the reports table
+        for event in events_revenue:
+            cursor.execute("""
+                INSERT INTO report (organizer_id, event_id, total_revenue, start_date, end_date, generated_by)
+                VALUES (%s, %s, %s, %s, %s, %s)
+            """, (organizer_id, event['event_id'], event['total_revenue'], start_date_dt, end_date_dt, user_id))
+        # Commit the transaction
+        connection.commit()
+
+
         # Format the response
         response = []
         for event in events_revenue:
@@ -83,17 +91,17 @@ def create_report():
                 'event_name': event['event_name'],
                 'total_revenue': event['total_revenue'] if event['total_revenue'] is not None else 0
             })
-        
-        print(response)
-        
+
         return jsonify(response), 200
 
     except Exception as e:
+        connection.rollback()  # Rollback in case of error
         return jsonify({'error': str(e), 'trace': traceback.format_exc()}), 500
 
     finally:
         cursor.close()
-    
+        connection.close()
+
 
 @report_bp.route('/getOrganizers', methods=['GET'])
 def get_organizers():
@@ -106,13 +114,52 @@ def get_organizers():
 
         # Fetch all organizers
         organizers = cursor.fetchall()
-        
-        print(organizers)
 
         return jsonify(organizers), 200
 
     except Exception as e:
         return jsonify({'error': str(e), 'trace': traceback.format_exc()}), 500
+
+    finally:
+        cursor.close()
+        connection.close()
+
+@report_bp.route('/getReports', methods=['GET'])
+def get_reports():
+    # Configure logging
+    logging.basicConfig(filename='app.log', level=logging.DEBUG)
+
+    try:
+        logging.debug('Attempting to fetch reports')
+
+        # Get the current user ID from the JWT
+        current_user_id = get_jwt_identity().get('user_id')
+
+        # Get database connection and cursor
+        connection = get_db_connection()
+        cursor = connection.cursor(dictionary=True)
+
+        if not is_admin(current_user_id, cursor):
+            logging.warning('Unauthorized access: Admin access required')
+            return jsonify({'message': 'Unauthorized: Admin access required'}), 401
+
+        # Execute SQL query to fetch reports for the current user
+        cursor.execute("SELECT * FROM report WHERE generated_by = % s", (current_user_id,) )
+
+        # Fetch all reports
+        reports = cursor.fetchall()
+        if not reports:
+            print("WTF")
+        print("LANET")
+        print(reports)
+        logging.debug('Reports fetched successfully')
+
+        return jsonify(reports), 200
+
+    except Exception as e:
+        logging.error(f'Error occurred: {e}')
+        error_message = {'error': str(e), 'trace': traceback.format_exc()}
+        return jsonify(error_message), 500
 
     finally:
         cursor.close()

@@ -66,11 +66,20 @@ CREATE TABLE IF NOT EXISTS  admin (
     user_type VARCHAR(20)
 );
 
-CREATE TABLE IF NOT EXISTS  report(
+CREATE TABLE IF NOT EXISTS report (
     report_id INT AUTO_INCREMENT PRIMARY KEY,
-    report_date VARCHAR(10) NOT NULL,
-    report_text VARCHAR(8192)
+    organizer_id INT NOT NULL,
+    event_id INT NOT NULL,
+    total_revenue DECIMAL(10, 2) NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    generated_by INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (organizer_id) REFERENCES organizer(user_id),
+    FOREIGN KEY (event_id) REFERENCES event(event_id),
+    FOREIGN KEY (generated_by) REFERENCES admin(user_id)
 );
+
 
 CREATE TABLE IF NOT EXISTS  venue(
     venue_id INT AUTO_INCREMENT PRIMARY KEY,

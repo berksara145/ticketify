@@ -1,0 +1,46 @@
+DEBUG:root:Attempting to fetch reports
+ERROR:root:Error occurred: 1054 (42S22): Unknown column 'generated_by' in 'where clause'
+INFO:werkzeug:172.24.0.1 - - [19/May/2024 14:51:02] "[35m[1mGET /report/getReports HTTP/1.1[0m" 500 -
+INFO:werkzeug: * Detected change in '/api/report.py', reloading
+DEBUG:root:Attempting to fetch reports
+DEBUG:root:Reports fetched successfully
+INFO:werkzeug:172.24.0.1 - - [19/May/2024 14:54:00] "GET /report/getReports HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in '/api/report.py', reloading
+DEBUG:root:Attempting to fetch reports
+DEBUG:root:Reports fetched successfully
+INFO:werkzeug:172.24.0.1 - - [19/May/2024 14:54:41] "GET /report/getReports HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in '/api/report.py', reloading
+DEBUG:root:Attempting to fetch reports
+DEBUG:root:Reports fetched successfully
+INFO:werkzeug:172.24.0.1 - - [19/May/2024 14:57:34] "GET /report/getReports HTTP/1.1" 200 -
+DEBUG:root:Attempting to fetch reports
+DEBUG:root:Reports fetched successfully
+INFO:werkzeug:172.24.0.1 - - [19/May/2024 14:58:25] "GET /report/getReports HTTP/1.1" 200 -
+INFO:werkzeug:172.24.0.1 - - [19/May/2024 14:58:43] "OPTIONS /report/getReports HTTP/1.1" 200 -
+DEBUG:root:Attempting to fetch reports
+DEBUG:root:Reports fetched successfully
+INFO:werkzeug:172.24.0.1 - - [19/May/2024 14:58:43] "GET /report/getReports HTTP/1.1" 200 -
+INFO:werkzeug:172.24.0.1 - - [19/May/2024 14:59:03] "OPTIONS /report/createReport HTTP/1.1" 200 -
+INFO:werkzeug:172.24.0.1 - - [19/May/2024 14:59:03] "POST /report/createReport HTTP/1.1" 200 -
+INFO:werkzeug:172.24.0.1 - - [19/May/2024 14:59:04] "POST /report/createReport HTTP/1.1" 200 -
+INFO:werkzeug:172.24.0.1 - - [19/May/2024 14:59:04] "POST /report/createReport HTTP/1.1" 200 -
+INFO:werkzeug:172.24.0.1 - - [19/May/2024 14:59:04] "OPTIONS /report/getReports HTTP/1.1" 200 -
+DEBUG:root:Attempting to fetch reports
+DEBUG:root:Reports fetched successfully
+INFO:werkzeug:172.24.0.1 - - [19/May/2024 14:59:04] "GET /report/getReports HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in '/api/report.py', reloading
+DEBUG:root:Attempting to fetch reports
+DEBUG:root:Reports fetched successfully
+INFO:werkzeug:172.24.0.1 - - [19/May/2024 15:00:36] "GET /report/getReports HTTP/1.1" 200 -
+DEBUG:root:Attempting to fetch reports
+DEBUG:root:Reports fetched successfully
+INFO:werkzeug:172.24.0.1 - - [19/May/2024 15:01:12] "GET /report/getReports HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in '/api/report.py', reloading
+DEBUG:root:Attempting to fetch reports
+DEBUG:root:Reports fetched successfully
+INFO:werkzeug:172.24.0.1 - - [19/May/2024 15:01:58] "GET /report/getReports HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in '/api/report.py', reloading
+DEBUG:root:Attempting to fetch reports
+DEBUG:root:Reports fetched successfully
+INFO:werkzeug:172.24.0.1 - - [19/May/2024 15:10:44] "GET /report/getReports HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in '/api/report.py', reloading

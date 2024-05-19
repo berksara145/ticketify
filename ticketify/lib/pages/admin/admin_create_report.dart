@@ -122,12 +122,7 @@ class _AdminCreateReportState extends State<AdminCreateReport> {
     // Parse the response body
     final dynamic responseBody = jsonDecode(response.body);
     final List<Map<String, dynamic>> reportData = List<Map<String, dynamic>>.from(responseBody);
-    
-    // Navigate to the ShowReportPage with the report data
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => ShowReportPage(reportData: reportData)),
-    );
+
   } else {
     // Handle error if the request fails
     final Map<String, dynamic> responseBody = jsonDecode(response.body);
@@ -301,6 +296,22 @@ class _AdminCreateReportState extends State<AdminCreateReport> {
                   ],
                 ),
               ),
+              InkWell(
+                onTap: () {
+
+                  // Navigate to the ShowReportPage with the report data
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ShowReportPage()),
+                  );
+                },
+                child: Container(
+                    decoration:
+                    BoxDecoration(border: Border.all(width: 1)),
+                    padding: const EdgeInsets.all(5),
+                    child: const Text('Debug')),
+              ),
+
             ],
           ),
         ),
