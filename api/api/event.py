@@ -48,7 +48,7 @@ def get_all_events():
                 "start_date": event[2],  # Format date as string
                 "end_date": event[3],  # Format date as string
                 "event_category": event[4],
-                "ticket_prices": event[5].split('-'),  # Convert ticket prices to list
+                "ticket_prices": event[5],  # Convert ticket prices to list
                 "url_photo": event[6],
                 "description_text": event[7],
                 "event_rules": event[8],
@@ -64,6 +64,7 @@ def get_all_events():
             }
             event_list.append(event_dict)
         
+        print(event_list)
 
         return jsonify(event_list), 200
     except Exception as e:

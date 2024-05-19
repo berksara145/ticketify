@@ -128,6 +128,7 @@ class _EventsPageState extends State<EventsPage> {
                               location: event.venue!.address!,
                               organizer: event.organizerFirstName!,
                               rules: event.eventRules!,
+                              ticket_prices: event.ticketPrices!,
                               desc: event.descriptionText!,
                             );
                             Navigator.push(
