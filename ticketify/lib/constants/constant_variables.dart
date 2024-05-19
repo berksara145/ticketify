@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:ticketify/objects/event_model.dart';
+import 'package:ticketify/objects/user_model.dart';
 
 import 'dart:ui';
 
@@ -258,7 +259,7 @@ class UtilConstants {
     }
   }
 
-  Future<void> getAllUsers(BuildContext context) async {
+  Future<List<UserModel>> getAllUsers(BuildContext context) async {
     // Construct the login request payload
     final String? token = await getToken();
     try {
@@ -271,14 +272,29 @@ class UtilConstants {
         },
       );
       if (response.statusCode == 200) {
-        // final List<dynamic> jsonData = jsonDecode(response.body);
+        final Map<String, dynamic> jsonData = jsonDecode(response.body);
 
-        // // Convert each item in the list to an EventModel
-        // List<EventModel> events = jsonData
-        //     .map<EventModel>((json) => EventModel.fromJson(json))
-        //     .toList();
+        // Initialize an empty list to collect all users
+        List<UserModel> allUsers = [];
+
+        // Function to convert each user entry to UserModel and add to allUsers list
+        void extractUsers(String key) {
+          List<dynamic> users = jsonData[key];
+          var userList =
+              users.map<UserModel>((json) => UserModel.fromJson(json)).toList();
+          allUsers.addAll(userList);
+        }
+
+        // Extract and convert users from each category
+        extractUsers('buyer');
+        extractUsers('organizer');
+        extractUsers('worker_bee');
+
+        // Log the JSON data for debugging
         print(response.body);
-        //return events;
+
+        // Return the unified list of users
+        return allUsers;
       } else {
         final Map<String, dynamic> responseBody = jsonDecode(response.body);
         print(token); // Optional: For debugging purposes
@@ -290,6 +306,45 @@ class UtilConstants {
     } catch (e) {
       // Handle any errors that might occur during the HTTP request
       throw Exception('Error fetching user data: $e');
+    }
+  }
+
+  Future<void> deleteUser(
+    BuildContext context,
+    String userId,
+    String userType,
+  ) async {
+    // Retrieve the token
+    final String? token = await getToken();
+
+    // Construct the data payload with provided arguments
+    final Map<String, dynamic> data = {
+      'user_id': userId,
+      'user_type': userType,
+    };
+
+    // Send the request to your Flask backend
+    final response = await http.delete(
+      Uri.parse(
+          'http://127.0.0.1:5000/user/deleteUser'), // Update with your backend URL
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode(data),
+    );
+
+    // Handle the response from the backend
+    if (response.statusCode == 200) {
+      // Operation successful, navigate to homepage or perform other actions
+      // Example: Navigator.pushReplacementNamed(context, '/homepage');
+    } else {
+      // Operation failed, display error message in a dialog
+      final Map<String, dynamic> responseBody = jsonDecode(response.body);
+      print(response.body); // Optional: For debugging purposes
+
+      _showErrorDialog(
+          responseBody['message'] ?? 'User deletion failed', context);
     }
   }
 }

@@ -20,7 +20,7 @@ class AdminPage extends StatefulWidget {
 
 class _AdminPageState extends State<AdminPage> {
   //TODO: activePage logici ile gösterilecek sayfa seçilebilir.
-  String activePage = "View Venues";
+  String activePage = "View Users";
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +66,9 @@ class _AdminPageState extends State<AdminPage> {
           ),
           if (activePage == 'View Users') ...[UsersPage()],
           if (activePage == 'Edit Users') ...[
-            CreateEventWidget(),
+            UsersPage(
+              isDeleteEnabled: true,
+            ),
           ],
           if (activePage == 'View Venues') ...[VenuesPage()],
           if (activePage == 'Create Report') ...[
