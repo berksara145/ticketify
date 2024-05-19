@@ -42,3 +42,36 @@ def getUsers():
         cursor.close()
         connection.close()
 
+
+@user_bp.route('/deleteUser', methods=['DELETE'])
+def deleteUser():
+    try:
+        # Extract parameters from request
+        data = request.json
+        user_id = data.get('user_id')
+        user_type = data.get('user_type')
+
+        if not (user_id and user_type is not None):
+            return jsonify({'error': 'Missing required parameters'}), 400
+
+        connection = get_db_connection()
+        cursor = connection.cursor()
+
+        # Construct the query to delete the user based on user_type
+        query = f"DELETE FROM {user_type} WHERE user_id = %s"
+        cursor.execute(query, (user_id,))
+
+        # Commit the transaction
+        connection.commit()
+
+        # Return success response
+        return jsonify({'message': 'User deleted successfully'}), 200
+
+    except Exception as e:
+        # Handle exceptions
+        return jsonify({'error': str(e), 'trace': traceback.format_exc()}), 500
+
+    finally:
+        # Close cursor and connection
+        cursor.close()
+        connection.close()
