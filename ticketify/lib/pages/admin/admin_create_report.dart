@@ -155,7 +155,7 @@ class _AdminCreateReportState extends State<AdminCreateReport> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const PageTitle(title: "Create Event"),
+              const PageTitle(title: "Create Report for Organizer"),
               Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20),
