@@ -113,6 +113,17 @@ def choose_ticket():
         cursor.execute("SELECT seat_position FROM ticket_seat WHERE ticket_id = %s", (ticket[0],))
         seat = cursor.fetchone()
 
+
+        # Construct the SQL query with a placeholder for the single ticket ID
+        query = """
+            UPDATE tickets
+            SET is_bought = TRUE
+            WHERE ticket_id = %s
+        """
+
+        # Execute the SQL query with the ticket ID as a parameter
+        cursor.execute(query, (ticket[0],))
+        connection.commit()
         # Close database connection
         cursor.close()
         connection.close()
@@ -174,7 +185,7 @@ def buy_ticket():
         query = """
             SELECT SUM(ticket_price)
             FROM tickets
-            WHERE ticket_id IN ({}) AND is_bought = FALSE
+            WHERE ticket_id IN ({})
         """.format(','.join(['%s'] * len(ticket_ids)))
 
         # Execute the SQL query with the ticket IDs as parameters
