@@ -161,13 +161,12 @@ def create_event():
         description_text = data.get('description_text')
         event_rules = data.get('event_rules')
         venue_id = data.get('venue_id')
-        performer_name = data.get('performer_name')
         ticket_prices = data.get('ticket_prices')  # Array of ticket prices)
 
         # Validate required data
         if not ( event_name and start_date and end_date and event_category
                 and event_image and description_text and event_rules and organizer_id and venue_id 
-                and ticket_prices and performer_name):
+                and ticket_prices):
             return jsonify({'error': 'Missing required data'}), 400
 
         # Convert date strings to datetime objects
