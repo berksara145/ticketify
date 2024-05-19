@@ -144,7 +144,7 @@ def get_reports():
             return jsonify({'message': 'Unauthorized: Admin access required'}), 401
 
         # Execute SQL query to fetch reports for the current user
-        cursor.execute("SELECT * FROM report WHERE generated_by = %s", (current_user_id))
+        cursor.execute("SELECT organizer_id, event_id, total_revenue, start_date, end_date, created_at FROM report WHERE generated_by = %s", (current_user_id,))
 
         # Fetch all reports
         reports = cursor.fetchall()
@@ -161,3 +161,4 @@ def get_reports():
     finally:
         cursor.close()
         connection.close()
+
