@@ -5,18 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ticketify/constants/constant_variables.dart';
+import 'package:ticketify/objects/event_model.dart';
 import 'package:ticketify/pages/auth/widgets/appbar/user_app_bar.dart';
 import 'package:ticketify/pages/homepage/ItemGrid.dart';
 import 'package:ticketify/pages/homepage/homepage.dart';
 import 'package:ticketify/pages/homepage/purchase_ticket.dart';
 
 class OneItemView extends StatefulWidget {
-  OneItemView({
-    Key? key,
-    this.post,
-    required this.event_id,
-  }) : super(key: key);
-
+  OneItemView({Key? key, this.post, required this.event_id, this.event})
+      : super(key: key);
+  final EventModel? event;
   final PostDTO? post;
   final String event_id;
   @override
@@ -119,7 +117,11 @@ class PhoneOneItemView extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => PurchaseTicket(
-                                    post: post, event_id: event_id),
+                                  maxTicketsLeft: [],
+                                  post: post,
+                                  event_id: event_id,
+                                  event: widget.event,
+                                ),
                               ),
                             );
                           },
@@ -340,13 +342,24 @@ class DesktopOneItemView extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.only(right: 75.0),
                             child: TextButton(
-                              onPressed: () {
+                              onPressed: () async {
                                 //GoRouter.of(context).go('/purchase/:eventID');
+                                List<int> maxTicketsLeft =
+                                    await fetchAllSectionMaxTickets(
+                                        mapSectionPrices(
+                                            widget.event!.ticketPrices!),
+                                        event_id,
+                                        context);
+                                print(maxTicketsLeft);
+
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => PurchaseTicket(
-                                        post: post, event_id: event_id), // TODO
+                                        maxTicketsLeft: maxTicketsLeft,
+                                        post: post,
+                                        event_id: event_id,
+                                        event: widget.event), // TODO
                                   ),
                                 );
                               },
@@ -476,4 +489,20 @@ class DesktopOneItemView extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<List<int>> fetchAllSectionMaxTickets(
+    Map<String, int> sectionPrices, eventId, context) async {
+  List<Future<int>> futures = [];
+
+  // Create a list of futures for each section
+  int index = 0;
+  sectionPrices.forEach((section, price) {
+    futures.add(UtilConstants().getMaxTicketsLeft(context, eventId, index));
+    index++;
+  });
+
+  // Wait for all futures to complete
+  List<int> maxTicketsList = await Future.wait(futures);
+  return maxTicketsList;
 }

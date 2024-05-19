@@ -15,22 +15,18 @@ from flask_jwt_extended import get_jwt_identity
 @ticket_bp.route('/getMaxTicket', methods=['POST'])
 def get_max_ticket():
     try:
-        # Extract parameters from request
         data = request.json
         event_id = data.get('event_id')
         category_num = data.get('category_num')
         
-        # Validate required parameters
         if not (event_id and category_num is not None):
             return jsonify({'error': 'Missing required parameters'}), 400
 
         category_num -= 1
 
-        # Connect to the database
         connection = get_db_connection()
         cursor = connection.cursor()
 
-        # Retrieve event and its ticket prices
         cursor.execute("SELECT * FROM event WHERE event_id = %s", (event_id,))
         event = cursor.fetchone()
         if event is None:
@@ -40,9 +36,8 @@ def get_max_ticket():
         if category_num >= len(ticket_prices_list) or category_num < 0:
             return jsonify({'error': 'Invalid category number'}), 400
 
-        category_price = ticket_prices_list
+        category_price = ticket_prices_list[category_num]
 
-        # Count the number of available tickets for the event and category
         cursor.execute("""
             SELECT COUNT(*) AS available_tickets
             FROM tickets
@@ -50,9 +45,8 @@ def get_max_ticket():
             WHERE event_has_ticket.event_id = %s AND tickets.ticket_price = %s AND tickets.is_bought = FALSE
         """, (event_id, category_price))
         result = cursor.fetchone()
-        available_tickets = result['available_tickets']
+        available_tickets = result[0]  # Assuming COUNT(*) is the first column in the result
 
-        # Close the database connection
         cursor.close()
         connection.close()
 
@@ -61,7 +55,10 @@ def get_max_ticket():
     except Exception as e:
         return jsonify({'error': str(e), 'trace': traceback.format_exc()}), 500
 
-@ticket_bp.route('/chooseTicket', methods=['GET'])
+
+
+
+@ticket_bp.route('/chooseTicket', methods=['POST'])
 def choose_ticket():   
     try:
         # Extract parameters from request
@@ -113,6 +110,17 @@ def choose_ticket():
         cursor.execute("SELECT seat_position FROM ticket_seat WHERE ticket_id = %s", (ticket[0],))
         seat = cursor.fetchone()
 
+
+        # Construct the SQL query with a placeholder for the single ticket ID
+        query = """
+            UPDATE tickets
+            SET is_bought = TRUE
+            WHERE ticket_id = %s
+        """
+
+        # Execute the SQL query with the ticket ID as a parameter
+        cursor.execute(query, (ticket[0],))
+        connection.commit()
         # Close database connection
         cursor.close()
         connection.close()
@@ -174,7 +182,7 @@ def buy_ticket():
         query = """
             SELECT SUM(ticket_price)
             FROM tickets
-            WHERE ticket_id IN ({}) AND is_bought = FALSE
+            WHERE ticket_id IN ({})
         """.format(','.join(['%s'] * len(ticket_ids)))
 
         # Execute the SQL query with the ticket IDs as parameters

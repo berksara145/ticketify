@@ -163,7 +163,7 @@ class UtilConstants {
       // Operation failed, display error message in a dialog
       final Map<String, dynamic> responseBody = jsonDecode(response.body);
       _showErrorDialog(
-          responseBody['message'] ?? 'Venue creation failed', context);
+          responseBody['error'] ?? 'Venue creation failed', context);
     }
   }
 
@@ -202,7 +202,7 @@ class UtilConstants {
         print(response.body); // Optional: For debugging purposes
 
         _showErrorDialog(
-            responseBody['message'] ?? 'Event creation failed', context);
+            responseBody['error'] ?? 'Event creation failed', context);
         throw Exception('Failed to load venues: ${response.body}');
       }
     } catch (e) {
@@ -253,8 +253,8 @@ class UtilConstants {
 
     // Handle the response from the backend
     if (response.statusCode == 200) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Event is created!')));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text('Event is created!')));
       // Operation successful, navigate to homepage or perform other actions
       // Example: Navigator.pushReplacementNamed(context, '/homepage');
     } else {
@@ -263,7 +263,7 @@ class UtilConstants {
       print(response.body); // Optional: For debugging purposes
 
       _showErrorDialog(
-          responseBody['message'] ?? 'Event creation failed', context);
+          responseBody['error'] ?? 'Event creation failed', context);
     }
   }
 
@@ -308,7 +308,7 @@ class UtilConstants {
         print(token); // Optional: For debugging purposes
 
         _showErrorDialog(
-            responseBody['message'] ?? 'User loading failed', context);
+            responseBody['error'] ?? 'User loading failed', context);
         throw Exception('Failed to load Users: ${response.body}');
       }
     } catch (e) {
@@ -344,8 +344,8 @@ class UtilConstants {
 
     // Handle the response from the backend
     if (response.statusCode == 200) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('User is delete!')));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text('User is delete!')));
       // Operation successful, navigate to homepage or perform other actions
       // Example: Navigator.pushReplacementNamed(context, '/homepage');
     } else {
@@ -354,7 +354,134 @@ class UtilConstants {
       print(response.body); // Optional: For debugging purposes
 
       _showErrorDialog(
-          responseBody['message'] ?? 'User deletion failed', context);
+          responseBody['error'] ?? 'User deletion failed', context);
+    }
+  }
+
+  Future<int> getMaxTicketsLeft(
+      BuildContext context, String eventId, int sectionIndex) async {
+    final Map<String, dynamic> data = {
+      'event_id': eventId,
+      'category_num': sectionIndex + 1,
+    };
+
+    final String? token = await getToken();
+
+    try {
+      final uri = Uri.parse('http://127.0.0.1:5000/ticket/getMaxTicket');
+      final response = await http.post(
+        uri,
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode(data),
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> jsonData = jsonDecode(response.body);
+        // Log the JSON data for debugging
+        print(response.body);
+        // Extract max_ticket_count from JSON and return it
+        int maxTicketCount = jsonData['max_ticket_count'] as int;
+        return maxTicketCount;
+      } else {
+        print("error");
+
+        final Map<String, dynamic> responseBody = jsonDecode(response.body);
+        _showErrorDialog(
+            responseBody['error'] ?? 'Ticket loading failed', context);
+        throw Exception('Failed to load ticket prices: ${response.body}');
+      }
+    } catch (e) {
+      print("exception");
+
+      // Handle any errors that might occur during the HTTP request
+      throw Exception('Error fetching ticket data: $e');
+    }
+  }
+
+  Future<int> chooseTicket(
+      BuildContext context, String eventId, int sectionIndex) async {
+    final Map<String, dynamic> data = {
+      'event_id': eventId,
+      'category_num': sectionIndex,
+    };
+
+    final String? token = await getToken();
+
+    try {
+      final uri = Uri.parse('http://127.0.0.1:5000/ticket/chooseTicket');
+      final response = await http.post(
+        uri,
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode(data),
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> jsonData = jsonDecode(response.body);
+        // Log the JSON data for debugging
+        print(response.body);
+        // Extract max_ticket_count from JSON and return it
+        int ticketId = jsonData['ticket_id'] as int;
+        return ticketId;
+      } else {
+        print("error");
+
+        final Map<String, dynamic> responseBody = jsonDecode(response.body);
+        _showErrorDialog(
+            responseBody['error'] ?? 'Ticket loading failed', context);
+        throw Exception('Failed to load ticket prices: ${response.body}');
+      }
+    } catch (e) {
+      print("exception");
+
+      // Handle any errors that might occur during the HTTP request
+      throw Exception('Error fetching ticket data: $e');
+    }
+  }
+
+  Future<void> buyTickets(
+      BuildContext context, String eventId, List<int> ids) async {
+    final Map<String, dynamic> data = {
+      'event_id': eventId,
+      'ticket_ids': ids,
+    };
+
+    final String? token = await getToken();
+
+    try {
+      final uri = Uri.parse('http://127.0.0.1:5000/ticket/buyTicket');
+      final response = await http.post(
+        uri,
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode(data),
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> jsonData = jsonDecode(response.body);
+        _showErrorDialog(
+            jsonData['message'] ?? 'Can not buy ticket(s): ', context);
+        print(response.body);
+      } else {
+        print("error");
+
+        final Map<String, dynamic> responseBody = jsonDecode(response.body);
+        _showErrorDialog(
+            responseBody['error'] ?? 'Can not buy ticket(s): ', context);
+        throw Exception('Failed to load ticket prices: ${response.body}');
+      }
+    } catch (e) {
+      print("exception");
+
+      // Handle any errors that might occur during the HTTP request
+      throw Exception('Error buying ticket(s): $e');
     }
   }
 }

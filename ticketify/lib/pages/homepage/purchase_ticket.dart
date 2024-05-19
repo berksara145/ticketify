@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:getwidget/components/dropdown/gf_dropdown.dart';
 import 'package:ticketify/constants/constant_variables.dart';
+import 'package:ticketify/objects/event_model.dart';
+import 'package:ticketify/objects/venue_model.dart';
 import 'package:ticketify/pages/auth/widgets/appbar/user_app_bar.dart';
 import 'package:ticketify/pages/homepage/ItemGrid.dart';
 import 'package:ticketify/pages/homepage/one_item_view.dart';
 
 class PurchaseTicket extends StatefulWidget {
-  PurchaseTicket({
-    Key? key,
-    this.post,
-    required this.event_id,
-  }) : super(key: key);
+  PurchaseTicket(
+      {Key? key,
+      this.post,
+      required this.event_id,
+      this.event,
+      required this.maxTicketsLeft})
+      : super(key: key);
 
   final PostDTO? post;
+  final List<int> maxTicketsLeft;
+  final EventModel? event;
   final String event_id;
 
   @override
@@ -22,16 +28,12 @@ class PurchaseTicket extends StatefulWidget {
 class _OneItemViewState extends State<PurchaseTicket> {
   late PostDTO post;
   String? chosen;
-  Map<String, int> selectedSections = {};
+  //Map<String, int> selectedSections = {};
+  Map<String, Map<String, int>> selectedSections = {};
+
   Map<String, int> cartItems = {};
 
   // Section prices map
-  Map<String, int> sectionPrices = {
-    'Section1 - 1000 tl': 1000,
-    'Section2 - 750 tl': 750,
-    'Section3 - 500 tl': 500,
-    'Section4 - 250 tl': 250,
-  };
 
   @override
   void initState() {
@@ -41,8 +43,11 @@ class _OneItemViewState extends State<PurchaseTicket> {
 
   @override
   Widget build(BuildContext context) {
+    Map<String, int> sectionPrices =
+        mapSectionPrices(widget.event!.ticketPrices!);
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+    int idx = 0;
 
     return Scaffold(
       appBar: UserAppBar(),
@@ -71,9 +76,9 @@ class _OneItemViewState extends State<PurchaseTicket> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => OneItemView(
-                                  post: post,
-                                  event_id: post.id,
-                                ),
+                                    post: post,
+                                    event_id: post.id,
+                                    event: widget.event!),
                               ),
                             );
                           },
@@ -169,7 +174,37 @@ class _OneItemViewState extends State<PurchaseTicket> {
                                       height: 20,
                                     ),
                                     InkWell(
-                                      onTap: () {},
+                                      onTap: () async {
+                                        Map<int, int> ticketsToBeBought =
+                                            extractSectionDetails(cartItems);
+                                        List<int> ticketResults =
+                                            []; // This list will store the return values
+
+                                        // Iterate through each entry in the ticketsToBeBought map
+                                        for (var entry
+                                            in ticketsToBeBought.entries) {
+                                          int sectionIndex = entry.key;
+                                          int ticketCount = entry.value;
+
+                                          // Loop to handle multiple tickets per section
+                                          for (int i = 0;
+                                              i < ticketCount;
+                                              i++) {
+                                            // Await the asynchronous chooseTicket function and add the result to the list
+                                            int result = await UtilConstants()
+                                                .chooseTicket(
+                                                    context,
+                                                    widget.event!.eventId
+                                                        .toString(),
+                                                    sectionIndex);
+                                            ticketResults.add(result);
+                                          }
+                                        }
+                                        await UtilConstants().buyTickets(
+                                            context,
+                                            widget.event!.eventId.toString(),
+                                            ticketResults);
+                                      },
                                       child: Container(
                                           decoration: BoxDecoration(
                                               border: Border.all(width: 1)),
@@ -215,20 +250,21 @@ class _OneItemViewState extends State<PurchaseTicket> {
                                 setState(() {
                                   chosen = newValue;
                                   if (!selectedSections.containsKey(chosen)) {
-                                    selectedSections[chosen!] = 1;
+                                    int index = sectionPrices.keys
+                                        .toList()
+                                        .indexOf(chosen!);
+                                    selectedSections[chosen!] = {
+                                      'count': 1,
+                                      'index': index
+                                    };
                                   }
                                 });
                               },
-                              items: [
-                                'Section1 - 1000 tl',
-                                'Section2 - 750 tl',
-                                'Section3 - 500 tl',
-                                'Section4 - 250 tl'
-                              ].map((value) {
+                              items: sectionPrices.keys.map((String key) {
                                 return DropdownMenuItem(
-                                  value: value,
+                                  value: key,
                                   child: Text(
-                                    value,
+                                    key,
                                     style: TextStyle(color: Colors.black),
                                   ),
                                 );
@@ -237,6 +273,8 @@ class _OneItemViewState extends State<PurchaseTicket> {
                           ),
                         ),
                         ...selectedSections.entries.map((entry) {
+                          int? sectionIndex = entry.value['index'];
+                          int? ticketCount = entry.value['count'];
                           return Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
@@ -245,9 +283,10 @@ class _OneItemViewState extends State<PurchaseTicket> {
                                 style: TextStyle(fontSize: 20),
                               ),
                               DropdownButton<int>(
-                                value: entry.value,
-                                items: List.generate(10, (index) => index + 1)
-                                    .map((number) {
+                                value: ticketCount,
+                                items: List.generate(
+                                    widget.maxTicketsLeft[sectionIndex!],
+                                    (index) => index + 1).map((number) {
                                   return DropdownMenuItem<int>(
                                     value: number,
                                     child: Text(number.toString()),
@@ -255,8 +294,10 @@ class _OneItemViewState extends State<PurchaseTicket> {
                                 }).toList(),
                                 onChanged: (int? newValue) {
                                   setState(() {
-                                    selectedSections[entry.key] = newValue!;
-                                    // Update cart items when ticket count changes
+                                    selectedSections[entry.key] = {
+                                      'count': newValue!,
+                                      'index': sectionIndex
+                                    };
                                     _updateCart(entry.key, newValue);
                                   });
                                 },
@@ -295,9 +336,69 @@ class _OneItemViewState extends State<PurchaseTicket> {
 
   int _calculateTotalPrice() {
     int totalPrice = 0;
+    Map<String, int> sectionPrices =
+        mapSectionPrices(widget.event!.ticketPrices!);
     cartItems.forEach((key, value) {
       totalPrice += sectionPrices[key]! * value;
     });
     return totalPrice;
   }
+}
+
+Map<int, int> extractSectionDetails(Map<String, int> cartItems) {
+  Map<int, int> extractedDetails = {};
+
+  cartItems.forEach((key, value) {
+    // Assuming the format is always "Section X - YYY tl"
+    // Extract the section number from the string
+    final sectionNumberString =
+        key.split(' ')[1]; // This gets the '2' from "Section 2 - 5555 tl"
+    int sectionNumber = int.parse(sectionNumberString); // Convert to int
+
+    // Now map this section number to its corresponding value in the new map
+    extractedDetails[sectionNumber] = value;
+  });
+
+  return extractedDetails;
+}
+
+Map<String, int> mapSectionPrices(String prices) {
+  // Split the prices string into a list of prices
+  List<String> priceList = prices.split('-');
+
+  // Create a map to hold the section names and their corresponding prices
+  Map<String, int> sectionPrices = {};
+
+  // Determine the number of sections based on the number of prices in the list
+  int sectionCount = priceList.length;
+
+  // Loop through the number of sections and create the map entries
+  for (int i = 0; i < sectionCount; i++) {
+    // Construct the section name
+    String sectionName = 'Section ${i + 1} - ${priceList[i]} tl';
+
+    // Parse the price and add it to the map
+    int price = int.parse(priceList[i]);
+    sectionPrices[sectionName] = price;
+  }
+
+  return sectionPrices;
+}
+
+Future<List<int>> fetchAllSectionMaxTickets(
+    Map<String, int> sectionPrices, eventId, context) async {
+  List<Future<int>> futures = [];
+
+  // Create a list of futures for each section
+  int index = 0;
+  print("maxTicketsLeft");
+  sectionPrices.forEach((section, price) {
+    futures.add(UtilConstants().getMaxTicketsLeft(context, eventId, index));
+    index++;
+  });
+  print("here");
+
+  // Wait for all futures to complete
+  List<int> maxTicketsList = await Future.wait(futures);
+  return maxTicketsList;
 }
