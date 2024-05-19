@@ -7,6 +7,7 @@ import '../../../constants/constant_variables.dart';
 import '../../admin/admin_page.dart';
 import '../../homepage/homepage.dart';
 import '../../Organizator/organizer_homepage.dart';
+import '../../workerbee/worker_homepage.dart';
 import 'auth_text_field.dart';
 
 class LoginForm extends StatefulWidget {
@@ -69,6 +70,12 @@ class _LoginFormState extends State<LoginForm> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const AdminPage()),
+        );
+      }
+      if (userType == 'worker_bee'){
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => IssueListPage()),
         );
       }
       ScaffoldMessenger.of(context).showSnackBar(

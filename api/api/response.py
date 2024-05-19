@@ -23,6 +23,9 @@ def create_issue_response():
         data = request.json
         issue_id = data.get('issue_id')
         response_text = data.get('response_text')
+        print('QQQQQQQQQA')
+        print(issue_id)
+        print(response_text)
 
         # Validate required data
         if not (issue_id and user_id and response_text):

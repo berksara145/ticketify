@@ -12,6 +12,8 @@ import 'package:ticketify/constants/constant_variables.dart';
 import 'package:ticketify/pages/profile/profile_page.dart';
 import 'package:http/http.dart' as http;
 
+import '../../../workerbee/worker_homepage.dart';
+
 class UserAppBar extends StatefulWidget implements PreferredSizeWidget {
   const UserAppBar({super.key});
 
@@ -83,6 +85,7 @@ class _UserAppBarState extends State<UserAppBar> {
     );
   }
 }
+
 
 class OrganizerAppBar extends StatefulWidget implements PreferredSizeWidget {
   const OrganizerAppBar({super.key});
@@ -197,6 +200,67 @@ class _AdminAppBarState extends State<AdminAppBar> {
             onPressed: () {
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (context) => const AdminPage()));
+            },
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+            onPressed: () {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => const AuthScreen()));
+            },
+            child: const Text(
+              "Log out",
+              style: TextStyle(color: AppColors.black),
+            )),
+      ],
+    );
+  }
+}
+
+class WBAppBar extends StatefulWidget implements PreferredSizeWidget {
+  const WBAppBar({super.key});
+
+  @override
+  State<WBAppBar> createState() => _WBAppBarBarState();
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+}
+
+class _WBAppBarBarState extends State<WBAppBar> {
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      backgroundColor: AppColors.green.withOpacity(0.55),
+      automaticallyImplyLeading: false,
+      title: Row(
+        children: [
+          IconButton(
+            icon: Row(
+              children: [
+                Image.asset(
+                  AssetLocations.design,
+                  width: 35,
+                  height: 35,
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                Text(
+                  "TICKETIFY",
+                  style: GoogleFonts.allertaStencil(
+                      textStyle: const TextStyle(
+                        color: AppColors.black,
+                        fontSize: 25,
+                      )),
+                ),
+              ],
+            ),
+            onPressed: () {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => IssueListPage()));
             },
           ),
         ],
