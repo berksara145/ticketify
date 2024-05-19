@@ -4,6 +4,9 @@ import 'package:intl/intl.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:ticketify/objects/event_model.dart';
+import 'package:ticketify/pages/Organizator/event/events.dart';
+
 
 class FilterContainer extends StatefulWidget {
   const FilterContainer({
@@ -64,12 +67,20 @@ class _FilterContainerState extends State<FilterContainer> {
 
     if (response.statusCode == 200) {
       // Handle successful response
-      final List<dynamic> events = jsonDecode(response.body);
-      print(events);
-      // You can update the state to display these events
-    } else {
-      // Handle error
-      print('Failed to fetch filtered events');
+      final List<dynamic> eventsData = jsonDecode(response.body);
+      List<EventModel> filteredEvents = eventsData.map((event) {
+        // Convert dynamic data to EventModel objects
+        return EventModel.fromJson(event);
+      }).toList();
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => EventsPage(
+            filteredEvents: filteredEvents,
+          ),
+        ),
+      );
     }
   }
 
