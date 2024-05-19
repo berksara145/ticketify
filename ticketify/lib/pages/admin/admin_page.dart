@@ -7,6 +7,8 @@ import 'package:ticketify/pages/auth/widgets/appbar/user_app_bar.dart';
 import 'package:ticketify/pages/admin/admin_create_report.dart';
 import 'package:ticketify/pages/profile/widgets/profile_past_tickets.dart';
 
+import '../profile/profile_page.dart';
+
 class AdminPage extends StatefulWidget {
   const AdminPage({super.key});
 
@@ -28,13 +30,13 @@ class _AdminPageState extends State<AdminPage> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           PageSelector(
-            isCreateIssueEnabled: true,
+            isCreateIssueEnabled: false,
             returnActivePageName: (newName) {
               setState(() {
                 activePage = newName;
               });
             },
-            title: "Memduh Tutuş Welcome back!sssssssss",
+            title: "Admin Account!",
             pageListConfigs: [
               PageListConfig(
                   title: 'Users',
@@ -51,15 +53,7 @@ class _AdminPageState extends State<AdminPage> {
                 ],
                 iconData: Icons.place,
               ),
-              PageListConfig(
-                title: 'Settings',
-                menuItems: [
-                  'Profile Info',
-                  'Change Password',
-                ],
-                iconData: Icons.place,
-              ),
-            ],
+            ], settingsPage: AdminProfileSettings(),
           ),
           AdminCreateReport()
 
