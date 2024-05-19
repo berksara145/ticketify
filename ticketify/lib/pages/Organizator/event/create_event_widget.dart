@@ -435,7 +435,8 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                         InkWell(
                           onTap: () {
                             List<int> sectionPrices = List.generate(
-                                controllers.length, (index) => index);
+                                controllers.length,
+                                (index) => int.parse(controllers[index].text));
 
                             UtilConstants().createEvent(
                                 context,

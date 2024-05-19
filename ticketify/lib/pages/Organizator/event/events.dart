@@ -1,37 +1,36 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:ticketify/constants/constant_variables.dart';
 import 'package:ticketify/general_widgets/page_title.dart';
 import 'package:ticketify/objects/event_model.dart';
 import 'package:ticketify/pages/homepage/ItemGrid.dart';
 import 'package:ticketify/pages/homepage/one_item_view.dart';
+import 'package:http/http.dart' as http;
 
 
 class EventsPage extends StatefulWidget {
   EventsPage({
     Key? key,
-    this.filters = "empty",
-    this.filteredEvents,
+    required this.eventsFuture,
   }) : super(key: key);
 
-  final String? filters;
-  final List<EventModel>? filteredEvents;
+  final Future<List<EventModel>> eventsFuture;
 
   @override
   _EventsPageState createState() => _EventsPageState();
 }
 
+
 class _EventsPageState extends State<EventsPage> {
-  late Future<List<EventModel>> _eventsFuture;
+  //late Future<List<EventModel>>? _eventsFuture;
+  //late List<EventModel> filteredEvents;
+
 
   @override
   void initState() {
     super.initState();
-    if (widget.filteredEvents != null) {
-      // Use the filtered events if provided
-      _eventsFuture = Future.value(widget.filteredEvents);
-    } else {
-      _eventsFuture = UtilConstants().getAllEvents(context);
-    }
   }
 
   @override
@@ -52,7 +51,7 @@ class _EventsPageState extends State<EventsPage> {
             SizedBox(height: 20),
             Expanded(
               child: FutureBuilder<List<EventModel>>(
-                future: _eventsFuture,
+                future: widget.eventsFuture,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(child: CircularProgressIndicator());

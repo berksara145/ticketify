@@ -22,7 +22,7 @@ class _HomepageState extends State<Homepage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              child: DisplayProducts(),
+              child: PageLayout(),
             ),
           ],
         ),

@@ -7,6 +7,9 @@ import 'package:ticketify/pages/Organizator/venue/venues.dart';
 import 'package:ticketify/pages/auth/widgets/appbar/user_app_bar.dart';
 import 'package:ticketify/pages/profile/profile_page.dart';
 
+import '../../constants/constant_variables.dart';
+import '../../objects/event_model.dart';
+
 class OrganizerHomepage extends StatefulWidget {
   const OrganizerHomepage({super.key});
 
@@ -49,7 +52,7 @@ class _OrganizerHomepageState extends State<OrganizerHomepage> {
                 }, settingsPage: OrganizerProfileSettings(),),
           ),
           if (page == "Upcoming Events") ...[
-            EventsPage(),
+
           ],
           if (page == "Create Event") ...[
             CreateEventWidget(),
