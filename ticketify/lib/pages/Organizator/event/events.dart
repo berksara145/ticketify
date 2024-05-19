@@ -1,36 +1,83 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:ticketify/constants/constant_variables.dart';
 import 'package:ticketify/general_widgets/page_title.dart';
 import 'package:ticketify/objects/event_model.dart';
 import 'package:ticketify/pages/homepage/ItemGrid.dart';
 import 'package:ticketify/pages/homepage/one_item_view.dart';
+import 'package:http/http.dart' as http;
 
 
 class EventsPage extends StatefulWidget {
   EventsPage({
     Key? key,
     this.filters = "empty",
-    this.filteredEvents,
+    this.data,
   }) : super(key: key);
 
   final String? filters;
-  final List<EventModel>? filteredEvents;
+  final Map<String, dynamic>? data;
 
   @override
   _EventsPageState createState() => _EventsPageState();
 }
 
+
 class _EventsPageState extends State<EventsPage> {
-  late Future<List<EventModel>> _eventsFuture;
+  late Future<List<EventModel>>? _eventsFuture;
+  //late List<EventModel> filteredEvents;
+  final FlutterSecureStorage storage = const FlutterSecureStorage();
+
+  Future<String?> _getToken() async {
+    return await storage.read(key: 'access_token');
+  }
+
+  Future<List<EventModel>> _filterEvents() async {
+
+    final String? token = await _getToken();
+
+    final response = await http.post(
+      Uri.parse('http://127.0.0.1:5000/event/getFilteredEvents'), // Update with your backend URL
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode(widget.data),
+    );
+
+    if (response.statusCode == 200) {
+      // Handle successful response
+      final List<dynamic> eventsData = jsonDecode(response.body);
+      List<EventModel> filteredEvents = eventsData.map((event) {
+        // Convert dynamic data to EventModel objects
+        return EventModel.fromJson(event);
+      }).toList();
+      return filteredEvents;
+    }else {
+      // Handle error response
+      throw Exception('Failed to load events');
+    }
+  }
+
 
   @override
   void initState() {
     super.initState();
-    if (widget.filteredEvents != null) {
+    if (widget.data!['event_name'] == '' &&
+        widget.data!['selected_categories'] is List &&
+        widget.data!['selected_categories'].isEmpty &&
+        widget.data!['start_date'] == null &&
+        widget.data!['end_date'] == null &&
+        widget.data!['min_price'] == 0 &&
+        widget.data!['max_price'] == 10000000) {
       // Use the filtered events if provided
-      _eventsFuture = Future.value(widget.filteredEvents);
-    } else {
       _eventsFuture = UtilConstants().getAllEvents(context);
+
+    } else {
+      print('Filter Data: ${widget.data}');
+      _eventsFuture = _filterEvents();
     }
   }
 

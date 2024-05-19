@@ -8,17 +8,7 @@ import 'package:ticketify/objects/event_model.dart';
 import 'package:ticketify/pages/Organizator/event/events.dart';
 
 
-class FilterContainer extends StatefulWidget {
-  const FilterContainer({
-    super.key,
-    required this.title,
-  });
 
-  final String title;
-
-  @override
-  _FilterContainerState createState() => _FilterContainerState();
-}
 
 List<String> categoryOptions = [
   'Concert',
@@ -26,6 +16,27 @@ List<String> categoryOptions = [
   'Opera',
   // Add more categories as needed
 ];
+
+class FilterContainer extends StatefulWidget {
+  final String title;
+  final Function({
+  required String eventName,
+  required List<String> selectedCategories,
+  required DateTime? startDate,
+  required DateTime? endDate,
+  required double minPrice,
+  required double maxPrice,
+  }) updateFilters;
+
+  const FilterContainer({
+    Key? key,
+    required this.title,
+    required this.updateFilters,
+  }) : super(key: key);
+
+  @override
+  _FilterContainerState createState() => _FilterContainerState();
+}
 
 class _FilterContainerState extends State<FilterContainer> {
   // Define variables to hold filter values
@@ -36,74 +47,18 @@ class _FilterContainerState extends State<FilterContainer> {
   double minPrice = 0;
   double maxPrice = 10000000;
 
-  final FlutterSecureStorage storage = const FlutterSecureStorage();
-
-  Future<String?> _getToken() async {
-    return await storage.read(key: 'access_token');
-  }
-
-  void _filterEvents() async {
-
-    final String? token = await _getToken();
-
-    // Construct the query parameters
-    final Map<String, dynamic> data = {
-      'category_name': selectedCategories.isNotEmpty ? selectedCategories[0] : '',
-      'start_date': startDate != null ? DateFormat('yyyy-MM-dd').format(startDate!) : '',
-      'end_date': endDate != null ? DateFormat('yyyy-MM-dd').format(endDate!) : '',
-      'ticket_price_min': minPrice.toString(),
-      'ticket_price_max': maxPrice.toString(),
-      'event_name': eventName,
-    };
-
-    final response = await http.post(
-      Uri.parse('http://127.0.0.1:5000/event/getFilteredEvents'), // Update with your backend URL
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $token',
-      },
-      body: jsonEncode(data),
-    );
-
-    if (response.statusCode == 200) {
-      // Handle successful response
-      final List<dynamic> eventsData = jsonDecode(response.body);
-      List<EventModel> filteredEvents = eventsData.map((event) {
-        // Convert dynamic data to EventModel objects
-        return EventModel.fromJson(event);
-      }).toList();
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => EventsPage(
-            filteredEvents: filteredEvents,
-          ),
-        ),
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
-    double size;
-    if (screenSize.width > ScreenConstants.kMobileWidthThreshold) {
-      size = 250;
-    } else {
-      size = screenSize.width;
-    }
+    double size = screenSize.width > ScreenConstants.kMobileWidthThreshold ? 250 : screenSize.width;
+
     return Padding(
-      padding: const EdgeInsets.only(
-          top: 100.0, bottom: 40.0, right: 20.0, left: 20.0),
+      padding: const EdgeInsets.only(top: 100.0, bottom: 40.0, right: 20.0, left: 20.0),
       child: Container(
         width: size,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.0),
-          border: Border.all(
-            color: AppColors.greydark, // Siyah renkli border
-            width: 0.5, // Border kalınlığı
-          ),
+          border: Border.all(color: AppColors.greydark, width: 0.5),
           color: AppColors.filterColor,
           boxShadow: [
             BoxShadow(
@@ -115,10 +70,8 @@ class _FilterContainerState extends State<FilterContainer> {
           ],
         ),
         child: SingleChildScrollView(
-          // Add a SingleChildScrollView
           child: Padding(
-            padding: const EdgeInsets.all(
-                20.0), // Add padding to the content inside the container
+            padding: const EdgeInsets.all(20.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -135,225 +88,74 @@ class _FilterContainerState extends State<FilterContainer> {
                   ],
                 ),
                 const SizedBox(height: 20),
+                // Add your filter options here
                 _buildFilterOption(
                   'Event Name:',
                   TextField(
                     onChanged: (value) => setState(() => eventName = value),
                     decoration: InputDecoration(
                       border: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: AppColors.white, // Set the color of the border
-                          width: 1.0, // Set the width of the border
-                        ),
+                        borderSide: BorderSide(color: AppColors.white, width: 1.0),
                       ),
                       enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: AppColors
-                              .white, // Set the color of the border when TextField is enabled
-                          width: 1.0, // Set the width of the border
-                        ),
+                        borderSide: BorderSide(color: AppColors.white, width: 1.0),
                       ),
                       focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: AppColors
-                              .white, // Set the color of the border when TextField is focused
-                          width: 1.0, // Set the width of the border
-                        ),
+                        borderSide: BorderSide(color: AppColors.white, width: 1.0),
                       ),
                     ),
                   ),
                 ),
                 _buildFilterOption(
-                    'Choose Categories:',
-                    DropdownButtonFormField<String>(
-                      value: selectedCategories.isNotEmpty
-                          ? selectedCategories[0]
-                          : null,
-                      onChanged: (newValue) {
-                        setState(() {
-                          selectedCategories.clear();
-                          selectedCategories.add(newValue!);
-                        });
-                      },
-                      decoration: InputDecoration(
-                        border: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color:
-                                AppColors.white, // Set the color of the border
-                            width: 1.0, // Set the width of the border
-                          ),
-                        ),
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: AppColors
-                                .white, // Set the color of the border when TextField is enabled
-                            width: 1.0, // Set the width of the border
-                          ),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: AppColors
-                                .white, // Set the color of the border when TextField is focused
-                            width: 1.0, // Set the width of the border
-                          ),
-                        ),
+                  'Choose Categories:',
+                  DropdownButtonFormField<String>(
+                    value: selectedCategories.isNotEmpty ? selectedCategories[0] : null,
+                    onChanged: (newValue) {
+                      setState(() {
+                        selectedCategories.clear();
+                        if (newValue != null) {
+                          selectedCategories.add(newValue);
+                        }
+                      });
+                    },
+                    decoration: InputDecoration(
+                      border: UnderlineInputBorder(
+                        borderSide: BorderSide(color: AppColors.white, width: 1.0),
                       ),
-                      items: categoryOptions
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                    )),
-                _buildFilterOption(
-                    'Time Interval:',
-                    Row(
-                      children: [
-                        Expanded(
-                          child: InkWell(
-                            onTap: () {
-                              showDatePicker(
-                                context: context,
-                                initialDate: startDate ?? DateTime.now(),
-                                firstDate: DateTime(2000),
-                                lastDate: endDate ?? DateTime(2050),
-                              ).then((pickedDate) {
-                                if (pickedDate != null) {
-                                  setState(() {
-                                    startDate = pickedDate;
-                                  });
-                                }
-                              });
-                            },
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 8.0),
-                              child: Text(
-                                startDate != null
-                                    ? 'Start: ${DateFormat('yyyy-MM-dd').format(startDate!)}'
-                                    : 'Select start date',
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: InkWell(
-                            onTap: () {
-                              showDatePicker(
-                                context: context,
-                                initialDate: endDate ?? DateTime.now(),
-                                firstDate: startDate ?? DateTime(2000),
-                                lastDate: DateTime(2050),
-                              ).then((pickedDate) {
-                                if (pickedDate != null) {
-                                  setState(() {
-                                    endDate = pickedDate;
-                                  });
-                                }
-                              });
-                            },
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 8.0),
-                              child: Text(
-                                endDate != null
-                                    ? 'End: ${DateFormat('yyyy-MM-dd').format(endDate!)}'
-                                    : 'Select end date',
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    )),
-                _buildFilterOption(
-                    'Ticket Price:',
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            onChanged: (value) {
-                              setState(() {
-                                minPrice = double.tryParse(value) ?? 0;
-                              });
-                            },
-                            style: TextStyle(color: AppColors.greydark),
-                            keyboardType:
-                                TextInputType.numberWithOptions(decimal: true),
-                            decoration: InputDecoration(
-                              labelText: 'Min Price',
-                              border: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: AppColors
-                                      .white, // Set the color of the border
-                                  width: 1.0, // Set the width of the border
-                                ),
-                              ),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: AppColors
-                                      .white, // Set the color of the border when TextField is enabled
-                                  width: 1.0, // Set the width of the border
-                                ),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: AppColors
-                                      .white, // Set the color of the border when TextField is focused
-                                  width: 1.0, // Set the width of the border
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: TextField(
-                            onChanged: (value) {
-                              setState(() {
-                                maxPrice = double.tryParse(value) ?? 0;
-                              });
-                            },
-                            keyboardType:
-                                TextInputType.numberWithOptions(decimal: true),
-                            decoration: InputDecoration(
-                              labelText: 'Max Price',
-                              border: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: AppColors
-                                      .white, // Set the color of the border
-                                  width: 1.0, // Set the width of the border
-                                ),
-                              ),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: AppColors
-                                      .white, // Set the color of the border when TextField is enabled
-                                  width: 1.0, // Set the width of the border
-                                ),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: AppColors
-                                      .white, // Set the color of the border when TextField is focused
-                                  width: 1.0, // Set the width of the border
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    )),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: AppColors.white, width: 1.0),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: AppColors.white, width: 1.0),
+                      ),
+                    ),
+                    items: categoryOptions.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
+                ),
+                // Add more filter options here as needed
+                // Example: _buildFilterOption('Start Date', DatePickerWidget()),
                 ElevatedButton(
-                  onPressed: _filterEvents,
+                  onPressed: () {
+                    // Call the updateFilters method with the current filter data
+                    widget.updateFilters(
+                      eventName: eventName,
+                      selectedCategories: selectedCategories,
+                      startDate: startDate,
+                      endDate: endDate,
+                      minPrice: minPrice,
+                      maxPrice: maxPrice,
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
-                    textStyle: const TextStyle(
-                        fontSize: 16,
-                        color: AppColors.blue), // Set text color here
+                    textStyle: const TextStyle(fontSize: 16, color: AppColors.blue),
                   ),
-                  child: const Text('Reset Filters'),
+                  child: const Text('Apply Filters'), // Change button text if needed
                 ),
               ],
             ),
@@ -380,18 +182,8 @@ class _FilterContainerState extends State<FilterContainer> {
       ],
     );
   }
-
-  void _resetFilters() {
-    setState(() {
-      eventName = '';
-      selectedCategories.clear();
-      startDate = null;
-      endDate = null;
-      minPrice = 0;
-      maxPrice = 10000000;
-    });
-  }
 }
+
 
 class ClickableText extends StatefulWidget {
   const ClickableText({
