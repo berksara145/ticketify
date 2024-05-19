@@ -123,7 +123,12 @@ class _ProfilePageBuyerState extends State<ProfilePageBuyer> {
             ],
             settingsPage: BuyerProfileSettings(),
           ),
-          ProfileBrowseTickets(items: pastTickets),
+          if (activePage == 'Purchased Tickets' || activePage == 'Upcoming Tickets') ...[
+            ProfileBrowseTickets(
+              isPastTickets: activePage == 'Purchased Tickets',
+              items: pastTickets,
+            ),
+          ],
         ],
       ),
     );
@@ -389,6 +394,12 @@ class _BuyerProfileSettingsState extends State<BuyerProfileSettings> {
               ],
               settingsPage: BuyerProfileSettings(),
             ),
+            if (activePage == 'Purchased Tickets' || activePage == 'Upcoming Tickets') ...[
+              ProfileBrowseTickets(
+                isPastTickets: activePage == 'Purchased Tickets',
+                items: pastTickets,
+              ),
+            ],
           ]),
           Expanded(
             child: Container(
@@ -627,28 +638,6 @@ class _OrganizerProfileSettingsState extends State<OrganizerProfileSettings> {
       body: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Column(children: [
-            PageSelector(
-              isCreateIssueEnabled: true,
-              returnActivePageName: (newName) {
-                setState(() {
-                  activePage = newName;
-                });
-              },
-              title: "Welcome $name $surname",
-              pageListConfigs: [
-                PageListConfig(
-                  title: 'Tickets',
-                  menuItems: [
-                    'Purchased Tickets',
-                    'Upcoming Tickets',
-                  ],
-                  iconData: Icons.event,
-                ),
-              ],
-              settingsPage: OrganizerProfileSettings(),
-            ),
-          ]),
           Expanded(
             child: Container(
               decoration: BoxDecoration(
