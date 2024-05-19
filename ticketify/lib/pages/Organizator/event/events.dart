@@ -9,7 +9,6 @@ import 'package:ticketify/pages/homepage/ItemGrid.dart';
 import 'package:ticketify/pages/homepage/one_item_view.dart';
 import 'package:http/http.dart' as http;
 
-
 class EventsPage extends StatefulWidget {
   EventsPage({
     Key? key,
@@ -87,6 +86,7 @@ class _EventsPageState extends State<EventsPage> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => OneItemView(
+                                  event: event,
                                   post: post,
                                   event_id: event.eventId.toString(),
                                 ),
