@@ -7,6 +7,7 @@ import 'package:ticketify/pages/homepage/homepage.dart';
 import 'package:ticketify/pages/homepage/purchase_ticket.dart';
 import 'package:ticketify/pages/profile/profile_page.dart';
 import 'package:ticketify/pages/profile/widgets/event_details.dart';
+import 'package:ticketify/pages/workerbee/worker_homepage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home:
-          AuthScreen(), //Homepage(), /*EventDetails(), */ /*GoRouter.of(context).go('/auth'),*/
+          IssueListPage(), //Homepage(), /*EventDetails(), */ /*GoRouter.of(context).go('/auth'),*/
     );
   }
 }

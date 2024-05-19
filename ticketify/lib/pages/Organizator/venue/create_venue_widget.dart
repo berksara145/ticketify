@@ -127,17 +127,6 @@ class _CreateVenueWidgetState extends State<CreateVenueWidget> {
                     SizedBox(
                       height: 10,
                     ),
-                    TextFormField(
-                      onChanged: (value) {
-                        setState(() {
-                          venueName = value;
-                        });
-                      },
-                      decoration: const InputDecoration(
-                        labelText: 'Enter Name of the venue',
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
                     SizedBox(
                       height: 10,
                     ),

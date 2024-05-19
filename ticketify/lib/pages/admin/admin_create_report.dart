@@ -10,7 +10,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-
 class AdminCreateReport extends StatefulWidget {
   @override
   _AdminCreateReportState createState() => _AdminCreateReportState();
@@ -87,8 +86,12 @@ class _AdminCreateReportState extends State<AdminCreateReport> {
     if (response.statusCode == 200) {
       final List<dynamic> fetchedOrganizers = jsonDecode(response.body);
       setState(() {
-        organizers = fetchedOrganizers.map((organizer) => organizer['name'].toString()).toList();
-        organizersId = fetchedOrganizers.map((organizer) => organizer['user_id'] as int ).toList();
+        organizers = fetchedOrganizers
+            .map((organizer) => organizer['name'].toString())
+            .toList();
+        organizersId = fetchedOrganizers
+            .map((organizer) => organizer['user_id'] as int)
+            .toList();
       });
     } else {
       final Map<String, dynamic> responseBody = jsonDecode(response.body);
@@ -97,38 +100,44 @@ class _AdminCreateReportState extends State<AdminCreateReport> {
   }
 
   Future<void> _createReport() async {
-  final String? token = await _getToken();
+    final String? token = await _getToken();
 
-  // Extracting the selected organizer ID
-  String selectedOrganizer = _selectedOrgType;
-  int organizerId = organizersId[organizers.indexOf(selectedOrganizer)];
+    // Extracting the selected organizer ID
+    String selectedOrganizer = _selectedOrgType;
+    int organizerId = organizersId[organizers.indexOf(selectedOrganizer)];
 
-  // Make a POST request to the backend endpoint
-  final response = await http.post(
-    Uri.parse('http://localhost:5000/report/createReport'),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-      'Authorization': 'Bearer $token',
-    },
-    body: jsonEncode(<String, dynamic>{
-      'start_date': _formatDate(_startDate),
-      'end_date': _formatDate(_endDate),
-      'organizer_id': organizerId,
-    }),
-  );
+    // Make a POST request to the backend endpoint
+    final response = await http.post(
+      Uri.parse('http://localhost:5000/report/createReport'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'start_date': _formatDate(_startDate),
+        'end_date': _formatDate(_endDate),
+        'organizer_id': organizerId,
+      }),
+    );
 
-  if (response.statusCode == 200) {
-    // Navigate to a new page
-    // Parse the response body
-    final dynamic responseBody = jsonDecode(response.body);
-    final List<Map<String, dynamic>> reportData = List<Map<String, dynamic>>.from(responseBody);
+    if (response.statusCode == 200) {
+      // Navigate to a new page
+      // Parse the response body
+      final dynamic responseBody = jsonDecode(response.body);
+      final List<Map<String, dynamic>> reportData =
+          List<Map<String, dynamic>>.from(responseBody);
 
-  } else {
-    // Handle error if the request fails
-    final Map<String, dynamic> responseBody = jsonDecode(response.body);
-    _showErrorDialog(responseBody['error'] ?? 'Failed to create report');
+      // Navigate to the ShowReportPage with the report data
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ShowReportPage()),
+      );
+    } else {
+      // Handle error if the request fails
+      final Map<String, dynamic> responseBody = jsonDecode(response.body);
+      _showErrorDialog(responseBody['error'] ?? 'Failed to create report');
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -168,8 +177,8 @@ class _AdminCreateReportState extends State<AdminCreateReport> {
                       }).toList(),
                       onSelected: (String? selectedOrganizer) {
                         setState(() {
-                          _selectedOrgType = selectedOrganizer ?? ''; // Update the selected organizer
-
+                          _selectedOrgType = selectedOrganizer ??
+                              ''; // Update the selected organizer
                         });
                       },
                     ),
@@ -296,22 +305,6 @@ class _AdminCreateReportState extends State<AdminCreateReport> {
                   ],
                 ),
               ),
-              InkWell(
-                onTap: () {
-
-                  // Navigate to the ShowReportPage with the report data
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ShowReportPage()),
-                  );
-                },
-                child: Container(
-                    decoration:
-                    BoxDecoration(border: Border.all(width: 1)),
-                    padding: const EdgeInsets.all(5),
-                    child: const Text('Debug')),
-              ),
-
             ],
           ),
         ),

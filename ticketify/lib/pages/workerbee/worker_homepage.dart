@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ticketify/constants/constant_variables.dart';
+import 'package:ticketify/objects/issue.dart';
 import 'package:ticketify/pages/auth/widgets/appbar/user_app_bar.dart';
 
 class IssueListPage extends StatefulWidget {
@@ -154,18 +155,4 @@ class _IssueListPageState extends State<IssueListPage> {
       ),
     );
   }
-}
-
-class Issue {
-  final String title;
-  final String details;
-  List<String> responses;
-
-  Issue({
-    required this.title,
-    required this.details,
-    List<String>? responses,
-  }) : responses = responses ?? [];
-
-  bool get isSolved => responses.isNotEmpty;
 }

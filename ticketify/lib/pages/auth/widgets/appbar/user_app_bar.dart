@@ -51,8 +51,7 @@ class _UserAppBarState extends State<UserAppBar> {
                 ),
               ],
             ),
-            onPressed: () {
-            },
+            onPressed: () {},
           ),
         ],
       ),
@@ -65,8 +64,10 @@ class _UserAppBarState extends State<UserAppBar> {
             icon: Icon(Icons.shopping_bag_outlined)),
         IconButton(
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const ProfilePageBuyer()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const ProfilePageBuyer()));
             },
             icon: Icon(Icons.account_circle)),
         TextButton(
@@ -116,15 +117,17 @@ class _OrganizerAppBarState extends State<OrganizerAppBar> {
                   "TICKETIFY",
                   style: GoogleFonts.allertaStencil(
                       textStyle: const TextStyle(
-                        color: AppColors.black,
-                        fontSize: 25,
-                      )),
+                    color: AppColors.black,
+                    fontSize: 25,
+                  )),
                 ),
               ],
             ),
             onPressed: () {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => const OrganizerHomepage()));
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const OrganizerHomepage()));
             },
           ),
         ],
@@ -185,9 +188,9 @@ class _AdminAppBarState extends State<AdminAppBar> {
                   "TICKETIFY",
                   style: GoogleFonts.allertaStencil(
                       textStyle: const TextStyle(
-                        color: AppColors.black,
-                        fontSize: 25,
-                      )),
+                    color: AppColors.black,
+                    fontSize: 25,
+                  )),
                 ),
               ],
             ),

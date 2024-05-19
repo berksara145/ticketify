@@ -24,6 +24,10 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
   String briefDescription = '';
   String eventRules = '';
   List<String?> categories = [];
+  List<int?> sectionNumbers = [];
+  List<TextEditingController> controllers = [];
+
+  int? noofsections = 0;
   VenueModel? venueModel;
   List<String> eventType = ['concert', 'opera', 'comedy', 'theater'];
 
@@ -116,6 +120,188 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                         const Text('1 Day Event'),
                       ],
                     ),
+                    _isOneDayEvent
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              InkWell(
+                                onTap: () async {
+                                  final selectedDate = await showDatePicker(
+                                    context: context,
+                                    initialDate: _startDate,
+                                    firstDate: DateTime(2022),
+                                    lastDate: DateTime(2025),
+                                  );
+                                  if (selectedDate != null) {
+                                    setState(() {
+                                      _startDate = selectedDate;
+                                    });
+                                  }
+                                },
+                                child: Row(
+                                  children: [
+                                    const Icon(Icons.calendar_month_outlined),
+                                    Text(
+                                        'Select Date: ${_formatDate(_startDate)}'),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 10.0),
+                              InkWell(
+                                onTap: () async {
+                                  final selectedTime = await showTimePicker(
+                                    context: context,
+                                    initialTime: _startTime,
+                                  );
+                                  if (selectedTime != null) {
+                                    setState(() {
+                                      _startTime = selectedTime;
+                                    });
+                                  }
+                                },
+                                child: Row(
+                                  children: [
+                                    const Icon(Icons.access_time),
+                                    Text(
+                                        'Start Time: ${_formatTime(_startTime)}'),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 10.0),
+                              InkWell(
+                                onTap: () async {
+                                  final selectedTime = await showTimePicker(
+                                    context: context,
+                                    initialTime: _endTime,
+                                  );
+                                  if (selectedTime != null) {
+                                    setState(() {
+                                      _endTime = selectedTime;
+                                    });
+                                  }
+                                },
+                                child: Row(
+                                  children: [
+                                    const Icon(Icons.access_time),
+                                    Text('End Time: ${_formatTime(_endTime)}'),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          )
+                        : Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: InkWell(
+                                      onTap: () async {
+                                        final selectedDate =
+                                            await showDatePicker(
+                                          context: context,
+                                          initialDate: _startDate,
+                                          firstDate: DateTime(2022),
+                                          lastDate: DateTime(2025),
+                                        );
+                                        if (selectedDate != null) {
+                                          setState(() {
+                                            _startDate = selectedDate;
+                                          });
+                                        }
+                                      },
+                                      child: Row(
+                                        children: [
+                                          const Icon(
+                                              Icons.calendar_month_outlined),
+                                          Text(
+                                              'Start Date: ${_formatDate(_startDate)}'),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10.0),
+                                  Expanded(
+                                    child: InkWell(
+                                      onTap: () async {
+                                        final selectedDate =
+                                            await showDatePicker(
+                                          context: context,
+                                          initialDate: _endDate,
+                                          firstDate: _startDate,
+                                          lastDate: DateTime(2025),
+                                        );
+                                        if (selectedDate != null) {
+                                          setState(() {
+                                            _endDate = selectedDate;
+                                          });
+                                        }
+                                      },
+                                      child: Row(
+                                        children: [
+                                          const Icon(
+                                              Icons.calendar_month_outlined),
+                                          Text(
+                                              'End Date: ${_formatDate(_endDate)}'),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 10.0),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: InkWell(
+                                      onTap: () async {
+                                        final selectedTime =
+                                            await showTimePicker(
+                                          context: context,
+                                          initialTime: _startTime,
+                                        );
+                                        if (selectedTime != null) {
+                                          setState(() {
+                                            _startTime = selectedTime;
+                                          });
+                                        }
+                                      },
+                                      child: Row(
+                                        children: [
+                                          const Icon(Icons.access_time),
+                                          Text(
+                                              'Start Time: ${_formatTime(_startTime)}'),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10.0),
+                                  Expanded(
+                                    child: InkWell(
+                                      onTap: () async {
+                                        final selectedTime =
+                                            await showTimePicker(
+                                          context: context,
+                                          initialTime: _endTime,
+                                        );
+                                        if (selectedTime != null) {
+                                          setState(() {
+                                            _endTime = selectedTime;
+                                          });
+                                        }
+                                      },
+                                      child: Row(
+                                        children: [
+                                          const Icon(Icons.access_time),
+                                          Text(
+                                              'End Time: ${_formatTime(_endTime)}'),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                     const SizedBox(height: 10.0),
                     // Additional Widgets for date and time selection, venue, and category selection
                     DropdownMenu<Venue>(
@@ -123,11 +309,15 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                       hintText: "Select Venue",
                       onSelected: (Venue? venue) {
                         setState(() {
-                          selectedVenue = venue;
-                          categories = venue?.seats
+                          selectedVenue =
+                              venue; /*
+                          categories = venue?.seats // BURAYI DEĞİŞTİRYORUM 
                                   ?.map((seat) => seat.seatPosition)
                                   .toList() ??
                               [];
+                        */
+                          noofsections = venue?.venueSectionCount;
+                          print("noofsections $noofsections");
                         });
                       },
                       dropdownMenuEntries: venueModel?.venues?.map((venue) {
@@ -139,18 +329,48 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                           [],
                     ),
                     const SizedBox(height: 10.0),
-                    DropdownMenu<String>(
-                      expandedInsets: const EdgeInsets.all(0),
-                      hintText: categories.isEmpty
-                          ? "Select Venue First"
-                          : "Select Category",
-                      dropdownMenuEntries: categories.map((category) {
-                        return DropdownMenuEntry<String>(
-                          value: category!,
-                          label: category,
-                        );
-                      }).toList(),
-                    ),
+                    noofsections != null && noofsections! > 0
+                        ? Container(
+                            height: 500,
+                            child: GridView.builder(
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount:
+                                    3, // Adjust the number of columns as needed
+                                childAspectRatio:
+                                    2.0, // Adjust the aspect ratio as needed
+                              ),
+                              itemCount: noofsections!,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  width: 75,
+                                  height: 75,
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: TextField(
+                                    controller: controllers[index],
+                                    keyboardType: TextInputType.number,
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(),
+                                      labelText: 'Section ${index + 1}',
+                                    ),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        sectionNumbers[index] =
+                                            int.tryParse(value);
+                                      });
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
+                          )
+                        : Center(
+                            child: Text(
+                              'Select Venue First',
+                              style:
+                                  TextStyle(fontSize: 16.0, color: Colors.grey),
+                            ),
+                          ),
 
                     const SizedBox(height: 10.0),
                     Row(
