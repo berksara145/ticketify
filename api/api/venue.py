@@ -81,7 +81,7 @@ def create_venue():
         return jsonify({'error': str(e)}), 500
 
 # Endpoint to fetch all venues and their associated seats
-@venue_bp.route('/getVenue', methods=['GET'])
+@venue_bp.route('/getAllVenue', methods=['GET'])
 def get_all_venues():
     try:
         # Connect to the database
@@ -98,6 +98,37 @@ def get_all_venues():
             cursor.execute("SELECT * FROM seats WHERE venue_id = %s", (venue_id,))
             seats = cursor.fetchall()
             venue['seats'] = seats
+
+        # Close database connection
+        cursor.close()
+        connection.close()
+
+        return jsonify({'venues': venues}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+# Endpoint to fetch all venues and their associated seats
+@venue_bp.route('/getVenue', methods=['GET'])
+def get_venues():
+    try:
+        # Get the identity (claims) from the JWT token
+        identity = get_jwt_identity()
+        
+        # Extract user_id from the identity
+        user_id = identity.get('user_id')
+        
+        # Connect to the database
+        connection = get_db_connection()
+        cursor = connection.cursor(dictionary=True)
+    
+        # Retrieve venues associated with the user_id
+        cursor.execute("""
+            SELECT venue.* 
+            FROM venue
+            JOIN generate ON venue.venue_id = generate.venue_id
+            WHERE generate.user_id = %s
+        """, (user_id,))
+        venues = cursor.fetchall()
 
         # Close database connection
         cursor.close()

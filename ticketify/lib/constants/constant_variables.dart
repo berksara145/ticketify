@@ -172,7 +172,7 @@ class UtilConstants {
 
     try {
       // Construct the URI for your Flask backend endpoint
-      final uri = Uri.parse('http://127.0.0.1:5000/venue/getVenue');
+      final uri = Uri.parse('http://127.0.0.1:5000/venue/getAllVenue');
 
       // Send the HTTP GET request
       final response = await http.get(
