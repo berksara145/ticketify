@@ -71,13 +71,14 @@ class _PageLayoutState extends State<PageLayout> {
       } else {
         throw Exception('Unexpected response format: ${response.body}');
       }
-    } else {
+    }
+
+    if (response.statusCode == 204) {
+      return [];
+    }else {
       throw Exception('Failed to load events');
     }
   }
-
-
-
 
   // Method to update state with filter data
   void updateFilters({

@@ -362,12 +362,20 @@ def get_filtered_events():
         data = request.json
 
         # Extract query parameters
-        category_name = data.get('category_name', '')
+        category_name = data.get('selected_categories', '')
         start_date = data.get('start_date', '')
         end_date = data.get('end_date', '')
-        ticket_price_min = data.get('ticket_price_min', '')
-        ticket_price_max = data.get('ticket_price_max', '')
+        ticket_price_min = data.get('min_price', '')
+        ticket_price_max = data.get('max_price', '')
         event_name = data.get('event_name', '')
+
+        print('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
+        print("Category Name:", category_name)
+        print("Start Date:", start_date)
+        print("End Date:", end_date)
+        print("Ticket Price Min:", ticket_price_min)
+        print("Ticket Price Max:", ticket_price_max)
+        print("Event Name:", event_name)
 
         # Connect to the database
         connection = get_db_connection()
@@ -418,6 +426,7 @@ def get_filtered_events():
 
         # Fetch all matching events
         events = cursor.fetchall()
+
         if not events:  # If no events found
             return jsonify([]), 204 # or perform any other action
         else:
@@ -428,7 +437,7 @@ def get_filtered_events():
             # Format the results
             result = []
             for event in events:
-                result.append({
+                event_dict = {
                     "event_id": event[0],
                     "event_name": event[1],
                     "start_date": event[2],  # Format date as string
@@ -446,7 +455,8 @@ def get_filtered_events():
                     "performer_name": event[12],
                     "organizer_first_name": event[13],
                     "organizer_last_name": event[14]
-                })
+                }
+            result.append(event_dict)
             return jsonify(result), 200
 
     except Exception as e:
