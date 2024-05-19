@@ -162,6 +162,7 @@ def create_event():
         event_rules = data.get('event_rules')
         venue_id = data.get('venue_id')
         ticket_prices = data.get('ticket_prices')  # Array of ticket prices)
+        performer_name = "performerr"
 
         # Validate required data
         if not ( event_name and start_date and end_date and event_category
