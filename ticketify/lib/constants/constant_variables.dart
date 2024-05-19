@@ -101,6 +101,9 @@ class UtilConstants {
 
         return events;
       } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('No Event Found!')),
+        );
         final Map<String, dynamic> responseBody = jsonDecode(response.body);
         print(response.body); // Optional: For debugging purposes
 
@@ -151,6 +154,9 @@ class UtilConstants {
 
     // Handle the response from the backend
     if (response.statusCode == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Venue is created!')),
+      );
       // Operation successful, navigate to homepage or perform other actions
       // Example: Navigator.pushReplacementNamed(context, '/homepage');
     } else {
@@ -247,6 +253,8 @@ class UtilConstants {
 
     // Handle the response from the backend
     if (response.statusCode == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Event is created!')));
       // Operation successful, navigate to homepage or perform other actions
       // Example: Navigator.pushReplacementNamed(context, '/homepage');
     } else {
@@ -336,6 +344,8 @@ class UtilConstants {
 
     // Handle the response from the backend
     if (response.statusCode == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('User is delete!')));
       // Operation successful, navigate to homepage or perform other actions
       // Example: Navigator.pushReplacementNamed(context, '/homepage');
     } else {
