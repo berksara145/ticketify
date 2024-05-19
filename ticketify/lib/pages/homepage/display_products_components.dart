@@ -1,6 +1,9 @@
 import 'package:ticketify/constants/constant_variables.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class FilterContainer extends StatefulWidget {
   const FilterContainer({
@@ -27,10 +30,48 @@ class _FilterContainerState extends State<FilterContainer> {
   List<String> selectedCategories = [];
   DateTime? startDate;
   DateTime? endDate;
-  String venueLocation = '';
-  String cityName = '';
   double minPrice = 0;
   double maxPrice = 10000000;
+
+  final FlutterSecureStorage storage = const FlutterSecureStorage();
+
+  Future<String?> _getToken() async {
+    return await storage.read(key: 'access_token');
+  }
+
+  void _filterEvents() async {
+
+    final String? token = await _getToken();
+
+    // Construct the query parameters
+    final Map<String, dynamic> data = {
+      'category_name': selectedCategories.isNotEmpty ? selectedCategories[0] : '',
+      'start_date': startDate != null ? DateFormat('yyyy-MM-dd').format(startDate!) : '',
+      'end_date': endDate != null ? DateFormat('yyyy-MM-dd').format(endDate!) : '',
+      'ticket_price_min': minPrice.toString(),
+      'ticket_price_max': maxPrice.toString(),
+      'event_name': eventName,
+    };
+
+    final response = await http.post(
+      Uri.parse('http://127.0.0.1:5000/event/getFilteredEvents'), // Update with your backend URL
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode(data),
+    );
+
+    if (response.statusCode == 200) {
+      // Handle successful response
+      final List<dynamic> events = jsonDecode(response.body);
+      print(events);
+      // You can update the state to display these events
+    } else {
+      // Handle error
+      print('Failed to fetch filtered events');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -335,8 +376,6 @@ class _FilterContainerState extends State<FilterContainer> {
       selectedCategories.clear();
       startDate = null;
       endDate = null;
-      venueLocation = '';
-      cityName = '';
       minPrice = 0;
       maxPrice = 10000000;
     });
