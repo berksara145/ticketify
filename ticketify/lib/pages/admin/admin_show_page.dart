@@ -120,6 +120,21 @@ class ReportCard extends StatelessWidget {
               'Total Revenue: \$${report['total_revenue']}',
               style: TextStyle(fontSize: 16),
             ),
+            SizedBox(height: 8.0),
+            Text(
+              'Start date: \$${report['start_date']}',
+              style: TextStyle(fontSize: 16),
+            ),
+            SizedBox(height: 8.0),
+            Text(
+              'End date: \$${report['end_date']}',
+              style: TextStyle(fontSize: 16),
+            ),
+            SizedBox(height: 8.0),
+            Text(
+              'Creation date: \$${report['created_at']}',
+              style: TextStyle(fontSize: 16),
+            ),
           ],
         ),
       ),
