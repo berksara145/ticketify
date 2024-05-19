@@ -71,7 +71,7 @@ class _VenuesPageState extends State<VenuesPage> {
                             );
                           },
                           child: Card(
-                            color: Colors.grey,
+                            color: AppColors.greylight,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15.0),
                             ),
