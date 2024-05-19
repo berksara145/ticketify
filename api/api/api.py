@@ -17,6 +17,7 @@ from response import response_bp
 from ticket import ticket_bp
 from report import report_bp
 from profile import profile_bp
+from user import user_bp
 
 app = Flask(__name__)
 CORS(app) 
@@ -29,13 +30,11 @@ app.config['MYSQL_DB'] = 'cs353dbproject'
 
 mysql = MySQL(app)
 
-print("heree1")
 
 app.config['JWT_SECRET_KEY'] = 'very secret key'  # Change this to your preferred secret key
 jwt = JWTManager(app)
 
 
-print("heree2")
 
 # Register custom error handlers for JWT exceptions
 jwt.expired_token_loader(expired_token_callback)
@@ -44,7 +43,6 @@ jwt.unauthorized_loader(unauthorized_callback)
 jwt.needs_fresh_token_loader(needs_fresh_token_callback)
 jwt.revoked_token_loader(revoked_token_callback)
 
-print("heree3")
 
 # Registerings
 event_bp.before_request(check_access_token)
@@ -68,7 +66,9 @@ app.register_blueprint(report_bp)
 profile_bp.before_request(check_access_token)
 app.register_blueprint(profile_bp)
 
-print("heree4")
+user_bp.before_request(check_access_token)
+app.register_blueprint(user_bp)
+
 
 def execute_schema_sql():
     print("handling schemas")
