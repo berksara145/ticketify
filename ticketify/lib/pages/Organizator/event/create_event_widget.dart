@@ -24,7 +24,6 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
   String briefDescription = '';
   String eventRules = '';
   List<String?> categories = [];
-  List<int?> sectionNumbers = [];
   List<TextEditingController> controllers = [];
 
   int? noofsections = 0;
@@ -362,12 +361,6 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                       border: OutlineInputBorder(),
                                       labelText: 'Section ${index + 1}',
                                     ),
-                                    onChanged: (value) {
-                                      setState(() {
-                                        sectionNumbers[index] =
-                                            int.tryParse(value);
-                                      });
-                                    },
                                   ),
                                 );
                               },
@@ -441,18 +434,21 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                         const SizedBox(width: 10.0),
                         InkWell(
                           onTap: () {
+                            List<int> sectionPrices = List.generate(
+                                controllers.length, (index) => index);
+
                             UtilConstants().createEvent(
                                 context,
                                 _eventName,
                                 _startDate.toString(),
                                 _endDate.toString(),
-                                "selectedCategory",
+                                _selectedEventType,
                                 "https://picsum.photos/200/300",
                                 briefDescription,
                                 eventRules,
                                 selectedVenue!.venueId!,
                                 "performerName",
-                                [10, 20]);
+                                sectionPrices);
                           },
                           child: Container(
                               decoration:
