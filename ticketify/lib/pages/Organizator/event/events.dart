@@ -87,7 +87,7 @@ class _EventsPageState extends State<EventsPage> {
                             );
                           },
                           child: Card(
-                            color: Colors.grey,
+                            color: AppColors.greylight,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15.0),
                             ),
