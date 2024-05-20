@@ -117,6 +117,7 @@ def browse_issues():
 
         # Prepare response data
         issue_list = []
+        print(issues[1])
         for issue in issues:
             issue_dict = {
                 "issue_id": issue[0],

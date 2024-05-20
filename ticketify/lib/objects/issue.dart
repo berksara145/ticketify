@@ -1,4 +1,3 @@
-
 class Issue {
   final String id;
   final String title;
@@ -14,10 +13,13 @@ class Issue {
 
   factory Issue.fromJson(Map<String, dynamic> json) {
     return Issue(
-      id: json['issue_id'],
+      id: json['issue_id'].toString(), // Convert issue_id to String
       title: json['issue_name'] ?? '',
       details: json['issue_text'] ?? '',
-      responses: List<String>.from(json['responses'] ?? []),
+      responses: json['responses'] != null
+          ? List<String>.from(
+              json['responses'].map((response) => response['response_text']))
+          : [],
     );
   }
 

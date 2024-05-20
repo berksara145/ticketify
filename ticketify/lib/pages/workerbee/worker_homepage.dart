@@ -13,8 +13,7 @@ class IssueListPage extends StatefulWidget {
 }
 
 class _IssueListPageState extends State<IssueListPage> {
-
-  late List<Issue> issues ;
+  List<Issue> issues = [];
 
   TextEditingController textController = TextEditingController();
   Issue? selectedIssue;
@@ -24,7 +23,7 @@ class _IssueListPageState extends State<IssueListPage> {
     return await storage.read(key: 'access_token');
   }
 
-  Future<void> createIssueResponse( String responseText) async {
+  Future<void> createIssueResponse(String responseText) async {
     try {
       final String? token = await getToken();
       final response = await http.post(
@@ -48,7 +47,8 @@ class _IssueListPageState extends State<IssueListPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Failed to create issue response!')),
         );
-        print('Failed to create issue response. Status code: ${response.statusCode}');
+        print(
+            'Failed to create issue response. Status code: ${response.statusCode}');
         // Handle error or display a message to the user
       }
     } catch (e) {
@@ -70,9 +70,8 @@ class _IssueListPageState extends State<IssueListPage> {
 
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = jsonDecode(response.body);
-        List<Issue> issuesList = jsonData
-            .map<Issue>((json) => Issue.fromJson(json))
-            .toList();
+        List<Issue> issuesList =
+            jsonData.map<Issue>((json) => Issue.fromJson(json)).toList();
         return issuesList;
       } else {
         print('Failed to fetch issues. Status code: ${response.statusCode}');
