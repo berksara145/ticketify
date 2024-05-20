@@ -43,6 +43,17 @@ class _FilterContainerState extends State<FilterContainer> {
   DateTime? endDate;
   double minPrice = 0;
   double maxPrice = 10000000;
+  void _updateMinPrice(String value) {
+    setState(() {
+      minPrice = int.tryParse(value) as double;
+    });
+  }
+
+  void _updateMaxPrice(String value) {
+    setState(() {
+      maxPrice = int.tryParse(value) as double;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -141,6 +152,67 @@ class _FilterContainerState extends State<FilterContainer> {
                     }).toList(),
                   ),
                 ),
+                _buildFilterOption(
+                  'Min Price:',
+                  TextField(
+                    onChanged: (value) => setState(() => eventName = value),
+                    decoration: InputDecoration(
+                      border: UnderlineInputBorder(
+                        borderSide:
+                            BorderSide(color: AppColors.white, width: 1.0),
+                      ),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide:
+                            BorderSide(color: AppColors.white, width: 1.0),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide:
+                            BorderSide(color: AppColors.white, width: 1.0),
+                      ),
+                    ),
+                  ),
+                ),
+                _buildFilterOption(
+                  'Min Price:',
+                  TextField(
+                    onChanged: _updateMinPrice,
+                    decoration: InputDecoration(
+                      border: UnderlineInputBorder(
+                        borderSide:
+                            BorderSide(color: AppColors.white, width: 1.0),
+                      ),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide:
+                            BorderSide(color: AppColors.white, width: 1.0),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide:
+                            BorderSide(color: AppColors.white, width: 1.0),
+                      ),
+                    ),
+                  ),
+                ),
+                _buildFilterOption(
+                  'Max Price:',
+                  TextField(
+                    onChanged: _updateMaxPrice,
+                    decoration: InputDecoration(
+                      border: UnderlineInputBorder(
+                        borderSide:
+                            BorderSide(color: AppColors.white, width: 1.0),
+                      ),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide:
+                            BorderSide(color: AppColors.white, width: 1.0),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide:
+                            BorderSide(color: AppColors.white, width: 1.0),
+                      ),
+                    ),
+                  ),
+                ),
+
                 _buildFilterOption(
                     'Time Interval:',
                     Row(
