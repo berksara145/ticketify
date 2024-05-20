@@ -19,7 +19,7 @@ class OrganizerHomepage extends StatefulWidget {
 
 class _OrganizerHomepageState extends State<OrganizerHomepage> {
   String page = "";
-
+  late Future<List<EventModel>> _eventsFuture = UtilConstants().getAllEvents(context);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +52,8 @@ class _OrganizerHomepageState extends State<OrganizerHomepage> {
                 }, settingsPage: OrganizerProfileSettings(),),
           ),
           if (page == "Upcoming Events") ...[
-
+            
+            EventsPage(eventsFuture: _eventsFuture,),
           ],
           if (page == "Create Event") ...[
             CreateEventWidget(),
