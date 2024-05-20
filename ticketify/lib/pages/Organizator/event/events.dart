@@ -21,11 +21,9 @@ class EventsPage extends StatefulWidget {
   _EventsPageState createState() => _EventsPageState();
 }
 
-
 class _EventsPageState extends State<EventsPage> {
   //late Future<List<EventModel>>? _eventsFuture;
   //late List<EventModel> filteredEvents;
-
 
   @override
   void initState() {
@@ -124,6 +122,12 @@ class _EventsPageState extends State<EventsPage> {
                                     Text(
                                       event.venue?.venueName ??
                                           "No venue specified",
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    Text(
+                                      event.startDate ?? "No time ",
                                       style: const TextStyle(
                                         fontSize: 14,
                                       ),

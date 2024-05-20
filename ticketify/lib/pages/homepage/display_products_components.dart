@@ -7,9 +7,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:ticketify/objects/event_model.dart';
 import 'package:ticketify/pages/Organizator/event/events.dart';
 
-
-
-
 List<String> categoryOptions = [
   'concert',
   'festival',
@@ -20,12 +17,12 @@ List<String> categoryOptions = [
 class FilterContainer extends StatefulWidget {
   final String title;
   final Function({
-  required String eventName,
-  required String? selectedCategories,
-  required DateTime? startDate,
-  required DateTime? endDate,
-  required double minPrice,
-  required double maxPrice,
+    required String eventName,
+    required String? selectedCategories,
+    required DateTime? startDate,
+    required DateTime? endDate,
+    required double minPrice,
+    required double maxPrice,
   }) updateFilters;
 
   const FilterContainer({
@@ -50,10 +47,13 @@ class _FilterContainerState extends State<FilterContainer> {
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
-    double size = screenSize.width > ScreenConstants.kMobileWidthThreshold ? 250 : screenSize.width;
+    double size = screenSize.width > ScreenConstants.kMobileWidthThreshold
+        ? 250
+        : screenSize.width;
 
     return Padding(
-      padding: const EdgeInsets.only(top: 100.0, bottom: 40.0, right: 20.0, left: 20.0),
+      padding: const EdgeInsets.only(
+          top: 100.0, bottom: 40.0, right: 20.0, left: 20.0),
       child: Container(
         width: size,
         decoration: BoxDecoration(
@@ -95,13 +95,16 @@ class _FilterContainerState extends State<FilterContainer> {
                     onChanged: (value) => setState(() => eventName = value),
                     decoration: InputDecoration(
                       border: UnderlineInputBorder(
-                        borderSide: BorderSide(color: AppColors.white, width: 1.0),
+                        borderSide:
+                            BorderSide(color: AppColors.white, width: 1.0),
                       ),
                       enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: AppColors.white, width: 1.0),
+                        borderSide:
+                            BorderSide(color: AppColors.white, width: 1.0),
                       ),
                       focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: AppColors.white, width: 1.0),
+                        borderSide:
+                            BorderSide(color: AppColors.white, width: 1.0),
                       ),
                     ),
                   ),
@@ -117,16 +120,20 @@ class _FilterContainerState extends State<FilterContainer> {
                     },
                     decoration: InputDecoration(
                       border: UnderlineInputBorder(
-                        borderSide: BorderSide(color: AppColors.white, width: 1.0),
+                        borderSide:
+                            BorderSide(color: AppColors.white, width: 1.0),
                       ),
                       enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: AppColors.white, width: 1.0),
+                        borderSide:
+                            BorderSide(color: AppColors.white, width: 1.0),
                       ),
                       focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: AppColors.white, width: 1.0),
+                        borderSide:
+                            BorderSide(color: AppColors.white, width: 1.0),
                       ),
                     ),
-                    items: categoryOptions.map<DropdownMenuItem<String>>((String value) {
+                    items: categoryOptions
+                        .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
                         child: Text(value),
@@ -134,6 +141,67 @@ class _FilterContainerState extends State<FilterContainer> {
                     }).toList(),
                   ),
                 ),
+                _buildFilterOption(
+                    'Time Interval:',
+                    Row(
+                      children: [
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              showDatePicker(
+                                context: context,
+                                initialDate: startDate ?? DateTime.now(),
+                                firstDate: DateTime(2000),
+                                lastDate: endDate ?? DateTime(2050),
+                              ).then((pickedDate) {
+                                if (pickedDate != null) {
+                                  setState(() {
+                                    startDate = pickedDate;
+                                  });
+                                }
+                              });
+                            },
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 8.0),
+                              child: Text(
+                                startDate != null
+                                    ? 'Start: ${DateFormat('yyyy-MM-dd').format(startDate!)}'
+                                    : 'Select start date',
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              showDatePicker(
+                                context: context,
+                                initialDate: endDate ?? DateTime.now(),
+                                firstDate: startDate ?? DateTime(2000),
+                                lastDate: DateTime(2050),
+                              ).then((pickedDate) {
+                                if (pickedDate != null) {
+                                  setState(() {
+                                    endDate = pickedDate;
+                                  });
+                                }
+                              });
+                            },
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 8.0),
+                              child: Text(
+                                endDate != null
+                                    ? 'End: ${DateFormat('yyyy-MM-dd').format(endDate!)}'
+                                    : 'Select end date',
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )),
                 // Add more filter options here as needed
                 // Example: _buildFilterOption('Start Date', DatePickerWidget()),
                 ElevatedButton(
@@ -150,9 +218,11 @@ class _FilterContainerState extends State<FilterContainer> {
                   },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
-                    textStyle: const TextStyle(fontSize: 16, color: AppColors.blue),
+                    textStyle:
+                        const TextStyle(fontSize: 16, color: AppColors.blue),
                   ),
-                  child: const Text('Apply Filters'), // Change button text if needed
+                  child: const Text(
+                      'Apply Filters'), // Change button text if needed
                 ),
               ],
             ),
@@ -180,7 +250,6 @@ class _FilterContainerState extends State<FilterContainer> {
     );
   }
 }
-
 
 class ClickableText extends StatefulWidget {
   const ClickableText({
