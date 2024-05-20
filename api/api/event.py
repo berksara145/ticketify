@@ -171,9 +171,12 @@ def create_event():
                 and ticket_prices):
             return jsonify({'error': 'Missing required data'}), 400
 
-        # Convert date strings to datetime objects
-        start_date = datetime.strptime(start_date, '%Y-%m-%d %H:%M:%S.%f').date()
-        end_date = datetime.strptime(end_date, '%Y-%m-%d %H:%M:%S.%f').date()
+       # Convert date strings to datetime objects and then format them as 'YYYY-MM-DD'
+        if start_date:
+            start_date = datetime.strptime(start_date, '%Y-%m-%d %H:%M:%S.%f').strftime('%Y-%m-%d')
+        if end_date:
+            end_date = datetime.strptime(end_date, '%Y-%m-%d %H:%M:%S.%f').strftime('%Y-%m-%d')
+
 
         # Connect to the database
         connection = get_db_connection()
@@ -405,12 +408,17 @@ def get_filtered_events():
         if category_name:
             query += " AND e.event_category = %s"
             query_params.append(category_name)
+            # Convert the start_date to yyyy-MM-dd format
         if start_date:
+            formatted_start_date = datetime.strptime(start_date, "%Y-%m-%dT%H:%M:%S.%f").strftime("%Y-%m-%d")
             query += " AND e.start_date >= %s"
-            query_params.append(start_date)
+            query_params.append(formatted_start_date)
+        # Convert the end_date to yyyy-MM-dd format
         if end_date:
+            formatted_end_date = datetime.strptime(end_date, "%Y-%m-%dT%H:%M:%S.%f").strftime("%Y-%m-%d")
+            print(formatted_end_date)
             query += " AND e.end_date <= %s"
-            query_params.append(end_date)
+            query_params.append(formatted_end_date)
         if ticket_price_min:
             query += " AND CAST(SUBSTRING_INDEX(e.ticket_prices, '-', 1) AS DECIMAL) >= %s"
             query_params.append(ticket_price_min)

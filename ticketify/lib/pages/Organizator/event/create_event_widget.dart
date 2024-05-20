@@ -134,6 +134,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                   if (selectedDate != null) {
                                     setState(() {
                                       _startDate = selectedDate;
+                                      _endDate = selectedDate;
                                     });
                                   }
                                 },
