@@ -51,6 +51,9 @@ def deleteUser():
         user_id = data.get('user_id')
         user_type = data.get('user_type')
 
+        print(user_id)
+        print(user_type)
+
         if not (user_id and user_type is not None):
             return jsonify({'error': 'Missing required parameters'}), 400
 
