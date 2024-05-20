@@ -130,6 +130,7 @@ class ProfileItemData {
   final String location;
   final String organizer;
   final int ticketPrice;
+  final String ticket_id;
 
   ProfileItemData({
     this.imageUrl = "https://picsum.photos/200/300",
@@ -138,6 +139,7 @@ class ProfileItemData {
     required this.location,
     required this.organizer,
     required this.ticketPrice,
+    required this.ticket_id
   });
 
   get address => null;

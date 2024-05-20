@@ -58,6 +58,7 @@ class _ProfilePageBuyerState extends State<ProfilePageBuyer> {
                       "${json['organizer_first_name']} ${json['organizer_last_name']}",
                   imageUrl:
                       "https://picsum.photos/200/300", // Default image URL
+                  ticket_id: "${json['ticket_id']}"
                 ))
             .toList();
       });
@@ -341,7 +342,8 @@ class _BuyerProfileSettingsState extends State<BuyerProfileSettings> {
                   organizer:
                       "${json['organizer_first_name']} ${json['organizer_last_name']}",
                   imageUrl:
-                      "https://picsum.photos/200/300", // Default image URL
+                      "https://picsum.photos/200/300", // Default image URL Default image URL
+                  ticket_id: "${json['ticket_id']}"
                 ))
             .toList();
       });

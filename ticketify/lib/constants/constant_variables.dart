@@ -484,4 +484,44 @@ class UtilConstants {
       throw Exception('Error buying ticket(s): $e');
     }
   }
+
+  Future<void> refundTicket(
+      BuildContext context, String ticketId) async {
+    final Map<String, dynamic> data = {
+      'ticket_id': ticketId
+    };
+
+    final String? token = await getToken();
+
+    try {
+      final uri = Uri.parse('http://127.0.0.1:5000/ticket/returnTicket');
+      final response = await http.post(
+        uri,
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode(data),
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> jsonData = jsonDecode(response.body);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Refund completed!')),
+        );
+      } else {
+        print("error");
+
+        final Map<String, dynamic> responseBody = jsonDecode(response.body);
+        _showErrorDialog(
+            responseBody['error'] ?? 'Can not refund ticket: ', context);
+        throw Exception('Failed to load ticket prices: ${response.body}');
+      }
+    } catch (e) {
+      print("exception");
+
+      // Handle any errors that might occur during the HTTP request
+      throw Exception('Error buying ticket(s): $e');
+    }
+  }
 }

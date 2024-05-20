@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:ticketify/constants/constant_variables.dart';
+import 'package:ticketify/pages/profile/profile_page.dart';
 import 'package:ticketify/pages/profile/widgets/profile_past_tickets.dart'; // Import the ProfileItemData class
 
 class EventDetails extends StatelessWidget {
   final ProfileItemData event;
+
 
   const EventDetails({super.key, required this.event});
 
@@ -103,6 +105,12 @@ class EventDetails extends StatelessWidget {
                       InkWell(
                         onTap: () {
                           // Handle refund
+                          UtilConstants utilConstants = UtilConstants();
+                          utilConstants.refundTicket(context, event.ticket_id);
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => const ProfilePageBuyer()),
+                          );
                         },
                         child: Container(
                           decoration: BoxDecoration(
