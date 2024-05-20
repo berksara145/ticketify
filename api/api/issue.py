@@ -117,7 +117,6 @@ def browse_issues():
 
         # Prepare response data
         issue_list = []
-        print(issues[1])
         for issue in issues:
             issue_dict = {
                 "issue_id": issue[0],
@@ -141,4 +140,6 @@ def browse_issues():
         return jsonify(issue_list), 200
 
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        traceback_info = traceback.format_exc()
+        print(traceback_info)
+        return jsonify({'error': str(e), 'traceback': traceback_info}), 500

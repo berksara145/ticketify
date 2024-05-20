@@ -166,3 +166,33 @@ DEBUG:root:Attempting to fetch reports
 DEBUG:root:Reports fetched successfully
 INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:36:42] "GET /report/getReports HTTP/1.1" 200 -
 INFO:werkzeug: * Detected change in '/api/report.py', reloading
+DEBUG:root:Attempting to fetch reports
+DEBUG:root:Reports fetched successfully
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:48:09] "GET /report/getReports HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:49:15] "OPTIONS /register HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:49:16] "POST /register HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:49:22] "OPTIONS /login HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:49:22] "POST /login HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:49:22] "OPTIONS /issue/browseIssues HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:49:22] "[35m[1mGET /issue/browseIssues HTTP/1.1[0m" 500 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:49:33] "OPTIONS /login HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:49:33] "POST /login HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:49:33] "OPTIONS /event/getAllEvents HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:49:33] "GET /event/getAllEvents HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:49:40] "OPTIONS /event/getAllEvents HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:49:40] "GET /event/getAllEvents HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:49:44] "OPTIONS /ticket/viewPastTickets HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:49:44] "GET /ticket/viewPastTickets HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:49:54] "OPTIONS /issue/createIssue HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:49:54] "POST /issue/createIssue HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:49:54] "OPTIONS /event/getAllEvents HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:49:55] "GET /event/getAllEvents HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:50:01] "OPTIONS /login HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:50:01] "POST /login HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:50:01] "OPTIONS /issue/browseIssues HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:50:01] "[35m[1mGET /issue/browseIssues HTTP/1.1[0m" 500 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:50:19] "OPTIONS /login HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:50:19] "POST /login HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:50:19] "OPTIONS /issue/browseIssues HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:50:19] "[35m[1mGET /issue/browseIssues HTTP/1.1[0m" 500 -
+INFO:werkzeug: * Detected change in '/api/issue.py', reloading
