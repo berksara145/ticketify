@@ -98,7 +98,7 @@ class EventDetails extends StatelessWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                        child: Text('450 TL',
+                        child: Text('${event.ticketPrice}',
                             style: TextStyle(fontWeight: FontWeight.bold)),
                       ),
                       SizedBox(width: 20),
