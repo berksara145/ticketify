@@ -466,9 +466,9 @@ class UtilConstants {
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonData = jsonDecode(response.body);
-        _showErrorDialog(
-            jsonData['message'] ?? 'Can not buy ticket(s): ', context);
-        print(response.body);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Purchase completed!')),
+        );
       } else {
         print("error");
 
