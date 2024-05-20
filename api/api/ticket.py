@@ -361,7 +361,7 @@ def insert_money():
         cursor.close()
         connection.close()
 
-        return jsonify({'message': 'Money inserted successfully', 'new_balance': new_balance, "user_id":user_id}), 200
+        return jsonify({'message': 'Money inserted successfully', 'new_balance': str(new_balance), "user_id":user_id}), 200
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500

@@ -53,6 +53,7 @@ class _ProfilePageBuyerState extends State<ProfilePageBuyer> {
                   title: json['event_name'],
                   acceptDate: json['start_date'],
                   location: json['venue_name'],
+                  ticketPrice: json['ticket_price'],
                   organizer:
                       "${json['organizer_first_name']} ${json['organizer_last_name']}",
                   imageUrl:
@@ -171,13 +172,17 @@ class _BuyerProfileSettingsState extends State<BuyerProfileSettings> {
       body: jsonEncode(data),
     );
 
-    if (response.statusCode == 200) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Balance added successfully!')),
-      );
-      _balanceController.clear();
-      Navigator.of(context).pop(); // Close the dialog
-    } else {
+   if (response.statusCode == 200) {
+    final Map<String, dynamic> responseJson = jsonDecode(response.body);
+    final String balance = responseJson['new_balance'];
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Balance added successfully! New balance: $balance')),
+    );
+
+    _balanceController.clear();
+    Navigator.of(context).pop(); // Close the dialog
+  }else {
       _showErrorDialog('Failed to add balance');
     }
   }
@@ -332,6 +337,7 @@ class _BuyerProfileSettingsState extends State<BuyerProfileSettings> {
                   title: json['event_name'],
                   acceptDate: json['start_date'],
                   location: json['venue_name'],
+                  ticketPrice: json['ticket_price'],
                   organizer:
                       "${json['organizer_first_name']} ${json['organizer_last_name']}",
                   imageUrl:

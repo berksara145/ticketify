@@ -155,26 +155,6 @@ class _FilterContainerState extends State<FilterContainer> {
                 _buildFilterOption(
                   'Min Price:',
                   TextField(
-                    onChanged: (value) => setState(() => eventName = value),
-                    decoration: InputDecoration(
-                      border: UnderlineInputBorder(
-                        borderSide:
-                            BorderSide(color: AppColors.white, width: 1.0),
-                      ),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide:
-                            BorderSide(color: AppColors.white, width: 1.0),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide:
-                            BorderSide(color: AppColors.white, width: 1.0),
-                      ),
-                    ),
-                  ),
-                ),
-                _buildFilterOption(
-                  'Min Price:',
-                  TextField(
                     onChanged: _updateMinPrice,
                     decoration: InputDecoration(
                       border: UnderlineInputBorder(

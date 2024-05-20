@@ -26,7 +26,7 @@ class ProfileBrowseTickets extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            PageTitle(title: isPastTickets ? "Past Events" : "Upcoming Events"),
+            PageTitle(title: isPastTickets ? "Purchased Tickets" : "Upcoming Tickets"),
             SizedBox(height: 20),
             Expanded(
               child: Padding(
@@ -84,6 +84,7 @@ class ProfileBrowseTickets extends StatelessWidget {
                                   ItemText(text: event.acceptDate),
                                   ItemText(text: event.location),
                                   ItemText(text: event.organizer),
+                                  ItemText(text: event.ticketPrice.toString()),
                                 ],
                               ),
                             ),
@@ -128,6 +129,7 @@ class ProfileItemData {
   final String acceptDate;
   final String location;
   final String organizer;
+  final int ticketPrice;
 
   ProfileItemData({
     this.imageUrl = "https://picsum.photos/200/300",
@@ -135,6 +137,7 @@ class ProfileItemData {
     required this.acceptDate,
     required this.location,
     required this.organizer,
+    required this.ticketPrice,
   });
 
   get address => null;
