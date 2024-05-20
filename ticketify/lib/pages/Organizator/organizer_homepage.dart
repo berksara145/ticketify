@@ -19,7 +19,22 @@ class OrganizerHomepage extends StatefulWidget {
 
 class _OrganizerHomepageState extends State<OrganizerHomepage> {
   String page = "";
-  late Future<List<EventModel>> _eventsFuture = UtilConstants().getAllEvents(context);
+  late Future<List<EventModel>> _eventsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _eventsFuture = UtilConstants().getAllEvents(context);
+  }
+
+  void refreshEvents() {
+    setState(() async {
+      await UtilConstants().getAllEvents(context);
+
+      _eventsFuture = UtilConstants().getAllEvents(context);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,33 +45,46 @@ class _OrganizerHomepageState extends State<OrganizerHomepage> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: PageSelector(
-                pageListConfigs: [
-                  PageListConfig(
-                      title: "Events",
-                      menuItems: [
-                        'Past Events',
-                        'Upcoming Events',
-                        'Create Event',
-                      ],
-                      iconData: Icons.event),
-                  PageListConfig(
-                      title: "Venues",
-                      menuItems: ["Venues", "Create Venue"],
-                      iconData: Icons.place)
-                ],
-                title: "Organizer, Welcome Back",
-                returnActivePageName: (name) {
-                  setState(() {
-                    page = name;
-                  });
-                }, settingsPage: OrganizerProfileSettings(),),
+              pageListConfigs: [
+                PageListConfig(
+                    title: "Events",
+                    menuItems: [
+                      'Past Events',
+                      'Upcoming Events',
+                      'Create Event',
+                    ],
+                    iconData: Icons.event),
+                PageListConfig(
+                    title: "Venues",
+                    menuItems: ["Venues", "Create Venue"],
+                    iconData: Icons.place)
+              ],
+              title: "Organizer, Welcome Back",
+              returnActivePageName: (name) {
+                setState(() {
+                  page = name;
+                });
+              },
+              settingsPage: OrganizerProfileSettings(),
+            ),
           ),
           if (page == "Upcoming Events") ...[
-            
-            EventsPage(eventsFuture: _eventsFuture,),
+            FutureBuilder<List<EventModel>>(
+              future: _eventsFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.hasData) {
+                  return EventsPage(eventsFuture: Future.value(snapshot.data));
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                }
+                return Text('Unknown error');
+              },
+            ),
           ],
           if (page == "Create Event") ...[
-            CreateEventWidget(),
+            CreateEventWidget(onCreate: refreshEvents),
           ],
           if (page == "Create Venue") ...[CreateVenueWidget()],
           if (page == "Venues") ...[VenuesPage()],

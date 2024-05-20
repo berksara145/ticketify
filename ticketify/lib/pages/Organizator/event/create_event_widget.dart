@@ -7,6 +7,9 @@ import 'package:ticketify/objects/venue_model.dart';
 import 'package:ticketify/pages/homepage/display_products_components.dart';
 
 class CreateEventWidget extends StatefulWidget {
+  final VoidCallback onCreate;
+
+  const CreateEventWidget({super.key, required this.onCreate});
   @override
   _CreateEventWidgetState createState() => _CreateEventWidgetState();
 }
@@ -446,6 +449,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                 selectedVenue!.venueId!,
                                 "performerName",
                                 sectionPrices);
+                            widget.onCreate();
                           },
                           child: Container(
                               decoration:
