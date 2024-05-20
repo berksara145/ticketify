@@ -167,13 +167,6 @@ class PhoneOneItemView extends StatelessWidget {
                                     Padding(
                                       padding:
                                           const EdgeInsets.only(bottom: 8.0),
-                                      child: FittedBox(
-                                          child:
-                                              Text("Artist(s): ${post?.id}")),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 8.0),
                                       child: Text("Starts at: ${post?.sdate}"),
                                     ),
                                     Padding(
@@ -199,70 +192,9 @@ class PhoneOneItemView extends StatelessWidget {
                                     Padding(
                                       padding:
                                           const EdgeInsets.only(bottom: 4.0),
-                                      child: Text(
-                                        "- All participants are required to have their valid ID with them.",
-                                        softWrap: true,
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 4.0),
-                                      child: Text(
-                                        "- It is forbidden to bring outside food and drinks into the area.",
-                                        softWrap: true,
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 4.0),
-                                      child: Text(
+                                      child: Text(post!.desc,
                                           softWrap: true,
-                                          "- For security reasons, piercing, cutting tools, flammable materials, drugs and illegal substances will not be taken into the area.",
                                           overflow: TextOverflow.ellipsis),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 4.0),
-                                      child: Text(
-                                          softWrap: true,
-                                          "- For security reasons, piercing, cutting tools, flammable materials, drugs and illegal substances will not be taken into the area.",
-                                          overflow: TextOverflow.ellipsis),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 4.0),
-                                      child: Text(
-                                          softWrap: true,
-                                          "- For security reasons, piercing, cutting tools, flammable materials, drugs and illegal substances will not be taken into the area.",
-                                          overflow: TextOverflow.ellipsis),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 4.0),
-                                      child: Text(
-                                          softWrap: true,
-                                          "- For security reasons, piercing, cutting tools, flammable materials, drugs and illegal substances will not be taken into the area.",
-                                          overflow: TextOverflow.ellipsis),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 4.0),
-                                      child: Text(
-                                          softWrap: true,
-                                          "- For security reasons, piercing, cutting tools, flammable materials, drugs and illegal substances will not be taken into the area.",
-                                          overflow: TextOverflow.ellipsis),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 4.0),
-                                      child: Text(
-                                          softWrap: true,
-                                          "- For security reasons, piercing, cutting tools, flammable materials, drugs and illegal substances will not be taken into the area.",
-                                          overflow: TextOverflow.ellipsis),
-                                    ),
-                                    Text(
-                                      softWrap: true,
-                                      "- It is forbidden to enter the area with pets.",
                                     ),
                                   ],
                                 ),
@@ -425,13 +357,6 @@ class DesktopOneItemView extends StatelessWidget {
                                           Padding(
                                             padding: const EdgeInsets.only(
                                                 bottom: 8.0),
-                                            child: FittedBox(
-                                                child: Text(
-                                                    "Artist(s): ${post?.id}")),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                bottom: 8.0),
                                             child: Text(
                                                 "Starts at: ${post?.sdate}"),
                                           ),
@@ -445,7 +370,9 @@ class DesktopOneItemView extends StatelessWidget {
                                             padding: const EdgeInsets.only(
                                                 bottom: 8.0),
                                             child: Text(
-                                              "Event Info: ${post?.id} is getting ready to bring you its popular songs with the ${post?.organizer} organization.",
+                                              post!.desc,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
                                               softWrap:
                                                   true, // Allow text to wrap to multiple lines
                                             ),
@@ -464,6 +391,9 @@ class DesktopOneItemView extends StatelessWidget {
                                                     bottom: 4.0),
                                                 child: Text(
                                                   post!.rules,
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
                                                   //post.
                                                   softWrap: true,
                                                 ),
