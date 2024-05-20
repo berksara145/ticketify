@@ -149,24 +149,22 @@ class _ItemGridState extends State<ItemGrid> {
                   ),
                   itemBuilder: (context, index) {
                     PostDTO post = PostDTO(
-                      rules: "rule",
-                      desc: "desc",
-                      id: '1', // Example: Replace '1' with the actual ID
-                      tags:
-                          'Concert', // Example: Replace 'Sample Tags' with the actual tags
-                      title:
-                          'Mayfest & Mogollar', // Example: Replace 'Sample Title' with the actual title
-                      imageUrl:
-                          'https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg', // Example: Replace with actual image URL
-                      sdate: DateTime
-                          .now(), // Example: Replace 'DateTime.now()' with the actual creation date
-                      location:
-                          "Bilkent", // Example: Replace '10.0' with the actual price
-                      organizer:
-                          'Bilkent', // Example: Replace 'Sample User' with the actual user
-                      ticket_prices : 
-                          "50-100"
-                    );
+                        rules: "rule",
+                        desc: "desc",
+                        id: '1', // Example: Replace '1' with the actual ID
+                        tags:
+                            'Concert', // Example: Replace 'Sample Tags' with the actual tags
+                        title:
+                            'Mayfest & Mogollar', // Example: Replace 'Sample Title' with the actual title
+                        imageUrl:
+                            'https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg', // Example: Replace with actual image URL
+                        sdate: DateTime
+                            .now(), // Example: Replace 'DateTime.now()' with the actual creation date
+                        location:
+                            "Bilkent", // Example: Replace '10.0' with the actual price
+                        organizer:
+                            'Bilkent', // Example: Replace 'Sample User' with the actual user
+                        ticket_prices: "50-100");
 
                     return ProductCard(
                       post: post,
@@ -207,18 +205,17 @@ class PostDTO {
   final String desc;
   final String ticket_prices;
 
-  PostDTO({
-    required this.rules,
-    required this.desc,
-    required this.id,
-    required this.tags,
-    required this.title,
-    required this.imageUrl,
-    required this.sdate,
-    required this.location,
-    required this.ticket_prices,
-    required this.organizer
-  });
+  PostDTO(
+      {required this.rules,
+      required this.desc,
+      required this.id,
+      required this.tags,
+      required this.title,
+      required this.imageUrl,
+      required this.sdate,
+      required this.location,
+      required this.ticket_prices,
+      required this.organizer});
 }
 
 class ProductCard extends StatefulWidget {
@@ -239,6 +236,7 @@ class _ProductCardState extends State<ProductCard> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+        print(widget.post.toString());
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -292,7 +290,7 @@ class _ProductCardState extends State<ProductCard> {
                       ),
                       padding: const EdgeInsets.all(5.0),
                       child: Text(
-                        widget.post.tags ?? "",
+                        widget.post.tags ?? "adsfasdf",
                         style: const TextStyle(
                           fontSize: 8,
                           fontWeight: FontWeight.bold,
@@ -304,7 +302,7 @@ class _ProductCardState extends State<ProductCard> {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  "Date: ${widget.post.sdate}",
+                  "Date: ${widget.post.ticket_prices}",
                   style: const TextStyle(fontSize: 12),
                 ),
                 Text(

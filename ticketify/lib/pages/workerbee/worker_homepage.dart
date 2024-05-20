@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:ticketify/constants/constant_variables.dart';
 import 'package:ticketify/objects/issue.dart';
 import 'package:ticketify/pages/auth/widgets/appbar/user_app_bar.dart';
+import 'package:http/http.dart' as http;
 
 class IssueListPage extends StatefulWidget {
   @override
@@ -9,15 +13,88 @@ class IssueListPage extends StatefulWidget {
 }
 
 class _IssueListPageState extends State<IssueListPage> {
-  final List<Issue> issues = [
-    Issue(title: 'Issue 1', details: 'Details of issue 1'),
-    Issue(title: 'Issue 2', details: 'Details of issue 2'),
-    Issue(title: 'Issue 3', details: 'Details of issue 3'),
-    // Add more issues here
-  ];
+  List<Issue> issues = [];
 
   TextEditingController textController = TextEditingController();
   Issue? selectedIssue;
+  final FlutterSecureStorage storage = const FlutterSecureStorage();
+
+  Future<String?> getToken() async {
+    return await storage.read(key: 'access_token');
+  }
+
+  Future<void> createIssueResponse(String responseText) async {
+    try {
+      final String? token = await getToken();
+      final response = await http.post(
+        Uri.parse('http://127.0.0.1:5000/response/createIssueResponse'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode({
+          'issue_id': selectedIssue!.id,
+          'response_text': responseText,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Issue response created successfully!')),
+        );
+        // Optionally, you can update the UI or perform any other action here
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to create issue response!')),
+        );
+        print(
+            'Failed to create issue response. Status code: ${response.statusCode}');
+        // Handle error or display a message to the user
+      }
+    } catch (e) {
+      print('Error while creating issue response: $e');
+      // Handle error or display a message to the user
+    }
+  }
+
+  Future<List<Issue>> browseIssues() async {
+    try {
+      final String? token = await getToken();
+      final response = await http.get(
+        Uri.parse('http://127.0.0.1:5000/issue/browseIssues'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonData = jsonDecode(response.body);
+        List<Issue> issuesList =
+            jsonData.map<Issue>((json) => Issue.fromJson(json)).toList();
+        return issuesList;
+      } else {
+        print('Failed to fetch issues. Status code: ${response.statusCode}');
+        return []; // Return an empty list if failed to fetch issues
+      }
+    } catch (e) {
+      print('Error occurred while fetching issues: $e');
+      return []; // Return an empty list if an error occurred
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchIssues();
+  }
+
+  Future<void> fetchIssues() async {
+    List<Issue> fetchedIssues = await browseIssues();
+    setState(() {
+      issues = fetchedIssues;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +109,7 @@ class _IssueListPageState extends State<IssueListPage> {
     });
 
     return Scaffold(
-      appBar: UserAppBar(),
+      appBar: WBAppBar(),
       body: Center(
         child: Container(
           decoration: BoxDecoration(
@@ -128,7 +205,7 @@ class _IssueListPageState extends State<IssueListPage> {
                           Expanded(
                             child: TextField(
                               controller: textController,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 labelText: 'Add your response',
                                 border: OutlineInputBorder(),
                               ),
@@ -138,6 +215,7 @@ class _IssueListPageState extends State<IssueListPage> {
                             onPressed: () {
                               if (textController.text.isNotEmpty) {
                                 setState(() {
+                                  createIssueResponse(textController.text);
                                   selectedIssue!.responses
                                       .add(textController.text);
                                   textController.clear();

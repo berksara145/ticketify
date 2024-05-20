@@ -339,7 +339,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                     const SizedBox(height: 10.0),
                     noofsections != null && noofsections! > 0
                         ? Container(
-                            height: 500,
+                            height: 250,
                             child: GridView.builder(
                               gridDelegate:
                                   SliverGridDelegateWithFixedCrossAxisCount(
@@ -350,17 +350,12 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                               ),
                               itemCount: noofsections!,
                               itemBuilder: (context, index) {
-                                return Container(
-                                  width: 75,
-                                  height: 75,
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: TextField(
-                                    controller: controllers[index],
-                                    keyboardType: TextInputType.number,
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(),
-                                      labelText: 'Section ${index + 1}',
-                                    ),
+                                return TextField(
+                                  controller: controllers[index],
+                                  keyboardType: TextInputType.number,
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    labelText: 'Section ${index + 1}',
                                   ),
                                 );
                               },

@@ -119,3 +119,4 @@ INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:52:38] "OPTIONS /report/getReports 
 DEBUG:root:Attempting to fetch reports
 DEBUG:root:Reports fetched successfully
 INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:52:38] "GET /report/getReports HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in '/api/api.py', reloading
