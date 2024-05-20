@@ -88,11 +88,8 @@ class DesktopVenueOneItemView extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 20.0, left: 40),
                   child: IconButton(
                     onPressed: () {
-                      Navigator.push(
+                      Navigator.pop(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => const Homepage(),
-                        ),
                       );
                     },
                     icon: Icon(Icons.arrow_back_ios_sharp),

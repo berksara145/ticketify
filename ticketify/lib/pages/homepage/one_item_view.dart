@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ticketify/constants/constant_variables.dart';
 import 'package:ticketify/objects/event_model.dart';
+import 'package:ticketify/pages/Organizator/organizer_homepage.dart';
 import 'package:ticketify/pages/auth/widgets/appbar/user_app_bar.dart';
 import 'package:ticketify/pages/homepage/ItemGrid.dart';
 import 'package:ticketify/pages/homepage/homepage.dart';
@@ -80,7 +81,7 @@ class PhoneOneItemView extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const Homepage(),
+                        builder: (context) => const OrganizerHomepage(),
                       ),
                     );
                   },
