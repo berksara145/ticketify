@@ -163,7 +163,6 @@ class _IssueListPageState extends State<IssueListPage> {
                               setState(() {
                                 selectedIssue = null;
                               });
-                              Navigator.of(context).pop();
                             },
                           ),
                           Text(
