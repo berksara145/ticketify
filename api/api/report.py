@@ -73,6 +73,8 @@ def create_report():
 
         events_revenue = cursor.fetchall()
 
+
+        print(events_revenue)
         # Insert the report into the reports table
         for event in events_revenue:
             cursor.execute("""
@@ -91,9 +93,10 @@ def create_report():
                 'event_name': event['event_name'],
                 'total_revenue': event['total_revenue'] if event['total_revenue'] is not None else 0
             })
-
+        print(response)
         return jsonify(response), 200
 
+        
     except Exception as e:
         connection.rollback()  # Rollback in case of error
         return jsonify({'error': str(e), 'trace': traceback.format_exc()}), 500
