@@ -74,7 +74,7 @@ def create_report():
         events_revenue = cursor.fetchall()
 
 
-        print(events_revenue)
+        print("events revenue",events_revenue)
         # Insert the report into the reports table
         for event in events_revenue:
             cursor.execute("""
@@ -151,7 +151,7 @@ def get_reports():
 
         # Fetch all reports
         reports = cursor.fetchall()
-        print(reports)
+        print("reports",reports)
         logging.debug('Reports fetched successfully')
 
         return jsonify(reports), 200
