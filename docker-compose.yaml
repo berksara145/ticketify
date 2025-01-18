@@ -6,6 +6,8 @@ services:
       - "8080:80"
     depends_on:
       - api
+    environment:
+      - ENVIRONMENT=production # Set the environment variable for production
   api:
     image: cs353app
     build: ./api
