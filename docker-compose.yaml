@@ -1,0 +1,31 @@
+version: "3.8"
+services:
+  web:
+    build: ./ticketify
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+  api:
+    image: cs353app
+    build: ./api
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=development
+      - FLASK_APP=api.py
+    volumes:
+      - ./api:/api # Mount the api directory correctly
+    depends_on:
+      - db
+    working_dir: /api/api # Update to point to the correct directory
+    command: ["python", "api.py"] # Run api.py from the /api directory
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: password1212
+      MYSQL_DATABASE: cs353dbproject
+    volumes:
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    ports:
+      - "3306:3306"

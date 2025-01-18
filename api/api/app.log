@@ -1,0 +1,198 @@
+DEBUG:root:Attempting to fetch reports
+ERROR:root:Error occurred: Could not process parameters: int(1), it must be of type list, tuple or dict
+INFO:werkzeug:172.24.0.1 - - [19/May/2024 15:40:08] "[35m[1mGET /report/getReports HTTP/1.1[0m" 500 -
+INFO:werkzeug: * Detected change in '/api/report.py', reloading
+DEBUG:root:Attempting to fetch reports
+DEBUG:root:Reports fetched successfully
+INFO:werkzeug:172.24.0.1 - - [19/May/2024 15:44:26] "GET /report/getReports HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in '/api/report.py', reloading
+DEBUG:root:Attempting to fetch reports
+DEBUG:root:Reports fetched successfully
+INFO:werkzeug:172.24.0.1 - - [19/May/2024 15:45:51] "GET /report/getReports HTTP/1.1" 200 -
+DEBUG:root:Attempting to fetch reports
+DEBUG:root:Reports fetched successfully
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:43:22] "GET /report/getReports HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:43:29] "OPTIONS /report/createReport HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:43:29] "POST /report/createReport HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:43:29] "OPTIONS /report/getReports HTTP/1.1" 200 -
+DEBUG:root:Attempting to fetch reports
+DEBUG:root:Reports fetched successfully
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:43:29] "GET /report/getReports HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:43:34] "POST /report/createReport HTTP/1.1" 200 -
+DEBUG:root:Attempting to fetch reports
+DEBUG:root:Reports fetched successfully
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:43:34] "GET /report/getReports HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:43:38] "OPTIONS /report/createReport HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:43:38] "POST /report/createReport HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:43:38] "OPTIONS /report/getReports HTTP/1.1" 200 -
+DEBUG:root:Attempting to fetch reports
+DEBUG:root:Reports fetched successfully
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:43:38] "GET /report/getReports HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:44:47] "OPTIONS /register HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:44:47] "[31m[1mPOST /register HTTP/1.1[0m" 400 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:44:54] "OPTIONS /register HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:44:54] "POST /register HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:45:03] "OPTIONS /login HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:45:03] "POST /login HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:45:30] "OPTIONS /venue/create HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:45:30] "POST /venue/create HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:45:34] "OPTIONS /venue/getAllVenue HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:45:34] "GET /venue/getAllVenue HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:45:42] "OPTIONS /venue/getAllVenue HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:45:42] "GET /venue/getAllVenue HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:46:03] "OPTIONS /event/createEvent HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:46:04] "POST /event/createEvent HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:46:22] "OPTIONS /register HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:46:22] "POST /register HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:46:30] "OPTIONS /login HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:46:30] "POST /login HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:46:31] "OPTIONS /event/getAllEvents HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:46:31] "GET /event/getAllEvents HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:46:34] "OPTIONS /ticket/viewPastTickets HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:46:35] "GET /ticket/viewPastTickets HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:46:38] "OPTIONS /profile/get_user_details HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:46:38] "GET /ticket/viewPastTickets HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:46:38] "GET /profile/get_user_details HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:46:42] "OPTIONS /ticket/insertMoney HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:46:43] "POST /ticket/insertMoney HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:46:46] "OPTIONS /ticket/viewPastTickets HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:46:46] "GET /ticket/viewPastTickets HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:46:48] "OPTIONS /event/getAllEvents HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:46:48] "GET /event/getAllEvents HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:46:52] "OPTIONS /ticket/getMaxTicket HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:46:52] "OPTIONS /ticket/getMaxTicket HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:46:52] "OPTIONS /ticket/getMaxTicket HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:46:52] "POST /ticket/getMaxTicket HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:46:52] "POST /ticket/getMaxTicket HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:46:52] "POST /ticket/getMaxTicket HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:47:03] "OPTIONS /ticket/chooseTicket HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:47:03] "POST /ticket/chooseTicket HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:47:04] "POST /ticket/chooseTicket HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:47:04] "POST /ticket/chooseTicket HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:47:04] "POST /ticket/chooseTicket HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:47:04] "POST /ticket/chooseTicket HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:47:04] "OPTIONS /ticket/buyTicket HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:47:04] "POST /ticket/buyTicket HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:47:10] "OPTIONS /ticket/viewPastTickets HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:47:10] "GET /ticket/viewPastTickets HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:47:11] "OPTIONS /profile/get_user_details HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:47:11] "GET /ticket/viewPastTickets HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:47:11] "GET /profile/get_user_details HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:47:12] "GET /ticket/viewPastTickets HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:47:21] "OPTIONS /ticket/viewPastTickets HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:47:21] "GET /ticket/viewPastTickets HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:47:23] "OPTIONS /event/getAllEvents HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:47:23] "GET /event/getAllEvents HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:47:53] "OPTIONS /register HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:47:53] "[31m[1mPOST /register HTTP/1.1[0m" 400 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:48:02] "OPTIONS /register HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:48:02] "[35m[1mPOST /register HTTP/1.1[0m" 500 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:48:17] "OPTIONS /register HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:48:17] "POST /register HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:48:59] "OPTIONS /login HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:48:59] "POST /login HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:48:59] "OPTIONS /user/getUsers HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:48:59] "GET /user/getUsers HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:49:05] "OPTIONS /report/getOrganizers HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:49:05] "GET /report/getOrganizers HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:49:09] "OPTIONS /report/createReport HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:49:09] "POST /report/createReport HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:49:09] "OPTIONS /report/getReports HTTP/1.1" 200 -
+DEBUG:root:Attempting to fetch reports
+DEBUG:root:Reports fetched successfully
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:49:10] "GET /report/getReports HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in '/api/report.py', reloading
+DEBUG:root:Attempting to fetch reports
+DEBUG:root:Reports fetched successfully
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:50:06] "GET /report/getReports HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in '/api/report.py', reloading
+DEBUG:root:Attempting to fetch reports
+DEBUG:root:Reports fetched successfully
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:51:11] "GET /report/getReports HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in '/api/report.py', reloading
+DEBUG:root:Attempting to fetch reports
+DEBUG:root:Reports fetched successfully
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:51:59] "GET /report/getReports HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:52:37] "OPTIONS /report/createReport HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:52:37] "POST /report/createReport HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:52:38] "OPTIONS /report/getReports HTTP/1.1" 200 -
+DEBUG:root:Attempting to fetch reports
+DEBUG:root:Reports fetched successfully
+INFO:werkzeug:172.18.0.1 - - [19/May/2024 22:52:38] "GET /report/getReports HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in '/api/api.py', reloading
+DEBUG:root:Attempting to fetch reports
+DEBUG:root:Reports fetched successfully
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:30:55] "GET /report/getReports HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:31:00] "OPTIONS /report/createReport HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:31:00] "POST /report/createReport HTTP/1.1" 200 -
+DEBUG:root:Attempting to fetch reports
+DEBUG:root:Reports fetched successfully
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:31:00] "GET /report/getReports HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:31:03] "POST /report/createReport HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:31:03] "OPTIONS /report/getReports HTTP/1.1" 200 -
+DEBUG:root:Attempting to fetch reports
+DEBUG:root:Reports fetched successfully
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:31:03] "GET /report/getReports HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in '/api/ticket.py', reloading
+DEBUG:root:Attempting to fetch reports
+DEBUG:root:Reports fetched successfully
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:33:10] "GET /report/getReports HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in '/api/report.py', reloading
+DEBUG:root:Attempting to fetch reports
+DEBUG:root:Reports fetched successfully
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:34:06] "GET /report/getReports HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:34:17] "OPTIONS /report/createReport HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:34:17] "POST /report/createReport HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:34:17] "OPTIONS /report/getReports HTTP/1.1" 200 -
+DEBUG:root:Attempting to fetch reports
+DEBUG:root:Reports fetched successfully
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:34:17] "GET /report/getReports HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in '/api/report.py', reloading
+DEBUG:root:Attempting to fetch reports
+DEBUG:root:Reports fetched successfully
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:35:38] "GET /report/getReports HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in '/api/report.py', reloading
+DEBUG:root:Attempting to fetch reports
+DEBUG:root:Reports fetched successfully
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:36:34] "GET /report/getReports HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:36:37] "POST /report/createReport HTTP/1.1" 200 -
+DEBUG:root:Attempting to fetch reports
+DEBUG:root:Reports fetched successfully
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:36:37] "GET /report/getReports HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:36:42] "OPTIONS /report/createReport HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:36:42] "POST /report/createReport HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:36:42] "OPTIONS /report/getReports HTTP/1.1" 200 -
+DEBUG:root:Attempting to fetch reports
+DEBUG:root:Reports fetched successfully
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:36:42] "GET /report/getReports HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in '/api/report.py', reloading
+DEBUG:root:Attempting to fetch reports
+DEBUG:root:Reports fetched successfully
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:48:09] "GET /report/getReports HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:49:15] "OPTIONS /register HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:49:16] "POST /register HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:49:22] "OPTIONS /login HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:49:22] "POST /login HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:49:22] "OPTIONS /issue/browseIssues HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:49:22] "[35m[1mGET /issue/browseIssues HTTP/1.1[0m" 500 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:49:33] "OPTIONS /login HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:49:33] "POST /login HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:49:33] "OPTIONS /event/getAllEvents HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:49:33] "GET /event/getAllEvents HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:49:40] "OPTIONS /event/getAllEvents HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:49:40] "GET /event/getAllEvents HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:49:44] "OPTIONS /ticket/viewPastTickets HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:49:44] "GET /ticket/viewPastTickets HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:49:54] "OPTIONS /issue/createIssue HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:49:54] "POST /issue/createIssue HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:49:54] "OPTIONS /event/getAllEvents HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:49:55] "GET /event/getAllEvents HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:50:01] "OPTIONS /login HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:50:01] "POST /login HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:50:01] "OPTIONS /issue/browseIssues HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:50:01] "[35m[1mGET /issue/browseIssues HTTP/1.1[0m" 500 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:50:19] "OPTIONS /login HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:50:19] "POST /login HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:50:19] "OPTIONS /issue/browseIssues HTTP/1.1" 200 -
+INFO:werkzeug:172.18.0.1 - - [20/May/2024 11:50:19] "[35m[1mGET /issue/browseIssues HTTP/1.1[0m" 500 -
+INFO:werkzeug: * Detected change in '/api/issue.py', reloading
