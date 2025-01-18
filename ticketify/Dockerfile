@@ -8,6 +8,9 @@ WORKDIR /home/flutteruser/ticketify
 # Switch to the non-root user
 USER flutteruser
 
+# Add the Flutter SDK directory as safe to resolve git ownership issue
+RUN git config --global --add safe.directory /sdks/flutter
+
 # Fetch dependencies and build the Flutter web app
 RUN flutter pub get
 RUN flutter build web
