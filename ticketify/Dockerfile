@@ -1,11 +1,18 @@
-# Stage 1: Serve the built web app with Nginx
+# Step 1: Build the Flutter web app
+FROM cirrusci/flutter:stable AS build
+
+WORKDIR /app
+
+COPY ./ticketify /app
+
+RUN flutter pub get
+RUN flutter build web
+
+# Step 2: Serve the built app using Nginx
 FROM nginx:alpine
 
-# Copy the pre-built web app from local machine to Nginx container
-COPY ./build/web /usr/share/nginx/html
+COPY --from=build /app/build/web /usr/share/nginx/html
 
-# Expose port 80 for the web server
 EXPOSE 80
 
-# Command to run Nginx
 CMD ["nginx", "-g", "daemon off;"]
