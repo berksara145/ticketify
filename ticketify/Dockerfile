@@ -1,28 +1,11 @@
-# Step 1: Build the Flutter web app
-FROM cirrusci/flutter:stable AS build
-
-# Create a non-root user and set the working directory
-RUN useradd -ms /bin/bash flutteruser
-WORKDIR /home/flutteruser/ticketify
-
-# Switch to the non-root user
-USER root
-RUN chown -R flutteruser:flutteruser /sdks/flutter/bin/cache
-USER flutteruser
-
-# Add the Flutter SDK directory as safe to resolve git ownership issue
-RUN git config --global --add safe.directory /sdks/flutter
-
-# Fetch dependencies and build the Flutter web app
-RUN flutter pub get
-RUN flutter build web
-
-# Step 2: Serve the built app using Nginx
+# Stage 1: Serve the built web app with Nginx
 FROM nginx:alpine
 
-# Copy the built web app from the Flutter build container
-COPY --from=build /home/flutteruser/ticketify/build/web /usr/share/nginx/html
+# Copy the pre-built web app from local machine to Nginx container
+COPY ./build/web /usr/share/nginx/html
 
+# Expose port 80 for the web server
 EXPOSE 80
 
+# Command to run Nginx
 CMD ["nginx", "-g", "daemon off;"]
