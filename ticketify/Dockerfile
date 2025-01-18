@@ -1,5 +1,5 @@
 # Stage 1: Build the Flutter web app
-FROM cirrusci/flutter:3.10.5 AS build
+FROM ghcr.io/cirruslabs/flutter:3.27.2 AS build
 
 # Set working directory inside the container
 WORKDIR /app
