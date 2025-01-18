@@ -1,9 +1,7 @@
 # Step 1: Build the Flutter web app
 FROM cirrusci/flutter:stable AS build
 
-WORKDIR /app
-
-COPY ./ticketify /app
+WORKDIR /ticketify
 
 RUN flutter pub get
 RUN flutter build web
@@ -11,7 +9,7 @@ RUN flutter build web
 # Step 2: Serve the built app using Nginx
 FROM nginx:alpine
 
-COPY --from=build /app/build/web /usr/share/nginx/html
+COPY --from=build /ticketify/build/web /usr/share/nginx/html
 
 EXPOSE 80
 
