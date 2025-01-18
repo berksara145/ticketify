@@ -1,15 +1,22 @@
 # Step 1: Build the Flutter web app
 FROM cirrusci/flutter:stable AS build
 
-WORKDIR /ticketify
+# Create a non-root user and set the working directory
+RUN useradd -ms /bin/bash flutteruser
+WORKDIR /home/flutteruser/ticketify
 
+# Switch to the non-root user
+USER flutteruser
+
+# Fetch dependencies and build the Flutter web app
 RUN flutter pub get
 RUN flutter build web
 
 # Step 2: Serve the built app using Nginx
 FROM nginx:alpine
 
-COPY --from=build /ticketify/build/web /usr/share/nginx/html
+# Copy the built web app from the Flutter build container
+COPY --from=build /home/flutteruser/ticketify/build/web /usr/share/nginx/html
 
 EXPOSE 80
 
