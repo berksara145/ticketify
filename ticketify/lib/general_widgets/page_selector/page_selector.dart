@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:ticketify/constants/constant_variables.dart';
 import 'package:ticketify/general_widgets/page_selector/page_selector_page_list.dart';
 import 'package:ticketify/general_widgets/page_selector/page_selector_title.dart';
-import 'package:ticketify/pages/issue/create_issue.dart';
+import 'package:ticketify/pages/homepage/issue/create_issue.dart';
 
 class PageSelector extends StatefulWidget {
   final List<PageListConfig> pageListConfigs;
@@ -70,7 +70,7 @@ class _PageSelectorState extends State<PageSelector> {
                         innerIndex = newIndex;
                       });
                       widget.returnActivePageName(config.menuItems[
-                      innerIndex]); // Pass the actual title of the active page list
+                          innerIndex]); // Pass the actual title of the active page list
                     },
                   );
                 }),
@@ -82,25 +82,33 @@ class _PageSelectorState extends State<PageSelector> {
               children: [
                 TextButton(
                     onPressed: () {
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (context) => widget.settingsPage));
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => widget.settingsPage));
                     },
                     child: const Text(
                       "Settings",
-                      style: TextStyle(color: AppColors.black,
-                        fontSize: 24,),
+                      style: TextStyle(
+                        color: AppColors.black,
+                        fontSize: 24,
+                      ),
                     )),
                 const SizedBox(height: 20),
                 if (widget.isCreateIssueEnabled)
                   TextButton(
                       onPressed: () {
-                        Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (context) => const CreateIssue()));
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const CreateIssue()));
                       },
                       child: const Text(
                         "Create Issue",
-                        style: TextStyle(color: AppColors.black,
-                          fontSize: 24,),
+                        style: TextStyle(
+                          color: AppColors.black,
+                          fontSize: 24,
+                        ),
                       )),
                 const SizedBox(height: 20),
                 /*if (widget.isCreateIssueEnabled) SizedBox(height: 4),

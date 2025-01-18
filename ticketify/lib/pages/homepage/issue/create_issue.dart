@@ -7,7 +7,7 @@ import 'package:ticketify/pages/auth/widgets/appbar/user_app_bar.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../homepage/homepage.dart';
+import '../homepage.dart';
 
 class CreateIssue extends StatefulWidget {
   const CreateIssue({Key? key}) : super(key: key);
@@ -23,6 +23,7 @@ class _CreateIssueState extends State<CreateIssue> {
   Future<String?> _getToken() async {
     return await storage.read(key: 'access_token');
   }
+
   Future<void> _createIssue() async {
     // Construct the login request payload
     final String? token = await _getToken();
@@ -33,7 +34,8 @@ class _CreateIssueState extends State<CreateIssue> {
 
     // Send the login request to your Flask backend
     final response = await http.post(
-      Uri.parse('http://127.0.0.1:5000/issue/createIssue'), // Update with your backend URL
+      Uri.parse(
+          'http://127.0.0.1:5000/issue/createIssue'), // Update with your backend URL
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token',
@@ -48,8 +50,7 @@ class _CreateIssueState extends State<CreateIssue> {
         context,
         MaterialPageRoute(builder: (context) => const Homepage()),
       );
-    }
-     else {
+    } else {
       // Login failed, display error message in a dialog
       final Map<String, dynamic> responseBody = jsonDecode(response.body);
       _showErrorDialog(responseBody['message'] ?? 'Issue create failed');

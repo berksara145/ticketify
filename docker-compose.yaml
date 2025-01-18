@@ -1,19 +1,25 @@
 version: "3.8"
 services:
   web:
+    build: ./ticketify
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+  api:
     image: cs353app
-    build: .
+    build: ./api
     ports:
       - "5000:5000"
     environment:
       - FLASK_ENV=development
       - FLASK_APP=api.py
     volumes:
-      - ./api:/api
+      - ./api:/api # Mount the api directory correctly
     depends_on:
       - db
-    working_dir: /api
-    command: ["python", "api.py"]
+    working_dir: /api/api # Update to point to the correct directory
+    command: ["python", "api.py"] # Run api.py from the /api directory
   db:
     image: mysql:5.7
     environment:

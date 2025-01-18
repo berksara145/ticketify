@@ -145,57 +145,71 @@ def login():
 
     except Exception as e:
         return jsonify({'error': str(e), 'trace': traceback.format_exc()}), 500
-
 @app.route('/register', methods=['POST'])
 def register():
     try:
         data = request.get_json()
-        
+        print(f"Received data: {data}")
+
         first_name = data.get('first_name')
         last_name = data.get('last_name')
         email = data.get('email')
         password = data.get('password')
         user_type = data.get('user_type')
         phone_no = data.get('phone')
+
+        print(f"First Name: {first_name}, Last Name: {last_name}, Email: {email}, User Type: {user_type}, Phone: {phone_no}")
         
         if not first_name or not last_name or not email or not password or not user_type:
+            print("Missing required fields")
             return jsonify({'message': 'All fields are required'}), 400
+
         if user_type == 'organizor':
             if not phone_no:
+                print("Phone number is required for organizers")
                 return jsonify({'message': 'Organizors are required to enter phone no.'}), 400
 
         # Check if email is valid
         if not re.match(r'[^@]+@[^@]+\.[^@]+', email):
+            print(f"Invalid email address: {email}")
             return jsonify({'message': 'Invalid email address'}), 400
 
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        
+
         # Check if the email is already registered
         cursor.execute(f"SELECT * FROM {user_type} WHERE email = %s", (email,))
         account = cursor.fetchone()
-        
+        print(f"Account found: {account}")
+
         if account:
+            print("Email already registered")
             return jsonify({'message': 'Email is already registered'}), 400
-        
+
         # Insert the new user into the database
         if user_type == 'organizer':
+            print(f"Inserting organizer with phone number: {phone_no}")
             cursor.execute(f"INSERT INTO {user_type} (first_name, last_name, email, password, user_type, phone_no) VALUES (%s, %s, %s, %s, %s, %s)",
                        (first_name, last_name, email, password, user_type, phone_no))
         elif user_type == 'buyer':
+            print("Inserting buyer with initial money = 0")
             cursor.execute(f"INSERT INTO {user_type} (password, money, first_name, last_name, email, user_type) VALUES (%s, %s, %s, %s, %s, %s)",
-                       (password, 0, first_name, last_name, email, user_type))            
+                       (password, 0, first_name, last_name, email, user_type))
         else:
+            print("Inserting other user type")
             cursor.execute(f"INSERT INTO {user_type} (first_name, last_name, email, password, user_type) VALUES (%s, %s, %s, %s, %s)",
                         (first_name, last_name, email, password, user_type))
-                        # Retrieve the created user
+
+        # Retrieve the created user
         cursor.execute(f"SELECT * FROM {user_type} WHERE email = %s", (email,))
         created_user = cursor.fetchone()
-        
+        print(f"Created user: {created_user}")
+
         mysql.connection.commit()
         cursor.close()
- 
+
         return jsonify({'message': 'User successfully registered', "user": created_user}), 200
     except Exception as e:
+        print(f"Error occurred: {str(e)}")
         return jsonify({'error': str(e), 'trace': traceback.format_exc()}), 500
 
 

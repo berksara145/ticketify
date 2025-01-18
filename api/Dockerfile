@@ -6,7 +6,7 @@ RUN apt-get update
 RUN apt-get install -y pkg-config
 RUN apt-get install -y gcc
 RUN apt-get install -y default-libmysqlclient-dev
-WORKDIR /app
+WORKDIR /api
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 COPY . .

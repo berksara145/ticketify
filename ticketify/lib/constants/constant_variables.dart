@@ -334,7 +334,7 @@ class UtilConstants {
     // Send the request to your Flask backend
     final response = await http.delete(
       Uri.parse(
-          'http://127.0.0.1:5000/user/deleteUser'), // Update with your backend URL
+          'http://127.0.0.1:5000/user/User'), // Update with your backend URL
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token',
@@ -485,11 +485,8 @@ class UtilConstants {
     }
   }
 
-  Future<void> refundTicket(
-      BuildContext context, String ticketId) async {
-    final Map<String, dynamic> data = {
-      'ticket_id': ticketId
-    };
+  Future<void> refundTicket(BuildContext context, String ticketId) async {
+    final Map<String, dynamic> data = {'ticket_id': ticketId};
 
     final String? token = await getToken();
 
