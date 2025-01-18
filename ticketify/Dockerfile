@@ -8,8 +8,8 @@ WORKDIR /home/flutteruser/ticketify
 # Switch to the non-root user
 USER flutteruser
 
-# Fix the permissions for the Flutter SDK cache
-RUN sudo chown -R flutteruser:flutteruser /sdks/flutter/bin/cache
+# Fix the permissions for the Flutter SDK cache (no sudo required as we're root by default)
+RUN chown -R flutteruser:flutteruser /sdks/flutter/bin/cache
 
 # Add the Flutter SDK directory as safe to resolve git ownership issue
 RUN git config --global --add safe.directory /sdks/flutter
