@@ -5,6 +5,7 @@ import 'package:ticketify/pages/auth/widgets/auth_text_field.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:ticketify/config/api_config.dart'; // Import the ApiConfig class
+import 'package:ticketify/config/api_config.dart'; // Import the ApiConfig class
 
 class RegisterForm extends StatefulWidget {
   RegisterForm({Key? key, required this.setParentState}) : super(key: key);

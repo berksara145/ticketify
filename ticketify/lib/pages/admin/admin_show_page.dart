@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:ticketify/config/api_config.dart'; // Import the ApiConfig class
 
 class ShowReportPage extends StatefulWidget {
   @override
@@ -25,14 +26,14 @@ class _ShowReportPageState extends State<ShowReportPage> {
   Future<void> _fetchReports() async {
     final String? token = await _getToken();
     final response = await http.get(
-      Uri.parse('http://127.0.0.1:5000/report/getReports'),
+      Uri.parse('${ApiConfig.baseUrl}/report/getReports'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token',
       },
     );
 
-  if (response.statusCode == 200) {
+    if (response.statusCode == 200) {
       final List<dynamic> fetchedReports = jsonDecode(response.body);
       setState(() {
         reports = List<Map<String, dynamic>>.from(fetchedReports);

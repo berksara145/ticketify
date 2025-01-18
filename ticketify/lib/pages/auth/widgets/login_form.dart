@@ -9,6 +9,7 @@ import '../../homepage/homepage.dart';
 import '../../Organizator/organizer_homepage.dart';
 import '../../workerbee/worker_homepage.dart';
 import 'auth_text_field.dart';
+import 'package:ticketify/config/api_config.dart'; // Import the ApiConfig class
 
 class LoginForm extends StatefulWidget {
   LoginForm({super.key, required this.setParentState});
@@ -39,7 +40,7 @@ class _LoginFormState extends State<LoginForm> {
 
     // Send the login request to your Flask backend
     final response = await http.post(
-      Uri.parse('http://127.0.0.1:5000/login'), // Update with your backend URL
+      Uri.parse('${ApiConfig.baseUrl}/login'), // Update with your backend URL
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -66,13 +67,13 @@ class _LoginFormState extends State<LoginForm> {
           MaterialPageRoute(builder: (context) => const OrganizerHomepage()),
         );
       }
-      if (userType == 'admin'){
+      if (userType == 'admin') {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const AdminPage()),
         );
       }
-      if (userType == 'worker_bee'){
+      if (userType == 'worker_bee') {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => IssueListPage()),
@@ -147,12 +148,12 @@ class _LoginFormState extends State<LoginForm> {
                   ),
                   items: <String>['admin', 'buyer', 'organizer', 'worker_bee']
                       .map((String item) => DropdownMenuItem<String>(
-                    value: item,
-                    child: Text(
-                      item,
-                      style: const TextStyle(fontSize: 14),
-                    ),
-                  ))
+                            value: item,
+                            child: Text(
+                              item,
+                              style: const TextStyle(fontSize: 14),
+                            ),
+                          ))
                       .toList(),
                   value: userType,
                   onChanged: (String? value) {

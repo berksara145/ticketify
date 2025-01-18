@@ -13,7 +13,7 @@ import 'package:ticketify/pages/auth/auth_screen.dart';
 import 'package:ticketify/pages/auth/widgets/appbar/user_app_bar.dart';
 import 'package:ticketify/pages/admin/admin_create_report.dart';
 import 'package:ticketify/pages/profile/widgets/profile_past_tickets.dart';
-
+import 'package:ticketify/config/api_config.dart'; // Import the ApiConfig class
 import '../../constants/constant_variables.dart';
 import '../admin/admin_page.dart';
 
@@ -38,7 +38,7 @@ class _ProfilePageBuyerState extends State<ProfilePageBuyer> {
     final String? token = await _getToken();
 
     final response = await http.get(
-      Uri.parse('http://127.0.0.1:5000/ticket/viewPastTickets'),
+      Uri.parse('${ApiConfig.baseUrl}/ticket/viewPastTickets'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token',
@@ -50,16 +50,14 @@ class _ProfilePageBuyerState extends State<ProfilePageBuyer> {
       setState(() {
         pastTickets = ticketsJson
             .map((json) => ProfileItemData(
-                  title: json['event_name'],
-                  acceptDate: json['start_date'],
-                  location: json['venue_name'],
-                  ticketPrice: json['ticket_price'],
-                  organizer:
-                      "${json['organizer_first_name']} ${json['organizer_last_name']}",
-                  imageUrl:
-                      "https://picsum.photos/200/300", // Default image URL
-                  ticket_id: "${json['ticket_id']}"
-                ))
+                title: json['event_name'],
+                acceptDate: json['start_date'],
+                location: json['venue_name'],
+                ticketPrice: json['ticket_price'],
+                organizer:
+                    "${json['organizer_first_name']} ${json['organizer_last_name']}",
+                imageUrl: "https://picsum.photos/200/300", // Default image URL
+                ticket_id: "${json['ticket_id']}"))
             .toList();
       });
 
@@ -125,7 +123,8 @@ class _ProfilePageBuyerState extends State<ProfilePageBuyer> {
             ],
             settingsPage: BuyerProfileSettings(),
           ),
-          if (activePage == 'Purchased Tickets' || activePage == 'Upcoming Tickets') ...[
+          if (activePage == 'Purchased Tickets' ||
+              activePage == 'Upcoming Tickets') ...[
             ProfileBrowseTickets(
               isPastTickets: activePage == 'Purchased Tickets',
               items: pastTickets,
@@ -165,7 +164,7 @@ class _BuyerProfileSettingsState extends State<BuyerProfileSettings> {
     };
 
     final response = await http.post(
-      Uri.parse('http://127.0.0.1:5000/ticket/insertMoney'),
+      Uri.parse('${ApiConfig.baseUrl}/ticket/insertMoney'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token',
@@ -173,17 +172,18 @@ class _BuyerProfileSettingsState extends State<BuyerProfileSettings> {
       body: jsonEncode(data),
     );
 
-   if (response.statusCode == 200) {
-    final Map<String, dynamic> responseJson = jsonDecode(response.body);
-    final String balance = responseJson['new_balance'];
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseJson = jsonDecode(response.body);
+      final String balance = responseJson['new_balance'];
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Balance added successfully! New balance: $balance')),
-    );
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text('Balance added successfully! New balance: $balance')),
+      );
 
-    _balanceController.clear();
-    Navigator.of(context).pop(); // Close the dialog
-  }else {
+      _balanceController.clear();
+      Navigator.of(context).pop(); // Close the dialog
+    } else {
       _showErrorDialog('Failed to add balance');
     }
   }
@@ -222,7 +222,7 @@ class _BuyerProfileSettingsState extends State<BuyerProfileSettings> {
     final String? token = await _getToken();
 
     final response = await http.get(
-      Uri.parse('http://127.0.0.1:5000/profile/get_user_details'),
+      Uri.parse('${ApiConfig.baseUrl}/profile/get_user_details'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token',
@@ -255,7 +255,7 @@ class _BuyerProfileSettingsState extends State<BuyerProfileSettings> {
 
     // Send the login request to your Flask backend
     final response = await http.post(
-      Uri.parse('http://127.0.0.1:5000/profile/change_name'),
+      Uri.parse('${ApiConfig.baseUrl}/profile/change_name'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token',
@@ -290,7 +290,7 @@ class _BuyerProfileSettingsState extends State<BuyerProfileSettings> {
     // Send the login request to your Flask backend
     final response = await http.post(
       Uri.parse(
-          'http://127.0.0.1:5000/profile/change_password'), // Update with your backend URL
+          '${ApiConfig.baseUrl}/profile/change_password'), // Update with your backend URL
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token',
@@ -323,7 +323,7 @@ class _BuyerProfileSettingsState extends State<BuyerProfileSettings> {
     final String? token = await _getToken();
 
     final response = await http.get(
-      Uri.parse('http://127.0.0.1:5000/ticket/viewPastTickets'),
+      Uri.parse('${ApiConfig.baseUrl}/ticket/viewPastTickets'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token',
@@ -335,16 +335,15 @@ class _BuyerProfileSettingsState extends State<BuyerProfileSettings> {
       setState(() {
         pastTickets = ticketsJson
             .map((json) => ProfileItemData(
-                  title: json['event_name'],
-                  acceptDate: json['start_date'],
-                  location: json['venue_name'],
-                  ticketPrice: json['ticket_price'],
-                  organizer:
-                      "${json['organizer_first_name']} ${json['organizer_last_name']}",
-                  imageUrl:
-                      "https://picsum.photos/200/300", // Default image URL Default image URL
-                  ticket_id: "${json['ticket_id']}"
-                ))
+                title: json['event_name'],
+                acceptDate: json['start_date'],
+                location: json['venue_name'],
+                ticketPrice: json['ticket_price'],
+                organizer:
+                    "${json['organizer_first_name']} ${json['organizer_last_name']}",
+                imageUrl:
+                    "https://picsum.photos/200/300", // Default image URL Default image URL
+                ticket_id: "${json['ticket_id']}"))
             .toList();
       });
     } else {
@@ -402,7 +401,8 @@ class _BuyerProfileSettingsState extends State<BuyerProfileSettings> {
               ],
               settingsPage: BuyerProfileSettings(),
             ),
-            if (activePage == 'Purchased Tickets' || activePage == 'Upcoming Tickets') ...[
+            if (activePage == 'Purchased Tickets' ||
+                activePage == 'Upcoming Tickets') ...[
               ProfileBrowseTickets(
                 isPastTickets: activePage == 'Purchased Tickets',
                 items: pastTickets,
@@ -511,7 +511,7 @@ class _OrganizerProfileSettingsState extends State<OrganizerProfileSettings> {
     final String? token = await _getToken();
 
     final response = await http.get(
-      Uri.parse('http://127.0.0.1:5000/profile/get_user_details'),
+      Uri.parse('${ApiConfig.baseUrl}/profile/get_user_details'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token',
@@ -544,7 +544,7 @@ class _OrganizerProfileSettingsState extends State<OrganizerProfileSettings> {
 
     // Send the request to your Flask backend
     final response = await http.post(
-      Uri.parse('http://127.0.0.1:5000/profile/change_name'),
+      Uri.parse('${ApiConfig.baseUrl}/profile/change_name'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token',
@@ -578,7 +578,7 @@ class _OrganizerProfileSettingsState extends State<OrganizerProfileSettings> {
 
     // Send the request to your Flask backend
     final response = await http.post(
-      Uri.parse('http://127.0.0.1:5000/profile/change_password'),
+      Uri.parse('${ApiConfig.baseUrl}/profile/change_password'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token',
@@ -742,7 +742,7 @@ class _AdminProfileSettingsState extends State<AdminProfileSettings> {
     final String? token = await _getToken();
 
     final response = await http.get(
-      Uri.parse('http://127.0.0.1:5000/profile/get_user_details'),
+      Uri.parse('${ApiConfig.baseUrl}/profile/get_user_details'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token',
@@ -775,7 +775,7 @@ class _AdminProfileSettingsState extends State<AdminProfileSettings> {
 
     // Send the request to your Flask backend
     final response = await http.post(
-      Uri.parse('http://127.0.0.1:5000/profile/change_name'),
+      Uri.parse('${ApiConfig.baseUrl}/profile/change_name'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token',
@@ -809,7 +809,7 @@ class _AdminProfileSettingsState extends State<AdminProfileSettings> {
 
     // Send the request to your Flask backend
     final response = await http.post(
-      Uri.parse('http://127.0.0.1:5000/profile/change_password'),
+      Uri.parse('${ApiConfig.baseUrl}/profile/change_password'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token',

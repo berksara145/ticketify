@@ -8,7 +8,7 @@ import 'package:ticketify/objects/event_model.dart';
 import 'package:ticketify/objects/user_model.dart';
 
 import 'dart:ui';
-
+import 'package:ticketify/config/api_config.dart'; // Import the ApiConfig class
 import 'package:ticketify/objects/venue_model.dart';
 
 class AppFonts {
@@ -83,7 +83,7 @@ class UtilConstants {
     // Construct the login request payload
     final String? token = await getToken();
     try {
-      final uri = Uri.parse('http://127.0.0.1:5000/event/getAllEvents');
+      final uri = Uri.parse('${ApiConfig.baseUrl}/event/getAllEvents');
       final response = await http.get(
         uri,
         headers: {
@@ -144,7 +144,7 @@ class UtilConstants {
     // Send the request to your Flask backend
     final response = await http.post(
       Uri.parse(
-          'http://127.0.0.1:5000/venue/create'), // Update with your backend URL
+          '${ApiConfig.baseUrl}/venue/create'), // Update with your backend URL
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token',
@@ -179,7 +179,7 @@ class UtilConstants {
 
     try {
       // Construct the URI for your Flask backend endpoint
-      final uri = Uri.parse('http://127.0.0.1:5000/venue/getAllVenue');
+      final uri = Uri.parse('${ApiConfig.baseUrl}/venue/getAllVenue');
 
       // Send the HTTP GET request
       final response = await http.get(
@@ -243,7 +243,7 @@ class UtilConstants {
     // Send the request to your Flask backend
     final response = await http.post(
       Uri.parse(
-          'http://127.0.0.1:5000/event/createEvent'), // Update with your backend URL
+          '${ApiConfig.baseUrl}/event/createEvent'), // Update with your backend URL
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token',
@@ -271,7 +271,7 @@ class UtilConstants {
     // Construct the login request payload
     final String? token = await getToken();
     try {
-      final uri = Uri.parse('http://127.0.0.1:5000/user/getUsers');
+      final uri = Uri.parse('${ApiConfig.baseUrl}/user/getUsers');
       final response = await http.get(
         uri,
         headers: {
@@ -334,7 +334,7 @@ class UtilConstants {
     // Send the request to your Flask backend
     final response = await http.delete(
       Uri.parse(
-          'http://127.0.0.1:5000/user/User'), // Update with your backend URL
+          '${ApiConfig.baseUrl}/user/User'), // Update with your backend URL
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token',
@@ -368,7 +368,7 @@ class UtilConstants {
     final String? token = await getToken();
 
     try {
-      final uri = Uri.parse('http://127.0.0.1:5000/ticket/getMaxTicket');
+      final uri = Uri.parse('${ApiConfig.baseUrl}/ticket/getMaxTicket');
       final response = await http.post(
         uri,
         headers: {
@@ -411,7 +411,7 @@ class UtilConstants {
     final String? token = await getToken();
 
     try {
-      final uri = Uri.parse('http://127.0.0.1:5000/ticket/chooseTicket');
+      final uri = Uri.parse('${ApiConfig.baseUrl}/ticket/chooseTicket');
       final response = await http.post(
         uri,
         headers: {
@@ -454,7 +454,7 @@ class UtilConstants {
     final String? token = await getToken();
 
     try {
-      final uri = Uri.parse('http://127.0.0.1:5000/ticket/buyTicket');
+      final uri = Uri.parse('${ApiConfig.baseUrl}/ticket/buyTicket');
       final response = await http.post(
         uri,
         headers: {
@@ -491,7 +491,7 @@ class UtilConstants {
     final String? token = await getToken();
 
     try {
-      final uri = Uri.parse('http://127.0.0.1:5000/ticket/returnTicket');
+      final uri = Uri.parse('${ApiConfig.baseUrl}/ticket/returnTicket');
       final response = await http.post(
         uri,
         headers: {

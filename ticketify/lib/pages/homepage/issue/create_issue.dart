@@ -6,7 +6,7 @@ import 'package:ticketify/general_widgets/page_selector/page_selector_title.dart
 import 'package:ticketify/pages/auth/widgets/appbar/user_app_bar.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
+import 'package:ticketify/config/api_config.dart'; // Import the ApiConfig class
 import '../homepage.dart';
 
 class CreateIssue extends StatefulWidget {
@@ -35,7 +35,7 @@ class _CreateIssueState extends State<CreateIssue> {
     // Send the login request to your Flask backend
     final response = await http.post(
       Uri.parse(
-          'http://127.0.0.1:5000/issue/createIssue'), // Update with your backend URL
+          '${ApiConfig.baseUrl}/issue/createIssue'), // Update with your backend URL
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token',

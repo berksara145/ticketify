@@ -9,6 +9,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:ticketify/config/api_config.dart'; // Import the ApiConfig class
 
 class AdminCreateReport extends StatefulWidget {
   @override
@@ -76,7 +77,7 @@ class _AdminCreateReportState extends State<AdminCreateReport> {
     final String? token = await _getToken();
 
     final response = await http.get(
-      Uri.parse('http://127.0.0.1:5000/report/getOrganizers'),
+      Uri.parse('${ApiConfig.baseUrl}/report/getOrganizers'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token',

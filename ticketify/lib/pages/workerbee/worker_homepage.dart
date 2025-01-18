@@ -6,6 +6,7 @@ import 'package:ticketify/constants/constant_variables.dart';
 import 'package:ticketify/objects/issue.dart';
 import 'package:ticketify/pages/auth/widgets/appbar/user_app_bar.dart';
 import 'package:http/http.dart' as http;
+import 'package:ticketify/config/api_config.dart'; // Import the ApiConfig class
 
 class IssueListPage extends StatefulWidget {
   @override
@@ -27,7 +28,7 @@ class _IssueListPageState extends State<IssueListPage> {
     try {
       final String? token = await getToken();
       final response = await http.post(
-        Uri.parse('http://127.0.0.1:5000/response/createIssueResponse'),
+        Uri.parse('${ApiConfig.baseUrl}/response/createIssueResponse'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Bearer $token',
@@ -61,7 +62,7 @@ class _IssueListPageState extends State<IssueListPage> {
     try {
       final String? token = await getToken();
       final response = await http.get(
-        Uri.parse('http://127.0.0.1:5000/issue/browseIssues'),
+        Uri.parse('${ApiConfig.baseUrl}/issue/browseIssues'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Bearer $token',
