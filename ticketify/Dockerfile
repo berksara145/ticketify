@@ -1,8 +1,23 @@
-# Stage 1: Serve the built web app with Nginx
+# Stage 1: Build the Flutter web app
+FROM google/flutter:3.10.5 AS build
+
+# Set working directory inside the container
+WORKDIR /app
+
+# Copy the entire Flutter project to the container
+COPY . .
+
+# Install Flutter dependencies
+RUN flutter pub get
+
+# Build the Flutter web app in release mode
+RUN flutter build web --dart-define=ENVIRONMENT=production
+
+# Stage 2: Serve the built web app with Nginx
 FROM nginx:alpine
 
-# Copy the pre-built web app from local machine to Nginx container
-COPY ./build/web /usr/share/nginx/html
+# Copy the built web app from the first stage to the Nginx container
+COPY --from=build /app/build/web /usr/share/nginx/html
 
 # Expose port 80 for the web server
 EXPOSE 80
