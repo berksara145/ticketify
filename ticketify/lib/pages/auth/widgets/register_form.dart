@@ -4,6 +4,7 @@ import 'package:ticketify/constants/constant_variables.dart';
 import 'package:ticketify/pages/auth/widgets/auth_text_field.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:ticketify/config/api_config.dart'; // Import the ApiConfig class
 
 class RegisterForm extends StatefulWidget {
   RegisterForm({Key? key, required this.setParentState}) : super(key: key);
@@ -41,7 +42,8 @@ class _RegisterFormState extends State<RegisterForm> {
 
     // Send the register request to your Flask backend
     final response = await http.post(
-      Uri.parse('http://127.0.0.1:5000/register'), // Update with your backend URL
+      Uri.parse(
+          '${ApiConfig.baseUrl}/register'), // Update with your backend URL
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -83,7 +85,6 @@ class _RegisterFormState extends State<RegisterForm> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -108,7 +109,8 @@ class _RegisterFormState extends State<RegisterForm> {
               height: 60,
               decoration: BoxDecoration(
                 // Set the background color
-                color: AppColors.blue, // Ensure AppColors.blue is defined in your application
+                color: AppColors
+                    .blue, // Ensure AppColors.blue is defined in your application
                 // Define the border
                 border: Border.all(
                   color: Colors.black, // Color of the border
@@ -131,14 +133,14 @@ class _RegisterFormState extends State<RegisterForm> {
                   ),
                   items: <String>['admin', 'buyer', 'organizer', 'worker_bee']
                       .map((String item) => DropdownMenuItem<String>(
-                    value: item,
-                    child: Text(
-                      item,
-                      style: const TextStyle(
-                        fontSize: 14,
-                      ),
-                    ),
-                  ))
+                            value: item,
+                            child: Text(
+                              item,
+                              style: const TextStyle(
+                                fontSize: 14,
+                              ),
+                            ),
+                          ))
                       .toList(),
                   value: userType,
                   onChanged: (String? value) {
