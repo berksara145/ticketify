@@ -36,12 +36,13 @@ class _ProfilePageBuyerState extends State<ProfilePageBuyer> {
 
   Future<void> _viewPastTickets() async {
     final String? token = await _getToken();
-
+    // Construct the Authorization header with Bearer
+    final String authorizationHeader = 'Bearer $token';
     final response = await http.get(
       Uri.parse('${ApiConfig.baseUrl}/ticket/viewPastTickets'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $token',
+        'Authorization': authorizationHeader,
       },
     );
 
@@ -161,12 +162,12 @@ class _BuyerProfileSettingsState extends State<BuyerProfileSettings> {
     final Map<String, dynamic> data = {
       "amount": int.parse(_balanceController.text)
     };
-
+    final String authorizationHeader = 'Bearer $token';
     final response = await http.post(
       Uri.parse('${ApiConfig.baseUrl}/ticket/insertMoney'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $token',
+        'Authorization': authorizationHeader,
       },
       body: jsonEncode(data),
     );
@@ -219,12 +220,12 @@ class _BuyerProfileSettingsState extends State<BuyerProfileSettings> {
 
   Future<void> _fetchUserDetails() async {
     final String? token = await _getToken();
-
+    final String authorizationHeader = 'Bearer $token';
     final response = await http.get(
       Uri.parse('${ApiConfig.baseUrl}/profile/get_user_details'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $token',
+        'Authorization': authorizationHeader,
       },
     );
 
@@ -252,13 +253,13 @@ class _BuyerProfileSettingsState extends State<BuyerProfileSettings> {
       'first_name': _firstNameController.text,
       'last_name': _lastNameController.text,
     };
-
+    final String authorizationHeader = 'Bearer $token';
     // Send the login request to your Flask backend
     final response = await http.post(
       Uri.parse('${ApiConfig.baseUrl}/profile/change_name'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $token',
+        'Authorization': authorizationHeader,
       },
       body: jsonEncode(data),
     );
@@ -286,14 +287,14 @@ class _BuyerProfileSettingsState extends State<BuyerProfileSettings> {
       'password_new1': _newPasswordController.text,
       'password_new2': _newPassword2Controller.text,
     };
-
+    final String authorizationHeader = 'Bearer $token';
     // Send the login request to your Flask backend
     final response = await http.post(
       Uri.parse(
           '${ApiConfig.baseUrl}/profile/change_password'), // Update with your backend URL
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $token',
+        'Authorization': authorizationHeader,
       },
       body: jsonEncode(data),
     );
@@ -321,12 +322,12 @@ class _BuyerProfileSettingsState extends State<BuyerProfileSettings> {
 
   Future<void> _viewPastTickets() async {
     final String? token = await _getToken();
-
+    final String authorizationHeader = 'Bearer $token';
     final response = await http.get(
       Uri.parse('${ApiConfig.baseUrl}/ticket/viewPastTickets'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $token',
+        'Authorization': authorizationHeader,
       },
     );
 
@@ -508,12 +509,12 @@ class _OrganizerProfileSettingsState extends State<OrganizerProfileSettings> {
 
   Future<void> _fetchUserDetails() async {
     final String? token = await _getToken();
-
+    final String authorizationHeader = 'Bearer $token';
     final response = await http.get(
       Uri.parse('${ApiConfig.baseUrl}/profile/get_user_details'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $token',
+        'Authorization': authorizationHeader,
       },
     );
 
@@ -541,13 +542,13 @@ class _OrganizerProfileSettingsState extends State<OrganizerProfileSettings> {
       'first_name': _firstNameController.text,
       'last_name': _lastNameController.text,
     };
-
+    final String authorizationHeader = 'Bearer $token';
     // Send the request to your Flask backend
     final response = await http.post(
       Uri.parse('${ApiConfig.baseUrl}/profile/change_name'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $token',
+        'Authorization': authorizationHeader,
       },
       body: jsonEncode(data),
     );
@@ -575,13 +576,13 @@ class _OrganizerProfileSettingsState extends State<OrganizerProfileSettings> {
       'password_new1': _newPasswordController.text,
       'password_new2': _newPassword2Controller.text,
     };
-
+    final String authorizationHeader = 'Bearer $token';
     // Send the request to your Flask backend
     final response = await http.post(
       Uri.parse('${ApiConfig.baseUrl}/profile/change_password'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $token',
+        'Authorization': authorizationHeader,
       },
       body: jsonEncode(data),
     );
@@ -739,12 +740,12 @@ class _AdminProfileSettingsState extends State<AdminProfileSettings> {
 
   Future<void> _fetchUserDetails() async {
     final String? token = await _getToken();
-
+    final String authorizationHeader = 'Bearer $token';
     final response = await http.get(
       Uri.parse('${ApiConfig.baseUrl}/profile/get_user_details'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $token',
+        'Authorization': authorizationHeader,
       },
     );
 
@@ -772,13 +773,13 @@ class _AdminProfileSettingsState extends State<AdminProfileSettings> {
       'first_name': _firstNameController.text,
       'last_name': _lastNameController.text,
     };
-
+    final String authorizationHeader = 'Bearer $token';
     // Send the request to your Flask backend
     final response = await http.post(
       Uri.parse('${ApiConfig.baseUrl}/profile/change_name'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $token',
+        'Authorization': authorizationHeader,
       },
       body: jsonEncode(data),
     );
@@ -806,13 +807,13 @@ class _AdminProfileSettingsState extends State<AdminProfileSettings> {
       'password_new1': _newPasswordController.text,
       'password_new2': _newPassword2Controller.text,
     };
-
+    final String authorizationHeader = 'Bearer $token';
     // Send the request to your Flask backend
     final response = await http.post(
       Uri.parse('${ApiConfig.baseUrl}/profile/change_password'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $token',
+        'Authorization': authorizationHeader,
       },
       body: jsonEncode(data),
     );

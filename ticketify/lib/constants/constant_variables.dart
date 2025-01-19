@@ -89,13 +89,16 @@ class UtilConstants {
       print('Token: $token');
     }
 
+    // Construct the Authorization header with Bearer
+    final String authorizationHeader = 'Bearer $token';
+
     try {
       final uri = Uri.parse('${ApiConfig.baseUrl}/event/getAllEvents');
       final response = await http.get(
         uri,
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer $token',
+          'Authorization': authorizationHeader,
         },
       );
       if (response.statusCode == 200) {
@@ -148,13 +151,16 @@ class UtilConstants {
     };
     print(jsonEncode(data));
 
+    // Construct the Authorization header with Bearer
+    final String authorizationHeader = 'Bearer $token';
+
     // Send the request to your Flask backend
     final response = await http.post(
       Uri.parse(
           '${ApiConfig.baseUrl}/venue/create'), // Update with your backend URL
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $token',
+        'Authorization': authorizationHeader,
       },
       body: jsonEncode(data),
     );
@@ -183,7 +189,8 @@ class UtilConstants {
     if (token == null) {
       throw Exception('Authentication token not found');
     }
-
+    // Construct the Authorization header with Bearer
+    final String authorizationHeader = 'Bearer $token';
     try {
       // Construct the URI for your Flask backend endpoint
       final uri = Uri.parse('${ApiConfig.baseUrl}/venue/getAllVenue');
@@ -193,7 +200,7 @@ class UtilConstants {
         uri,
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer $token',
+          'Authorization': authorizationHeader,
         },
       );
 
@@ -247,13 +254,16 @@ class UtilConstants {
       'ticket_prices': ticketPrices,
     };
 
+    // Construct the Authorization header with Bearer
+    final String authorizationHeader = 'Bearer $token';
+
     // Send the request to your Flask backend
     final response = await http.post(
       Uri.parse(
           '${ApiConfig.baseUrl}/event/createEvent'), // Update with your backend URL
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $token',
+        'Authorization': authorizationHeader,
       },
       body: jsonEncode(data),
     );
@@ -277,13 +287,15 @@ class UtilConstants {
   Future<List<UserModel>> getAllUsers(BuildContext context) async {
     // Construct the login request payload
     final String? token = await getToken();
+    // Construct the Authorization header with Bearer
+    final String authorizationHeader = 'Bearer $token';
     try {
       final uri = Uri.parse('${ApiConfig.baseUrl}/user/getUsers');
       final response = await http.get(
         uri,
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer $token',
+          'Authorization': authorizationHeader,
         },
       );
       if (response.statusCode == 200) {
@@ -337,14 +349,15 @@ class UtilConstants {
       'user_id': userId,
       'user_type': userType,
     };
-
+    // Construct the Authorization header with Bearer
+    final String authorizationHeader = 'Bearer $token';
     // Send the request to your Flask backend
     final response = await http.delete(
       Uri.parse(
           '${ApiConfig.baseUrl}/user/User'), // Update with your backend URL
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $token',
+        'Authorization': authorizationHeader,
       },
       body: jsonEncode(data),
     );
@@ -373,14 +386,15 @@ class UtilConstants {
     };
 
     final String? token = await getToken();
-
+    // Construct the Authorization header with Bearer
+    final String authorizationHeader = 'Bearer $token';
     try {
       final uri = Uri.parse('${ApiConfig.baseUrl}/ticket/getMaxTicket');
       final response = await http.post(
         uri,
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer $token',
+          'Authorization': authorizationHeader,
         },
         body: jsonEncode(data),
       );
@@ -416,14 +430,15 @@ class UtilConstants {
     };
 
     final String? token = await getToken();
-
+// Construct the Authorization header with Bearer
+    final String authorizationHeader = 'Bearer $token';
     try {
       final uri = Uri.parse('${ApiConfig.baseUrl}/ticket/chooseTicket');
       final response = await http.post(
         uri,
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer $token',
+          'Authorization': authorizationHeader,
         },
         body: jsonEncode(data),
       );
@@ -459,14 +474,15 @@ class UtilConstants {
     };
 
     final String? token = await getToken();
-
+// Construct the Authorization header with Bearer
+    final String authorizationHeader = 'Bearer $token';
     try {
       final uri = Uri.parse('${ApiConfig.baseUrl}/ticket/buyTicket');
       final response = await http.post(
         uri,
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer $token',
+          'Authorization': authorizationHeader,
         },
         body: jsonEncode(data),
       );
@@ -496,14 +512,15 @@ class UtilConstants {
     final Map<String, dynamic> data = {'ticket_id': ticketId};
 
     final String? token = await getToken();
-
+// Construct the Authorization header with Bearer
+    final String authorizationHeader = 'Bearer $token';
     try {
       final uri = Uri.parse('${ApiConfig.baseUrl}/ticket/returnTicket');
       final response = await http.post(
         uri,
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer $token',
+          'Authorization': authorizationHeader,
         },
         body: jsonEncode(data),
       );

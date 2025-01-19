@@ -38,13 +38,14 @@ class _PageLayoutState extends State<PageLayout> {
 
   Future<List<EventModel>> _filterEvents() async {
     final String? token = await _getToken();
-
+// Construct the Authorization header with Bearer
+    final String authorizationHeader = 'Bearer $token';
     final response = await http.post(
       Uri.parse(
           '${ApiConfig.baseUrl}/event/getFilteredEvents'), // Update with your backend URL
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $token',
+        'Authorization': authorizationHeader,
       },
       body: jsonEncode({
         'event_name': eventName,

@@ -30,7 +30,8 @@ app.config['MYSQL_DB'] = 'cs353dbproject'
 
 mysql = MySQL(app)
 
-
+# Set JWT_VERIFY_SUB to False (this disables the verification of the sub claim)
+app.config['JWT_VERIFY_SUB'] = False
 app.config['JWT_SECRET_KEY'] = 'very secret key'  # Change this to your preferred secret key
 jwt = JWTManager(app)
 

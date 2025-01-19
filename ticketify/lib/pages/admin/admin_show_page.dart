@@ -25,11 +25,13 @@ class _ShowReportPageState extends State<ShowReportPage> {
 
   Future<void> _fetchReports() async {
     final String? token = await _getToken();
+    // Construct the Authorization header with Bearer
+    final String authorizationHeader = 'Bearer $token';
     final response = await http.get(
       Uri.parse('${ApiConfig.baseUrl}/report/getReports'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $token',
+        'Authorization': authorizationHeader,
       },
     );
 

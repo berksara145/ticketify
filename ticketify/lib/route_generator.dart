@@ -24,7 +24,6 @@ class RouteGenerator {
   final String eventCreateRoute = "/event/create/:userId";
   final String venueCreateRoute = "/venue/create/:userId";
 
-
   getRouter() {
     return GoRouter(
       initialLocation: loginRoute,
@@ -41,10 +40,10 @@ class RouteGenerator {
               return const AuthScreen();
             }),
         GoRoute(
-          path: displayAllEvents,
-          builder: (context, state) {
+            path: displayAllEvents,
+            builder: (context, state) {
               return const Homepage();
-          }),
+            }),
         /*GoRoute(
             path: profileRoute,
             builder: (context, state) {
@@ -55,7 +54,9 @@ class RouteGenerator {
             path: displayOneItemRoute,
             builder: (context, state) {
               final itemId = state.pathParameters['eventID'].toString();
-              return OneItemView(event_id: itemId,);
+              return OneItemView(
+                event_id: itemId,
+              );
             }),
         /*GoRoute(
             path: questionHomepageRoute,

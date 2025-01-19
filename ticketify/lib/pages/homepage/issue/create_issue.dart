@@ -31,14 +31,15 @@ class _CreateIssueState extends State<CreateIssue> {
       'issue_text': _titleController.text,
       'issue_name': _descriptionController.text,
     };
-
+    // Construct the Authorization header with Bearer
+    final String authorizationHeader = 'Bearer $token';
     // Send the login request to your Flask backend
     final response = await http.post(
       Uri.parse(
           '${ApiConfig.baseUrl}/issue/createIssue'), // Update with your backend URL
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $token',
+        'Authorization': authorizationHeader,
       },
       body: jsonEncode(data),
     );

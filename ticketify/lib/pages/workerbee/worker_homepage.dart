@@ -27,11 +27,12 @@ class _IssueListPageState extends State<IssueListPage> {
   Future<void> createIssueResponse(String responseText) async {
     try {
       final String? token = await getToken();
+      final String authorizationHeader = 'Bearer $token';
       final response = await http.post(
         Uri.parse('${ApiConfig.baseUrl}/response/createIssueResponse'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer $token',
+          'Authorization': authorizationHeader,
         },
         body: jsonEncode({
           'issue_id': selectedIssue!.id,
@@ -61,11 +62,12 @@ class _IssueListPageState extends State<IssueListPage> {
   Future<List<Issue>> browseIssues() async {
     try {
       final String? token = await getToken();
+      final String authorizationHeader = 'Bearer $token';
       final response = await http.get(
         Uri.parse('${ApiConfig.baseUrl}/issue/browseIssues'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer $token',
+          'Authorization': authorizationHeader,
         },
       );
 
