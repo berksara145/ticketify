@@ -51,7 +51,8 @@ class _LoginFormState extends State<LoginForm> {
       // Handle the response from the backend
       if (response.statusCode == 200) {
         // Successful login, navigate to homepage or perform other actions
-        final Map<String, dynamic> responseBody = jsonDecode(response.body);
+        final Map<String, dynamic> responseBody =
+            await jsonDecode(response.body);
         String token = responseBody['access_token'];
 
         // Check if token is null
