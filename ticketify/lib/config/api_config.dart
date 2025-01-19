@@ -1,6 +1,6 @@
 class ApiConfig {
   static String get baseUrl {
-    final uri = "http://13.60.25.33";
+    final uri = "16.171.35.21";
     return uri;
   }
 }
