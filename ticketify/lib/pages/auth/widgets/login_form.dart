@@ -107,9 +107,12 @@ class _LoginFormState extends State<LoginForm> {
         final Map<String, dynamic> responseBody = jsonDecode(response.body);
         _showErrorDialog(responseBody['message'] ?? 'Login failed');
       }
-    } catch (error) {
-      // Handle errors that occur during network request or data processing
+    } catch (error, stackTrace) {
+      // Log error with stack trace
       print('Error during login: $error');
+      print('Stack trace: $stackTrace');
+
+      // Show error dialog
       _showErrorDialog('An unexpected error occurred. Please try again later.');
     }
   }
