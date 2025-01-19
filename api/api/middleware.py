@@ -22,7 +22,7 @@ def invalid_token_callback(error):
     token = request.headers.get('Authorization')
     print(f"Invalid token received: {token}")  # This will print the token value
     print(f"Invalid token error: {error}")
-    return jsonify({'message': 'Invalid token'}), 401
+    return jsonify({'message': f'Invalid token error: {error}, token:{token}'}), 401
 
 def unauthorized_callback(error):
     return jsonify({'message': 'Unauthorized access'}), 401
