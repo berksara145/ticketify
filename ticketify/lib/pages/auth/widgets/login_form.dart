@@ -53,6 +53,13 @@ class _LoginFormState extends State<LoginForm> {
       final Map<String, dynamic> responseBody = jsonDecode(response.body);
       String token = responseBody['access_token'];
 
+      // Check if token is null
+      if (token == null) {
+        print("Token is null!");
+      } else {
+        print("Token: $token");
+      }
+
       // Save the token securely
       await storage.write(key: 'access_token', value: token);
       if (userType == 'buyer') {
