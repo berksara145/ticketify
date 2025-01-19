@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:ticketify/general_widgets/page_selector/page_selector.dart';
@@ -16,6 +15,7 @@ import 'package:ticketify/pages/profile/widgets/profile_past_tickets.dart';
 import 'package:ticketify/config/api_config.dart'; // Import the ApiConfig class
 import '../../constants/constant_variables.dart';
 import '../admin/admin_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePageBuyer extends StatefulWidget {
   const ProfilePageBuyer({super.key});
@@ -72,8 +72,8 @@ class _ProfilePageBuyerState extends State<ProfilePageBuyer> {
   }
 
   Future<String?> _getToken() async {
-    const storage = FlutterSecureStorage();
-    return await storage.read(key: 'access_token');
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('access_token');
   }
 
   void _showErrorDialog(String message) {
@@ -155,7 +155,6 @@ class _BuyerProfileSettingsState extends State<BuyerProfileSettings> {
   final TextEditingController _oldPasswordController = TextEditingController();
   final TextEditingController _newPasswordController = TextEditingController();
   final TextEditingController _newPassword2Controller = TextEditingController();
-  final FlutterSecureStorage storage = const FlutterSecureStorage();
 
   void _addBalance() async {
     final String? token = await _getToken();
@@ -243,7 +242,8 @@ class _BuyerProfileSettingsState extends State<BuyerProfileSettings> {
   }
 
   Future<String?> _getToken() async {
-    return await storage.read(key: 'access_token');
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('access_token');
   }
 
   Future<void> _updateName() async {
@@ -505,7 +505,6 @@ class _OrganizerProfileSettingsState extends State<OrganizerProfileSettings> {
   final TextEditingController _oldPasswordController = TextEditingController();
   final TextEditingController _newPasswordController = TextEditingController();
   final TextEditingController _newPassword2Controller = TextEditingController();
-  final FlutterSecureStorage storage = const FlutterSecureStorage();
 
   Future<void> _fetchUserDetails() async {
     final String? token = await _getToken();
@@ -532,7 +531,8 @@ class _OrganizerProfileSettingsState extends State<OrganizerProfileSettings> {
   }
 
   Future<String?> _getToken() async {
-    return await storage.read(key: 'access_token');
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('access_token');
   }
 
   Future<void> _updateName() async {
@@ -736,7 +736,6 @@ class _AdminProfileSettingsState extends State<AdminProfileSettings> {
   final TextEditingController _oldPasswordController = TextEditingController();
   final TextEditingController _newPasswordController = TextEditingController();
   final TextEditingController _newPassword2Controller = TextEditingController();
-  final FlutterSecureStorage storage = const FlutterSecureStorage();
 
   Future<void> _fetchUserDetails() async {
     final String? token = await _getToken();
@@ -763,7 +762,8 @@ class _AdminProfileSettingsState extends State<AdminProfileSettings> {
   }
 
   Future<String?> _getToken() async {
-    return await storage.read(key: 'access_token');
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('access_token');
   }
 
   Future<void> _updateName() async {

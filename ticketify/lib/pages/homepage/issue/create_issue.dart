@@ -5,9 +5,9 @@ import 'package:ticketify/constants/constant_variables.dart';
 import 'package:ticketify/general_widgets/page_selector/page_selector_title.dart';
 import 'package:ticketify/pages/auth/widgets/appbar/user_app_bar.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:ticketify/config/api_config.dart'; // Import the ApiConfig class
 import '../homepage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateIssue extends StatefulWidget {
   const CreateIssue({Key? key}) : super(key: key);
@@ -19,9 +19,9 @@ class CreateIssue extends StatefulWidget {
 class _CreateIssueState extends State<CreateIssue> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  final FlutterSecureStorage storage = const FlutterSecureStorage();
   Future<String?> _getToken() async {
-    return await storage.read(key: 'access_token');
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('access_token');
   }
 
   Future<void> _createIssue() async {

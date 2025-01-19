@@ -1,12 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:ticketify/constants/constant_variables.dart';
 import 'package:ticketify/objects/issue.dart';
 import 'package:ticketify/pages/auth/widgets/appbar/user_app_bar.dart';
 import 'package:http/http.dart' as http;
 import 'package:ticketify/config/api_config.dart'; // Import the ApiConfig class
+import 'package:shared_preferences/shared_preferences.dart';
 
 class IssueListPage extends StatefulWidget {
   @override
@@ -18,10 +18,10 @@ class _IssueListPageState extends State<IssueListPage> {
 
   TextEditingController textController = TextEditingController();
   Issue? selectedIssue;
-  final FlutterSecureStorage storage = const FlutterSecureStorage();
 
   Future<String?> getToken() async {
-    return await storage.read(key: 'access_token');
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('access_token');
   }
 
   Future<void> createIssueResponse(String responseText) async {

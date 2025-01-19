@@ -1,6 +1,5 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../../../constants/constant_variables.dart';
@@ -10,6 +9,7 @@ import '../../Organizator/organizer_homepage.dart';
 import '../../workerbee/worker_homepage.dart';
 import 'auth_text_field.dart';
 import 'package:ticketify/config/api_config.dart'; // Import the ApiConfig class
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginForm extends StatefulWidget {
   LoginForm({super.key, required this.setParentState});
@@ -22,7 +22,6 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final FlutterSecureStorage storage = const FlutterSecureStorage();
 
   final String nameLabel = "Name";
   final String surnameLabel = "Surname";
@@ -55,13 +54,6 @@ class _LoginFormState extends State<LoginForm> {
             await jsonDecode(response.body);
         String token = responseBody['access_token'];
 
-        // Check if storage is initialized
-        if (storage == null) {
-          print("ERROR: Storage is null");
-          _showErrorDialog('Storage initialization error');
-          return;
-        }
-
         // Check if token is null
         if (token == null) {
           print("Token is null!");
@@ -71,7 +63,9 @@ class _LoginFormState extends State<LoginForm> {
 
         // Save the token securely
         print("1 amk: $token");
-        await storage.write(key: 'access_token', value: token);
+        // Write data to shared_preferences
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('access_token', token);
         print("2 amk: $token");
         if (userType == 'buyer') {
           print("3 amk: $token");

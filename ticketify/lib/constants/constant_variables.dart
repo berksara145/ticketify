@@ -6,7 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:ticketify/objects/event_model.dart';
 import 'package:ticketify/objects/user_model.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:ui';
 import 'package:ticketify/config/api_config.dart'; // Import the ApiConfig class
 import 'package:ticketify/objects/venue_model.dart';
@@ -73,10 +73,9 @@ void _showErrorDialog(String message, BuildContext context) {
 }
 
 class UtilConstants {
-  final FlutterSecureStorage storage = const FlutterSecureStorage();
-
   Future<String?> getToken() async {
-    return await storage.read(key: 'access_token');
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('access_token');
   }
 
   Future<List<EventModel>> getAllEvents(BuildContext context) async {

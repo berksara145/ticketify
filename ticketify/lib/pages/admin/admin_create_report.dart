@@ -5,8 +5,7 @@ import 'package:ticketify/constants/constant_variables.dart';
 import 'package:ticketify/general_widgets/page_title.dart';
 import 'package:ticketify/pages/homepage/display_products_components.dart';
 import 'package:ticketify/pages/admin/admin_show_page.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:ticketify/config/api_config.dart'; // Import the ApiConfig class
@@ -30,7 +29,6 @@ class _AdminCreateReportState extends State<AdminCreateReport> {
   String eventRules = '';
   List<String> items = [];
   final TextEditingController selectVenueController = TextEditingController();
-  final FlutterSecureStorage storage = const FlutterSecureStorage();
 
   List<String> venues = ['Venue A', 'Venue B', 'Venue C'];
   Map<String, List<String>> venueCategories = {
@@ -50,7 +48,8 @@ class _AdminCreateReportState extends State<AdminCreateReport> {
   }
 
   Future<String?> _getToken() async {
-    return await storage.read(key: 'access_token');
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('access_token');
   }
 
   void _showErrorDialog(String message) {

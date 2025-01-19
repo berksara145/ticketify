@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:html';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:ticketify/pages/Organizator/event/events.dart';
 import 'package:ticketify/config/api_config.dart'; // Import the ApiConfig class
@@ -11,6 +10,7 @@ import 'package:ticketify/constants/constant_variables.dart';
 import '../../objects/event_model.dart';
 import 'ItemGrid.dart';
 import 'display_products_components.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PageLayout extends StatefulWidget {
   const PageLayout({Key? key}) : super(key: key);
@@ -29,10 +29,11 @@ class _PageLayoutState extends State<PageLayout> {
   double minPrice = 0;
   double maxPrice = 10000000;
 
-  final FlutterSecureStorage storage = const FlutterSecureStorage();
-
   Future<String?> _getToken() async {
-    return await storage.read(key: 'access_token');
+    // Write data to shared_preferences
+    final prefs = await SharedPreferences.getInstance();
+
+    return await prefs.getString('access_token');
   }
 
   Future<List<EventModel>> _filterEvents() async {

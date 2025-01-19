@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:ticketify/config/api_config.dart'; // Import the ApiConfig class
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ShowReportPage extends StatefulWidget {
   @override
@@ -10,7 +10,6 @@ class ShowReportPage extends StatefulWidget {
 }
 
 class _ShowReportPageState extends State<ShowReportPage> {
-  final FlutterSecureStorage storage = const FlutterSecureStorage();
   List<Map<String, dynamic>> reports = [];
 
   @override
@@ -20,7 +19,8 @@ class _ShowReportPageState extends State<ShowReportPage> {
   }
 
   Future<String?> _getToken() async {
-    return await storage.read(key: 'access_token');
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('access_token');
   }
 
   Future<void> _fetchReports() async {

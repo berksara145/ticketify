@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ticketify/pages/Organizator/organizer_homepage.dart';
 import 'package:ticketify/pages/admin/admin_page.dart';
@@ -85,7 +84,6 @@ class _UserAppBarState extends State<UserAppBar> {
     );
   }
 }
-
 
 class OrganizerAppBar extends StatefulWidget implements PreferredSizeWidget {
   const OrganizerAppBar({super.key});
@@ -252,9 +250,9 @@ class _WBAppBarBarState extends State<WBAppBar> {
                   "TICKETIFY",
                   style: GoogleFonts.allertaStencil(
                       textStyle: const TextStyle(
-                        color: AppColors.black,
-                        fontSize: 25,
-                      )),
+                    color: AppColors.black,
+                    fontSize: 25,
+                  )),
                 ),
               ],
             ),
