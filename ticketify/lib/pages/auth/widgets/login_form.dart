@@ -55,6 +55,13 @@ class _LoginFormState extends State<LoginForm> {
             await jsonDecode(response.body);
         String token = responseBody['access_token'];
 
+        // Check if storage is initialized
+        if (storage == null) {
+          print("ERROR: Storage is null");
+          _showErrorDialog('Storage initialization error');
+          return;
+        }
+
         // Check if token is null
         if (token == null) {
           print("Token is null!");
