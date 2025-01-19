@@ -10,6 +10,7 @@ import 'package:ticketify/pages/profile/widgets/event_details.dart';
 import 'package:ticketify/pages/workerbee/worker_homepage.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 

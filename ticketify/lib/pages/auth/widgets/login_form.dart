@@ -58,15 +58,15 @@ class _LoginFormState extends State<LoginForm> {
         if (token == null) {
           print("Token is null!");
         } else {
-          print("Token: $token");
+          print("Token amk: $token");
         }
 
         // Save the token securely
-        print("1");
+        print("1 amk: $token");
         await storage.write(key: 'access_token', value: token);
-        print("2");
+        print("2 amk: $token");
         if (userType == 'buyer') {
-          print("3");
+          print("3 amk: $token");
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => const Homepage()),
@@ -90,7 +90,7 @@ class _LoginFormState extends State<LoginForm> {
             MaterialPageRoute(builder: (context) => IssueListPage()),
           );
         }
-        print("4");
+        print("4 amk: $token");
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Logged in successfully!')),
         );
