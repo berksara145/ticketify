@@ -62,8 +62,11 @@ class _LoginFormState extends State<LoginForm> {
         }
 
         // Save the token securely
+        print("1");
         await storage.write(key: 'access_token', value: token);
+        print("2");
         if (userType == 'buyer') {
+          print("3");
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => const Homepage()),
@@ -87,6 +90,7 @@ class _LoginFormState extends State<LoginForm> {
             MaterialPageRoute(builder: (context) => IssueListPage()),
           );
         }
+        print("4");
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Logged in successfully!')),
         );
