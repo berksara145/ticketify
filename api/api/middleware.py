@@ -16,6 +16,10 @@ def expired_token_callback(jwt_header, jwt_payload):
     return jsonify({'message': 'Token has expired'}), 401
 
 def invalid_token_callback(error):
+    # Print the token that caused the error
+    token = request.headers.get('Authorization')
+    print(f"Invalid token received: {token}")  # This will print the token value
+    print(f"Invalid token error: {error}")
     return jsonify({'message': 'Invalid token'}), 401
 
 def unauthorized_callback(error):

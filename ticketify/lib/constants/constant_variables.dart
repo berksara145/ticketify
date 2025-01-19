@@ -81,6 +81,14 @@ class UtilConstants {
   Future<List<EventModel>> getAllEvents(BuildContext context) async {
     // Construct the login request payload
     final String? token = await getToken();
+
+    // Check if the token is null and print it
+    if (token == null) {
+      print('Token is null!');
+    } else {
+      print('Token: $token');
+    }
+
     try {
       final uri = Uri.parse('${ApiConfig.baseUrl}/event/getAllEvents');
       final response = await http.get(
