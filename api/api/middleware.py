@@ -8,6 +8,8 @@ def check_access_token():
 
     # Check if the requested endpoint requires authentication
     if request.endpoint and request.endpoint not in excluded_endpoints:
+        token = request.headers.get('Authorization')
+        print(f"Authorization Token: {token}")
         # Verify access token in the request headers
         verify_jwt_in_request()
 
