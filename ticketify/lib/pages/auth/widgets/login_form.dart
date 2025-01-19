@@ -31,68 +31,74 @@ class _LoginFormState extends State<LoginForm> {
   String? userType;
 
   Future<void> _login() async {
-    // Construct the login request payload
-    final Map<String, dynamic> data = {
-      'email': emailController.text,
-      'password': passwordController.text,
-      'user_type': userType,
-    };
+    try {
+      // Construct the login request payload
+      final Map<String, dynamic> data = {
+        'email': emailController.text,
+        'password': passwordController.text,
+        'user_type': userType,
+      };
 
-    // Send the login request to your Flask backend
-    final response = await http.post(
-      Uri.parse('${ApiConfig.baseUrl}/login'), // Update with your backend URL
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(data),
-    );
-
-    // Handle the response from the backend
-    if (response.statusCode == 200) {
-      // Successful login, navigate to homepage or perform other actions
-      final Map<String, dynamic> responseBody = jsonDecode(response.body);
-      String token = responseBody['access_token'];
-
-      // Check if token is null
-      if (token == null) {
-        print("Token is null!");
-      } else {
-        print("Token: $token");
-      }
-
-      // Save the token securely
-      await storage.write(key: 'access_token', value: token);
-      if (userType == 'buyer') {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const Homepage()),
-        );
-      }
-      if (userType == 'organizer') {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const OrganizerHomepage()),
-        );
-      }
-      if (userType == 'admin') {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const AdminPage()),
-        );
-      }
-      if (userType == 'worker_bee') {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => IssueListPage()),
-        );
-      }
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Logged in successfully!')),
+      // Send the login request to your Flask backend
+      final response = await http.post(
+        Uri.parse('${ApiConfig.baseUrl}/login'), // Update with your backend URL
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(data),
       );
-    } else {
-      // Login failed, display error message in a dialog
-      final Map<String, dynamic> responseBody = jsonDecode(response.body);
-      _showErrorDialog(responseBody['message'] ?? 'Login failed');
+
+      // Handle the response from the backend
+      if (response.statusCode == 200) {
+        // Successful login, navigate to homepage or perform other actions
+        final Map<String, dynamic> responseBody = jsonDecode(response.body);
+        String token = responseBody['access_token'];
+
+        // Check if token is null
+        if (token == null) {
+          print("Token is null!");
+        } else {
+          print("Token: $token");
+        }
+
+        // Save the token securely
+        await storage.write(key: 'access_token', value: token);
+        if (userType == 'buyer') {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const Homepage()),
+          );
+        }
+        if (userType == 'organizer') {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const OrganizerHomepage()),
+          );
+        }
+        if (userType == 'admin') {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const AdminPage()),
+          );
+        }
+        if (userType == 'worker_bee') {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => IssueListPage()),
+          );
+        }
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Logged in successfully!')),
+        );
+      } else {
+        // Login failed, display error message in a dialog
+        final Map<String, dynamic> responseBody = jsonDecode(response.body);
+        _showErrorDialog(responseBody['message'] ?? 'Login failed');
+      }
+    } catch (error) {
+      // Handle errors that occur during network request or data processing
+      print('Error during login: $error');
+      _showErrorDialog('An unexpected error occurred. Please try again later.');
     }
   }
 
