@@ -1,1 +1,3 @@
 Ticketify is a user-friendly application designed with Flask and Flutter for seamless event ticket management. Users can effortlessly browse and filter events, check ticket availability, and purchase tickets with a smooth payment process. Creating events is straightforward, allowing users to enter event details, set ticket types, and publish them for sale. Ticket returns are simple, with the system handling refunds and ticket reavailability. Ticketify combines efficient backend management with an intuitive frontend, ensuring a smooth experience for both event creators and attendees.
+
+Here is the link for the project http://16.171.35.21:8080
